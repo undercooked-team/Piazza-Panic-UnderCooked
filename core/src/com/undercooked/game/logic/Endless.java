@@ -14,35 +14,13 @@ public class Endless extends GameLogic {
         this(null, null);
     }
 
-
-    @Override
     public void update(float delta) {
-
+        super.update(delta);
     }
 
-    @Override
-    public void preLoad() {
-        // Add all the game ingredients
-        ingredients.addIngredient("burger");
-        ingredients.addIngredient("burger_bun");
-        ingredients.addIngredient("burger_bun_burned");
-        ingredients.addIngredient("burger_bun_cooked");
-        ingredients.addIngredient("lettuce");
-        ingredients.addIngredient("lettuce_chopped");
-        ingredients.addIngredient("meat");
-        ingredients.addIngredient("meat_overcooked");
-        ingredients.addIngredient("meat_undercooked");
-        ingredients.addIngredient("onion");
-        ingredients.addIngredient("onion_chopped");
-        ingredients.addIngredient("patty");
-        ingredients.addIngredient("patty_burned");
-        ingredients.addIngredient("patty_cooked");
-        ingredients.addIngredient("salad");
-        ingredients.addIngredient("tomato");
-        ingredients.addIngredient("tomato_burned");
-        ingredients.addIngredient("tomato_cooked");
-        ingredients.addIngredient("unformed_patty");
-    }
+    // @Override public void preLoad() {
+
+    // }
 
     @Override
     public void load() {

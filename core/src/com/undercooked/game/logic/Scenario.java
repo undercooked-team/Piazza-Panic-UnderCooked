@@ -39,21 +39,8 @@ public class Scenario extends GameLogic {
         this(null, null);
     }
 
-    @Override
     public void update(float delta) {
-
-        InputController.updateKeys();
-
-        elapsedTime += delta;
-
-        // Check if game is over.
-
-        // Update cooks.
-        cookController.update(delta);
-
-        // Update Customers.
-        customerController.update(delta);
-
+        super.update(delta);
     }
 
     @Override
