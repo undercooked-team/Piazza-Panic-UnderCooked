@@ -22,26 +22,9 @@ public class Endless extends GameLogic {
 
     // }
 
-    @Override
     public void load() {
-        // Load all Cook and Customer sprites
-        TextureManager textureManager = gameScreen.getTextureManager();
-        // Cooks
-        for (int i = 1; i <= Constants.NUM_COOK_TEXTURES; i++) {
-            textureManager.load(Constants.GAME_TEXTURE_ID, "cook_walk_" + i + ".png");
-            textureManager.load(Constants.GAME_TEXTURE_ID, "cook_walk_hands_" + i + ".png");
-        }
+        super.load();
 
-        // Customers
-        for (int i = 1; i <= Constants.NUM_CUSTOMER_TEXTURES; i++) {
-            textureManager.load(Constants.GAME_TEXTURE_ID, "cust" + i + "f.png");
-            textureManager.load(Constants.GAME_TEXTURE_ID, "cust" + i + "b.png");
-            textureManager.load(Constants.GAME_TEXTURE_ID, "cust" + i + "r.png");
-            textureManager.load(Constants.GAME_TEXTURE_ID, "cust" + i + "l.png");
-        }
-
-        // Load all base ingredients
-        ingredients.load(textureManager);
     }
 
     @Override
