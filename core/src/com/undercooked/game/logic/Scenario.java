@@ -1,10 +1,7 @@
 package com.undercooked.game.logic;
 
-import com.undercooked.game.Input.InputController;
 import com.undercooked.game.assets.TextureManager;
-import com.undercooked.game.entity.Cook;
 import com.undercooked.game.screen.GameScreen;
-import com.undercooked.game.screen.GameScreen.STATE;
 
 public class Scenario extends GameLogic {
 
