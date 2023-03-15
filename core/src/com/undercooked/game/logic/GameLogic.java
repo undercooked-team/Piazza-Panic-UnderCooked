@@ -1,19 +1,14 @@
 package com.undercooked.game.logic;
 
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.utils.Array;
-import com.undercooked.game.MainGameClass;
+import com.undercooked.game.Input.InputController;
 import com.undercooked.game.assets.TextureManager;
-import com.undercooked.game.entity.Cook;
 import com.undercooked.game.entity.CookController;
 import com.undercooked.game.entity.CustomerController;
 import com.undercooked.game.entity.Entity;
-import com.undercooked.game.files.FileControl;
 import com.undercooked.game.food.Ingredients;
 import com.undercooked.game.map.Map;
 import com.undercooked.game.render.GameRenderer;
 import com.undercooked.game.screen.GameScreen;
-import com.undercooked.game.screen.ScreenController;
 import com.undercooked.game.station.StationManager;
 import com.undercooked.game.util.Constants;
 
@@ -83,7 +78,26 @@ public abstract class GameLogic implements Logic {
      * Called before the game has loaded.
      */
     public void preLoad() {
-
+        // Add all the game ingredients
+        ingredients.addIngredient("burger");
+        ingredients.addIngredient("burger_bun");
+        ingredients.addIngredient("burger_bun_burned");
+        ingredients.addIngredient("burger_bun_cooked");
+        ingredients.addIngredient("lettuce");
+        ingredients.addIngredient("lettuce_chopped");
+        ingredients.addIngredient("meat");
+        ingredients.addIngredient("meat_overcooked");
+        ingredients.addIngredient("meat_undercooked");
+        ingredients.addIngredient("onion");
+        ingredients.addIngredient("onion_chopped");
+        ingredients.addIngredient("patty");
+        ingredients.addIngredient("patty_burned");
+        ingredients.addIngredient("patty_cooked");
+        ingredients.addIngredient("salad");
+        ingredients.addIngredient("tomato");
+        ingredients.addIngredient("tomato_burned");
+        ingredients.addIngredient("tomato_cooked");
+        ingredients.addIngredient("unformed_patty");
     }
 
     /**
@@ -105,7 +119,30 @@ public abstract class GameLogic implements Logic {
     }
 
     /**
-     * Called when the {@link GameScreen} moves to the {@link com.undercooked.game.screen.PauseScreen}.
+     * Called every frame. Allowing the cooks, and chefs to move,
+     * depending on the amount of time that has passed since the last
+     * frame.
+     *
+     * @param delta The amount of time that has passed since the last
+     *              frame.
+     */
+    public void update(float delta) {
+        InputController.updateKeys();
+
+        elapsedTime += delta;
+
+        // Check if game is over.
+
+        // Update cooks.
+        cookController.update(delta);
+
+        // Update Customers.
+        customerController.update(delta);
+    }
+
+    /**
+     * Called when the {@link GameScreen} moves to the
+     * {@link com.undercooked.game.screen.PauseScreen}.
      */
     public void pause() {
         cookController.stopMovement();
