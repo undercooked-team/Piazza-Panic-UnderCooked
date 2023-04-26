@@ -35,7 +35,7 @@ public class FileControl {
     }
 
     public static String formatDir(String dir) {
-        return dir + (dir.endsWith("\\") || dir.endsWith("/") ? "" : "\\");
+        return dir + (dir.endsWith("\\") || dir.endsWith("/") ? "" : "/");
     }
 
     public static String dirAndName(String dir, String fileName) {
