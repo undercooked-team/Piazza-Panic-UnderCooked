@@ -5,17 +5,30 @@ import com.badlogic.gdx.utils.JsonValue;
 
 import java.util.Iterator;
 
+/**
+ * A class which holds {@link Items} in a stack.
+ */
 public class ItemStack implements Iterable<Item> {
-    Array<Item> items;
+    /** An {@link Array} of the {@link Items} within the stack. */
+    private final Array<Item> items;
 
+    /**
+     * Constructor for the class.
+     */
     public ItemStack() {
         this.items = new Array<>();
     }
 
+    /**
+     * @return {@code int} : The number of {@link Item}s in the stack.
+     */
     public int size() {
         return items.size;
     }
 
+    /**
+     * @return {@link Item} : The topmost {@link Item} of the stack.
+     */
     public Item peek() {
         if (items.size == 0) {
             return null;
@@ -23,18 +36,34 @@ public class ItemStack implements Iterable<Item> {
         return items.peek();
     }
 
+    /**
+     * Removes the topmost {@link Item} from the stack, and returns it.
+     * @return {@link Item} : The topmost {@link Item} of the stack.
+     */
     public Item pop() {
         return items.pop();
     }
 
+    /**
+     * Removes all of the {@link Item}s from the stack.
+     */
     public void clear() {
         items.clear();
     }
 
+    /**
+     * Adds an {@link Item} to the top of the stack.
+     * @param item {@link Item} : The {@link Item} to add to the stack.
+     */
     public void add(Item item) {
         items.add(item);
     }
 
+    /**
+     * Returns the {@link Item} at the index provided.
+     * @param index {@code int} : The index to get.
+     * @return {@link Item} : The {@link Item} at the index.
+     */
     public Item get(int index) {
         return items.get(index);
     }
@@ -111,10 +140,11 @@ public class ItemStack implements Iterable<Item> {
         return asArray(true);
     }
 
-    public String getStack() {
-        return null;
-    }
-
+    /**
+     * Converts the {@link ItemStack} into a {@link JsonValue} array
+     * of the {@link Item}s' ids.
+     * @return {@link JsonValue} : The {@link ItemStack} as a {@link JsonValue}.
+     */
     public JsonValue serial() {
         // Get ItemIDs from {@link heldItems}
         JsonValue theItemIds = new JsonValue(JsonValue.ValueType.array);
