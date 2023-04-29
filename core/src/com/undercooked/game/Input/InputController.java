@@ -8,19 +8,27 @@ import com.undercooked.game.files.FileControl;
 import com.undercooked.game.util.StringUtil;
 import com.undercooked.game.util.json.*;
 
+/**
+ * A class composing of static functions, with no constructor,
+ * to easily allow checking of inputs throughout anywhere in the game.
+ */
 public class InputController {
 
+    /** A map of the input ids to their {@link InputKey}. */
     static final ObjectMap<String, InputKey> inputs = new ObjectMap<>();
 
     /**
-     * Function used for Saving the inputs.
-     *
-     * @return The {@link ObjectMap} of the inputs.
+     * @return {@link ObjectMap<String,InputKey>} : The {@link #inputs}.
      */
-    public static ObjectMap getInputs() {
+    public static ObjectMap<String, InputKey> getInputs() {
         return inputs;
     }
 
+    /**
+     * Link a new key to a key id
+     * @param keyID {@link String} : The key's id.
+     * @param newKey {@code int} : The key value identifier.
+     */
     public static void addKey(String keyID, int newKey) {
         // First check that the key actually exists in the inputs map
         if (!inputs.containsKey(keyID)) {
@@ -31,17 +39,13 @@ public class InputController {
         inputs.get(keyID).addKey(newKey);
     }
 
-    public static void setKey(String keyID, int newKey) {
-        // First check that the key actually exists in the inputs map
-        if (!inputs.containsKey(keyID)) {
-            // If it doesn't, add it.
-            // Defaults to interaction
-            inputs.put(keyID,new InputKey());
-        }
-        // Add the key
-        inputs.get(keyID).addKey(newKey);
-    }
-
+    /**
+     * Set whether a certain key id is an interaction
+     * key or not.
+     * @param keyID {@link String} : The key's id.
+     * @param interaction {@code boolean} : Whether the key is an
+     *                                      interaction or not.
+     */
     public static void setInteraction(String keyID, boolean interaction) {
         // First check that the key actually exists in the inputs map
         if (!inputs.containsKey(keyID)) {
@@ -52,6 +56,12 @@ public class InputController {
         inputs.get(keyID).interaction = interaction;
     }
 
+    /**
+     * Returns whether a certain key is
+     * @param keyID {@link String} : The key's id.
+     * @return {@code boolean} : If the key id is ({@code true}) or
+     *                           isn't ({@code false}) an interaction.
+     */
     public static boolean isInteraction(String keyID) {
         // First check that the key actually exists in the inputs map
         if (!inputs.containsKey(keyID)) {
@@ -62,36 +72,67 @@ public class InputController {
         return inputs.get(keyID).interaction;
     }
 
+    /**
+     * Updates all of the {@link InputKey}s in the
+     * {@link #inputs}.
+     */
     public static void updateKeys() {
         for (InputKey key : inputs.values()) {
             key.update();
         }
     }
 
+    /**
+     * @param keyID {@link String} : The key's id.
+     * @return {@code boolean} : {@code true} if the key is being pressed,
+     *                           {@code false} false if not.
+     */
     public static boolean isKeyPressed(String keyID) {
         if (!keyExists(keyID)) return false;
 
         return inputs.get(keyID).isPressed();
     }
 
+    /**
+     * @param keyID {@link String} : The key's id.
+     * @return {@code boolean} : {@code true} if the key was just pressed,
+     *                           {@code false} false if not.
+     */
     public static boolean isKeyJustPressed(String keyID) {
         if (!keyExists(keyID)) return false;
 
         return inputs.get(keyID).isJustPressed();
     }
 
+    /**
+     * @param keyID {@link String} : The key's id.
+     * @return {@code boolean} : {@code true} if the key is released,
+     *                           {@code false} false if not.
+     */
     public static boolean isKeyReleased(String keyID) {
         if (!keyExists(keyID)) return false;
 
         return inputs.get(keyID).isReleased();
     }
 
+    /**
+     * @param keyID {@link String} : The key's id.
+     * @return {@code boolean} : {@code true} if the key was just released,
+     *                           {@code false} false if not.
+     */
     public static boolean isKeyJustReleased(String keyID) {
         if (!keyExists(keyID)) return false;
 
         return inputs.get(keyID).isJustReleased();
     }
 
+    /**
+     * Returns whether a key is being given a certain {@link InputType}.
+     * @param keyID {@link String} : The key's id.
+     * @param inputType {@link InputType} : The type of input to check for.
+     * @return {@code boolean} : {@code true} if the key has an input of {@code inputType},
+     *                           {@code false} if not.
+     */
     public static boolean isKey(String keyID, InputType inputType) {
         switch(inputType) {
             case PRESSED:
@@ -107,10 +148,21 @@ public class InputController {
         }
     }
 
+    /**
+     * Returns whether a key id exists or not.
+     * @param keyID {@link String} : The key's id.
+     * @return {@code boolean} : {@code true} if the key exists,
+     *                           {@code false} if not.
+     */
     public static boolean keyExists(String keyID) {
         return inputs.containsKey(keyID);
     }
 
+    /**
+     * Returns the {@link Input.Keys} value of the key name provided.
+     * @param keyName {@link String} : The name of the key.
+     * @return {@code int} : The value of the key.
+     */
     public static int getKeyVal(String keyName) {
         // Convert to title case, as that is what LibGDX uses
         keyName = StringUtil.convertToTitleCase(keyName);
@@ -118,11 +170,16 @@ public class InputController {
         return Input.Keys.valueOf(keyName);
     }
 
-    public static String getKeyString(String keyName) {
+    /**
+     * Returns the name of the first linked key of a key id.
+     * @param keyID {@link String} : The key's id.
+     * @return {@link String} : The key id's input.
+     */
+    public static String getKeyString(String keyID) {
         // If it doesn't exist, stop
-        if (!inputs.containsKey(keyName)) return "Key doesn't exist: " + keyName;
+        if (!inputs.containsKey(keyID)) return "Key doesn't exist: " + keyID;
         // If it does, return it formatted to use title case
-        return StringUtil.convertToTitleCase(Input.Keys.toString(inputs.get(keyName).keys.get(0)));
+        return StringUtil.convertToTitleCase(Input.Keys.toString(inputs.get(keyID).keys.get(0)));
     }
 
     /**
