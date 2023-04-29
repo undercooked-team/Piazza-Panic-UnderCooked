@@ -17,18 +17,32 @@ import com.undercooked.game.util.Constants;
 import com.undercooked.game.util.DefaultJson;
 import com.undercooked.game.util.json.JsonFormat;
 
+/**
+ * A class that holds all of the {@link InteractionObject}s in the game.
+ */
 public class Interactions {
 
     /** A mapping of stationID to the interactionIDs */
-    private ObjectMap<String, Array<String>> stationInteractions;
+    private final ObjectMap<String, Array<String>> stationInteractions;
     /** A mapping of interactionID to the interactions + the ingredients needed */
-    private ObjectMap<String, InteractionObject> interactions;
+    private final ObjectMap<String, InteractionObject> interactions;
 
+    /**
+     * Constructor for the class, setting up the class' {@link ObjectMap}s.
+     */
     public Interactions() {
         this.stationInteractions = new ObjectMap<>();
         this.interactions = new ObjectMap<>();
     }
 
+    /**
+     * Loads an interaction from the asset path, only loading if the file was found.
+     * @param assetPath {@link String} : The path to the asset.
+     * @param stationController {@link StationController} : The {@link StationController} to load the
+     *                                                   station needed for the interaction.
+     * @param audioManager {@link AudioManager} : The {@link AudioManager} to use to load sounds.
+     * @param items {@link Items} : The {@link Items} to load the items needed for the interaction.
+     */
     public void loadInteractionAsset(String assetPath, StationController stationController, AudioManager audioManager, Items items) {
         JsonValue interactionRoot = FileControl.loadJsonAsset(assetPath, "interactions");
         // If it's not null...
@@ -38,6 +52,16 @@ public class Interactions {
         }
     }
 
+    /**
+     * Goes through an interaction to load all of the {@link InteractionStep}s,
+     * returning {@code null} if it can't any of the {@link InteractionStep}s.
+     *
+     * @param interactionRoot {@link JsonValue} : The interaction's json.
+     * @param audioManager {@link AudioManager} : The {@link AudioManager} to use to load sounds.
+     * @param items {@link Items} : The {@link Items} to use to load items.
+     * @return {@link Array<InteractionStep>} : An {@link Array} of the loaded {@link InteractionStep}s,
+     *                                          or {@code null} if it failed to load.
+     */
     private Array<InteractionStep> addInteractions(JsonValue interactionRoot, AudioManager audioManager, Items items) {
         Array<InteractionStep> steps = new Array<>();
         // Loop through the interactions
@@ -53,6 +77,19 @@ public class Interactions {
         return steps;
     }
 
+    /**
+     * Goes through the {@link JsonValue} for the interaction, and loads
+     * it into a {@link InteractionStep} class, returning {@code null} if
+     * it fails to load.
+     * <br>
+     * Recursively calls the {@link #addInteractions(JsonValue, AudioManager, Items)}
+     * function for the success and failure {@link InteractionStep}s.
+     *
+     * @param interactionRoot {@link JsonValue} : The interaction's json.
+     * @param audioManager {@link AudioManager} : The {@link AudioManager} to use to load sounds.
+     * @param items {@link Items} : The {@link Items} to use to load items.
+     * @return {@link InteractionStep} : The {@link InteractionStep} loaded from the {@link JsonValue}.
+     */
     private InteractionStep addInteraction(JsonValue interactionRoot, AudioManager audioManager, Items items) {
         InteractionStep interactionStep = null;
         // Get the interaction step type
@@ -149,6 +186,18 @@ public class Interactions {
         return interactionStep;
     }
 
+    /**
+     * Loads a {@link JsonValue} interaction to the {@link #interactions} and
+     * {@link #stationInteractions} {@link ObjectMap}s, mapped the
+     * {@code interactionID} provided.
+     *
+     * @param interactionID {@link String} : The id of the interaction.
+     * @param interactionRoot {@link JsonValue} : The Json for the interaction.
+     * @param stationController {@link StationController} : The {@link StationController} to load the
+     *      *                                               station needed for the interaction.
+     * @param audioManager {@link AudioManager} : The {@link AudioManager} to use to load sounds.
+     * @param items {@link Items} : The {@link Items} to use to load items.
+     */
     private void loadInteraction(String interactionID, JsonValue interactionRoot, StationController stationController, AudioManager audioManager, Items items) {
         // Make sure it's formatted correctly
         JsonFormat.formatJson(interactionRoot, DefaultJson.interactionFormat());
@@ -220,10 +269,22 @@ public class Interactions {
         }
     }
 
+    /**
+     * Returns an array of the interaction ids that a specific
+     * {@link String} station id can do.
+     * @param stationID {@link String} : The id of the {@link com.undercooked.game.station.Station}.
+     * @return {@link Array<String>} : An {@link Array} of the interaction ids that can be done by
+     *                                 the {@link com.undercooked.game.station.Station}.
+     */
     public Array<String> getStationInteractions(String stationID) {
         return stationInteractions.get(stationID);
     }
 
+    /**
+     * Returns the {@link InteractionObject} that is mapped to the id provided.
+     * @param interactionID {@link String} : The id of the interaction.
+     * @return {@link InteractionObject} : The interaction requested.
+     */
     public InteractionObject getInteractionSteps(String interactionID) {
         return interactions.get(interactionID);
     }
