@@ -21,15 +21,15 @@ public class AudioSliders {
     private float paddingSides, paddingVertical;
     /** Percentage of the {@link Slider} used for the button. */
     private float slideButtonWidth;
-    Sprite backSprite;
-    Array<Slider> sliders;
+    private final Sprite backSprite;
+    private final Array<Slider> sliders;
 
     /**
      * Constructor for the AudioSliders
-     * @param x
-     * @param y
-     * @param width
-     * @param height
+     * @param x {@code float} : The {@code x} position of the {@link AudioSliders}.
+     * @param y {@code float} : The {@code y} position of the {@link AudioSliders}.
+     * @param width {@code float} : The width of the {@link AudioSliders}.
+     * @param height {@code float} : The height of the {@link AudioSliders}.
      */
     public AudioSliders(float x, float y, float width, float height, Texture backgroundTex) {
         this.x = x;
@@ -61,17 +61,15 @@ public class AudioSliders {
               paddingY = (height*paddingVertical)/2F;
 
         // Calculate the corners of the Sliders' area.
-        float bottomX = paddingX,
-              bottomY = paddingY,
-              topX = width-paddingX,
+        float topX = width-paddingX,
               topY = height-paddingY;
 
         // Calculate the width of the sliders.
-        float slideWidth = topX - bottomX;
+        float slideWidth = topX - paddingX;
 
         // Calculate the vertical area given to each slider.
         float percentSlide = 1F / sliders.size;
-        float slideYRoom = (topY - bottomY) * percentSlide;
+        float slideYRoom = (topY - paddingY) * percentSlide;
 
         // Calculate the height of the sliders.
         float slideHeight = this.slideHeight * slideYRoom;
@@ -82,33 +80,51 @@ public class AudioSliders {
             slider.setWidth(slideWidth);
             slider.setHeight(slideHeight);
             slider.setSliderSize(slideButtonWidth*slideWidth,slideHeight);
-            slider.setX(x+bottomX);
-            slider.setY(y+bottomY + (slideYRoom - slideHeight)/2 + slideYRoom * (sliders.size-1-i));
+            slider.setX(x + paddingX);
+            slider.setY(y + paddingY + (slideYRoom - slideHeight)/2 + slideYRoom * (sliders.size-1-i));
         }
     }
 
-    public Slider addSlider(Listener<Float> listener, String audioGroup, Texture sliderTexture) {
+    /**
+     * Add a new {@link Slider} to the {@link AudioSliders}.
+     *
+     * @param listener {@link Listener<Float>} : The {@link Listener} of the {@link Slider}.
+     * @param sliderTexture {@link Texture} : The {@link Texture} of the {@link Slider}'s button.
+     * @return {@link Slider} : The newly created {@link Slider}.
+     */
+    public Slider addSlider(Listener<Float> listener, Texture sliderTexture) {
         Slider newSlider = new Slider(x,y,0.5F,0F,1F,
-                sliderTexture, audioGroup);
+                sliderTexture);
         newSlider.addChangeListener(listener);
         sliders.add(newSlider);
         update();
         return newSlider;
     }
 
-    public Slider addSlider(Listener<Float> listener, Texture sliderTexture) {
-        return addSlider(listener, "default", sliderTexture);
-    }
-
+    /**
+     * Remove a {@link Slider} from the {@link AudioSliders}.
+     *
+     * @param index {@code int} : The index of the {@link Slider} to remove.
+     */
     public void removeSliderInd(int index) {
         sliders.removeIndex(index);
         update();
     }
 
+    /**
+     * Remove a {@link Slider} from the {@link AudioSliders}.
+     *
+     * @param slider {@link Slider} : The {@link Slider to remove.}
+     */
     public void removeSlider(Slider slider) {
         removeSliderInd(sliders.indexOf(slider, true));
     }
 
+    /**
+     * Draws the {@link Slider}s on the window.
+     *
+     * @param batch {@link SpriteBatch} : The {@link SpriteBatch} to use.
+     */
     public void render(SpriteBatch batch) {
 
         // Draw the background sprite behind.
@@ -122,30 +138,54 @@ public class AudioSliders {
 
     //region Getters
 
+    /**
+     * @return {@code float} : The {@code x} position of the {@link AudioSliders}.
+     */
     public float getX() {
         return x;
     }
 
+    /**
+     * @return {@code float} : The {@code y} position of the {@link AudioSliders}.
+     */
     public float getY() {
         return y;
     }
 
+    /**
+     * @return {@code float} : The width of the {@link AudioSliders}.
+     */
     public float getWidth() {
         return width;
     }
 
+    /**
+     * @return {@code float} : The height of the {@link AudioSliders}.
+     */
     public float getHeight() {
         return height;
     }
 
+    /**
+     * @return {@code float} : The side padding of the {@link AudioSliders}.
+     */
     public float getPaddingSides() {
         return paddingSides;
     }
 
+    /**
+     * @return {@code float} : The vertical padding of the {@link AudioSliders}.
+     */
     public float getPaddingVertical() {
         return paddingVertical;
     }
 
+    /**
+     * Get the {@link Slider} at the index requested.
+     *
+     * @param index {@code int} : The index of the {@link Slider}.
+     * @return {@link Slider} : The {@link Slider} at that index.
+     */
     public Slider getSlider(int index) {
         return sliders.get(index);
     }
@@ -154,38 +194,67 @@ public class AudioSliders {
 
     //region Setters
 
+    /**
+     * Set the {@code x} position of the {@link AudioSliders}.
+     * @param x {@code float} : The {@code x} position to set to.
+     */
     public void setX(float x) {
         this.x = x;
         update();
     }
 
+    /**
+     * Set the {@code y} position of the {@link AudioSliders}.
+     * @param y {@code float} : The {@code y} position to set to.
+     */
     public void setY(float y) {
         this.y = y;
         update();
     }
 
+    /**
+     * Set the width of the {@link AudioSliders}.
+     * @param width {@code float} : The width to set to.
+     */
     public void setWidth(float width) {
         this.width = width;
         update();
     }
 
+    /**
+     * Set the height of the {@link AudioSliders}.
+     * @param height {@code float} : The height to set to.
+     */
     public void setHeight(float height) {
         this.height = height;
         update();
     }
 
+    /**
+     * Set the side padding of the {@link AudioSliders}.
+     * @param paddingSides {@code float} : The side padding to set to.
+     */
     public void setPaddingSides(float paddingSides) {
         this.paddingSides = paddingSides;
         update();
     }
 
+    /**
+     * Set the vertical padding of the {@link AudioSliders}.
+     * @param paddingVertical {@code float} : The vertical padding to set to.
+     */
     public void setPaddingVertical(float paddingVertical) {
         this.paddingVertical = paddingVertical;
         update();
     }
 
+    /**
+     * Set the width of the {@link Slider}s, a percentage 0 - 1,
+     * of the {@link AudioSliders}'s width.
+     * @param sliderWidthPercent {@code float} : The percentage width of the {@link Slider}s.
+     */
     public void setSliderWidth(float sliderWidthPercent) {
-        this.slideButtonWidth = sliderWidthPercent;
+        this.slideButtonWidth = Math.max(Math.min(1,sliderWidthPercent), 0);
         update();
     }
 

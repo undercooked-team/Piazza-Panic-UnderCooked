@@ -25,9 +25,8 @@ public class Slider {
     float beforeVal;
     ListenerController<Float> changeListeners;
     ListenerController<Float> releaseListeners;
-    String audioGroup;
 
-    public Slider(float x, float y, float value, float minValue, float maxValue, Texture sliderTex, String audioGroup) {
+    public Slider(float x, float y, float value, float minValue, float maxValue, Texture sliderTex) {
         this.sliderButton = new Button(new Button.ButtonStyle());
         this.sliderButton.setPosition(x,y);
         this.sliderSprite = new Sprite(sliderTex);
@@ -59,11 +58,6 @@ public class Slider {
                 releaseListeners.tellListeners(percent - beforeVal);
             }
         });
-
-        this.audioGroup = audioGroup;
-    }
-    public Slider(float x, float y, float value, float minValue, float maxValue, Texture sliderTex) {
-        this(x,y,value,minValue,maxValue,sliderTex,"default");
     }
 
     /*public setBodySprite(Texture sprite) {
