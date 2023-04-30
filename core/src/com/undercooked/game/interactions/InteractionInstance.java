@@ -13,6 +13,8 @@ public class InteractionInstance {
 
     /** The station to update */
     public final Station station;
+
+    /** The {@link StationInteractControl} instance to use. */
     public final StationInteractControl interactControl;
 
     /** The items within the game. Useful for Interactions. */
@@ -30,6 +32,13 @@ public class InteractionInstance {
     /** The result of the last delta check, the time since the last frame. */
     private float lastDeltaCheck;
 
+    /**
+     * @param station {@link Station} : The {@link Station} that holds this interaction instance.
+     * @param interactControl {@link StationInteractControl} : The {@link StationInteractControl} that controls
+     *                                                         the interaction data.
+     * @param audioManager {@link AudioManager} : The {@link AudioManager} to use.
+     * @param gameItems {@link Items} : The {@link Items} of the game.
+     */
     public InteractionInstance(Station station, StationInteractControl interactControl, AudioManager audioManager, Items gameItems) {
         this.station = station;
         this.gameItems = gameItems;
@@ -39,19 +48,18 @@ public class InteractionInstance {
         this.lastDeltaCheck = 0;
     }
 
-    public void setSuccessListener(Listener listener) {
-        this.successListener = listener;
-    }
-
-    public void load(TextureManager textureManager, AudioManager audioManager) {
-
-    }
-
+    /**
+     * Updates the current {@link Station} interaction.
+     */
     public void updateInteractions() {
         // Then update the station
         station.updateStationInteractions();
     }
 
+    /**
+     * Plays a sound using {@link com.badlogic.gdx.audio.Music}.
+     * @param soundPath {@link String} : The asset path to the sound.
+     */
     public void playSound(String soundPath) {
         if (soundPath != null) {
             //if (!audioManager.musicIsPlaying(soundID)) {
@@ -59,18 +67,31 @@ public class InteractionInstance {
         }
     }
 
+    /**
+     * Stops a sound using {@link com.badlogic.gdx.audio.Music}.
+     * @param soundPath {@link String} : The asset path to the sound.
+     */
     public void stopSound(String soundPath) {
         audioManager.getMusicAsset(soundPath).stop();
     }
 
+    /**
+     * Resets the variables of the {@link InteractionInstance}.
+     */
     public void reset() {
         elapsedTime = 0;
     }
 
+    /**
+     * Updates the delta variable.
+     */
     public void updateDelta() {
         this.lastDeltaCheck = Gdx.graphics.getDeltaTime();
     }
 
+    /**
+     * @return {@code float} : The time since the last frame.
+     */
     public float getDelta() {
         return this.lastDeltaCheck;
     }
