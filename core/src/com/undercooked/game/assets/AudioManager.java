@@ -6,7 +6,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.undercooked.game.audio.SoundStateChecker;
 import com.undercooked.game.files.FileControl;
 import com.undercooked.game.util.Constants;
 
