@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package de.tomgrill.gdxtesting.tests;
+package de.tomgrill.gdxtesting.tests.filesTests;
 
 import static org.junit.Assert.*;
 

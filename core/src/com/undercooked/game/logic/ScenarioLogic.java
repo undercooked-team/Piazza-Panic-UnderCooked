@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.undercooked.game.Input.InputController;
 import com.undercooked.game.assets.AudioManager;
 import com.undercooked.game.assets.TextureManager;
@@ -13,17 +12,12 @@ import com.undercooked.game.entity.PowerUpType;
 import com.undercooked.game.entity.cook.Cook;
 import com.undercooked.game.entity.customer.Customer;
 import com.undercooked.game.entity.customer.CustomerTarget;
-import com.undercooked.game.files.FileControl;
-import com.undercooked.game.food.Instruction;
 import com.undercooked.game.food.Item;
 import com.undercooked.game.food.Request;
 import com.undercooked.game.map.*;
 import com.undercooked.game.screen.GameScreen;
 import com.undercooked.game.util.Constants;
-import com.undercooked.game.util.DefaultJson;
 import com.undercooked.game.util.Listener;
-import com.undercooked.game.util.json.JsonFormat;
-import com.undercooked.game.util.json.JsonObject;
 import com.undercooked.game.GameType;
 
 import java.util.Random;
@@ -288,7 +282,7 @@ public class ScenarioLogic extends ScenarioLoadLogic {
     public void createNewPowerUp() {
         // Get a random map cell that's open (with nothing blocking, and not
         // on the same cell as the current cook or another power up)
-        Array<MapCell> openCells = map.openCells(Map.CollisionType.ANY);
+        Array<MapCell> openCells = map.openCells(Map.MapCellType.ANY);
         Cook currentCook = cookController.getCurrentCook();
         for (int i = openCells.size-1 ; i >= 0 ; i--) {
             MapCell thisCell = openCells.get(i);
@@ -339,8 +333,8 @@ public class ScenarioLogic extends ScenarioLoadLogic {
         newPowerUp.setRemoveListener(powerUpRemoveListener);
 
         // Then add it to the map
-        newPowerUp.setX(openCell.getDisplayX() + MapManager.gridToPos(0.5f));
-        newPowerUp.setY(openCell.getDisplayY() + MapManager.gridToPos(0.5f));
+        newPowerUp.setX(openCell.getCollisionX() + MapManager.gridToPos(0.5f));
+        newPowerUp.setY(openCell.getCollisionY() + MapManager.gridToPos(0.5f));
 
         // And add it to the arrays
         gameRenderer.addEntity(newPowerUp);
@@ -674,7 +668,7 @@ public class ScenarioLogic extends ScenarioLoadLogic {
         // If all the above is valid, take the money and add the cook
         money -= cookCost;
         Random random = new Random();
-        Cook newCook = new Cook(new Vector2(openCell.getDisplayX() + MapManager.gridToPos(0), openCell.getDisplayY() + MapManager.gridToPos(0.5f)),
+        Cook newCook = new Cook(new Vector2(openCell.getCollisionX() + MapManager.gridToPos(0), openCell.getCollisionY() + MapManager.gridToPos(0.5f)),
                 random.nextInt(1,Constants.NUM_COOK_TEXTURES+1),
                 textureManager, map);
         newCook.postLoad(textureManager);

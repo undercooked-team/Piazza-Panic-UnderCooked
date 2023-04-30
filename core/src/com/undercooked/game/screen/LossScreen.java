@@ -2,8 +2,6 @@ package com.undercooked.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -60,7 +58,7 @@ public class LossScreen extends Screen {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
                 // Go to main screen
-                getScreenController().setScreen(Constants.MAIN_SCREEN_ID);
+                getScreenController().goToScreen(Constants.MAIN_SCREEN_ID);
             }
         });
 

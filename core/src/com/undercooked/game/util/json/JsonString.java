@@ -2,14 +2,31 @@ package com.undercooked.game.util.json;
 
 import com.badlogic.gdx.utils.JsonValue;
 
+/**
+ * A value used in a json format to specify a {@link JsonValue}'s value
+ * to be formatted as a {@link String}.
+ */
 public class JsonString extends JsonVal<String> {
+    /** If the default {@link #value} should be allowed to be {@code null} or not.*/
     boolean allowNull;
+
+    /**
+     * Constructor for the class that defaults {@code allowNull} to true.
+     * @param ID {@link String} : The id.
+     * @param value {@link String} : The default value to use.
+     */
     public JsonString(String ID, String value) {
-        super(ID, value);
-        // By default, allow null
-        this.allowNull = true;
+        this(ID, value, true);
     }
 
+    /**
+     * If {@code allowNull} is false and {@code value} is {@code null},
+     * it will instead become {@code ""}.
+     * @param ID {@link String} : The id.
+     * @param value {@link JsonValue.ValueType} : The default value to use.
+     * @param allowNull {@code boolean} : Whether the value of a {@link JsonValue}
+     *                                    should be allowed to be {@code null} or not.
+     */
     public JsonString(String ID, String value, boolean allowNull) {
         super(ID, value);
         this.allowNull = allowNull;
@@ -21,17 +38,17 @@ public class JsonString extends JsonVal<String> {
     }
 
     @Override
-    public boolean isValue(JsonValue value) {
-        return value.isString() || (allowNull && value.isNull());
+    public boolean isValue(JsonValue jsonData) {
+        return jsonData.isString() || (allowNull && jsonData.isNull());
     }
 
     @Override
-    public void setValue(JsonValue value, boolean existsBefore) {
+    public void setValue(JsonValue jsonData, boolean existsBefore) {
         // If null is allowed, then leave it alone
-        if (allowNull && value.isNull()) {
+        if (allowNull && jsonData.isNull()) {
             return;
         }
-        value.set(this.value);
+        jsonData.set(this.value);
     }
 
     @Override

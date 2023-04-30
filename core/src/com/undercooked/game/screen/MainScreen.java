@@ -224,7 +224,7 @@ public class MainScreen extends Screen {
 
 				tutorialLogic.setDifficulty(Difficulty.EASY);
 
-				game.screenController.setScreen(Constants.GAME_SCREEN_ID);
+				game.screenController.goToScreen(Constants.GAME_SCREEN_ID);
 			}
 		});
 
@@ -334,7 +334,7 @@ public class MainScreen extends Screen {
 		gameLogic.resetOnLoad = false;
 
 		// Move to the game screen
-		game.screenController.setScreen(Constants.GAME_SCREEN_ID);
+		game.screenController.goToScreen(Constants.GAME_SCREEN_ID);
 
 		// Load the game
 		SaveLoadGame.loadGame(gameLogic, saveData);

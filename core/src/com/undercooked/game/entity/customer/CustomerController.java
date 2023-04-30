@@ -310,11 +310,11 @@ public class CustomerController {
 			MapCell mapCell1 = o1.getRegisterCell();
 			MapCell mapCell2 = o2.getRegisterCell();
 			// If higher, return 1
-			if (mapCell1.getDisplayY() > mapCell1.getDisplayY()) {
+			if (mapCell1.getCollisionY() > mapCell1.getCollisionY()) {
 				return 1;
 			}
 			// If lower, return -1
-			if (mapCell2.getDisplayY() < mapCell2.getDisplayY()) {
+			if (mapCell2.getCollisionY() < mapCell2.getCollisionY()) {
 				return -1;
 			}
 			// Return 0 if they're the same.

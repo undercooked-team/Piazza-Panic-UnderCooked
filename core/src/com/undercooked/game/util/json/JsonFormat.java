@@ -2,8 +2,6 @@ package com.undercooked.game.util.json;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
-import com.undercooked.game.files.FileControl;
-import com.undercooked.game.util.DefaultJson;
 
 /**
  * A class which allows for the formatting of a {@link JsonValue}
@@ -42,10 +40,10 @@ public class JsonFormat {
             return null;
         }
 
-        Array<JsonVal> values = ideal.getValues();
+        Array<JsonVal<?>> values = ideal.getValues();
 
         for (int i = 0 ; i < values.size ; i++) {
-            JsonVal jsonVal = values.get(i);
+            JsonVal<?> jsonVal = values.get(i);
             // Check that it has the ID
             if (!json.has(jsonVal.ID)) {
                 // Add the child
@@ -53,8 +51,8 @@ public class JsonFormat {
             } else {
                 // Get the child
                 JsonValue thisJson = json.get(jsonVal.ID);
-                // And then check if
-                jsonVal.checkChild(thisJson, existsBefore);
+                // And then check if the child is correct
+                jsonVal.check(thisJson, existsBefore);
             }
         }
 

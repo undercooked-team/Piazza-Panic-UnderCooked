@@ -300,7 +300,7 @@ public class Cook extends MoveableEntity {
 				- interactCollision.width / 2;
 
 		// Update the cell that is currently being looked at
-		interactTarget = map.getCollision(interactCollision, true, Map.CollisionType.INTERACTABLE);
+		interactTarget = map.getCollision(interactCollision, true, Map.MapCellType.INTERACTABLE);
 		if (interactTarget != null) {
 			if (interactTarget.getMapEntity() != null) {
 				Station asStation = (Station) interactTarget.getMapEntity();

@@ -32,5 +32,4 @@ public class MainGameClassTest {
 	public void checkConstructorLoadsEverything() {
 		MainGameClass game = new MainGameClass();
 	}
-
 }

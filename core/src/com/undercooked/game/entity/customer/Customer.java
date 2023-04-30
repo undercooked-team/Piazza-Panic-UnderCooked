@@ -3,7 +3,6 @@ package com.undercooked.game.entity.customer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.JsonValue;
 import com.undercooked.game.assets.TextureManager;
@@ -160,7 +159,7 @@ public class Customer {
 			// Then just move until it reaches the register
 			y += moveSpeed * delta;
 			// If posy >= registerCell's y, + 0.5, then wait
-			float targetY = register.getRegisterCell().getDisplayY() - MapManager.gridToPos(0.3F);
+			float targetY = register.getRegisterCell().getCollisionY() - MapManager.gridToPos(0.3F);
 			if (y >= targetY) {
 				waiting = true;
 				curTexture = textr;

@@ -6,7 +6,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.undercooked.game.audio.SoundStateChecker;
 import com.undercooked.game.files.FileControl;
 import com.undercooked.game.util.Constants;
 
@@ -208,6 +207,9 @@ public class AudioManager {
      * Unloads the {@link Sound} {@code path} from the {@link AssetManager}, and removes it from
      * the volume groups.
      * @param path {@link String} : The path to unload.
+     * @return {@link Sound} : The {@link Sound} if it has been loaded,
+     *                         or the {@link Constants#DEFAULT_MUSIC} file
+     *                         if not.
      */
     public Sound getSound(String path) {
         // Try to get the music

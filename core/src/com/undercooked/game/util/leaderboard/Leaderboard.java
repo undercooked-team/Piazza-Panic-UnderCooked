@@ -4,16 +4,33 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.Comparator;
 
+/**
+ * The class for storing the data of an individual leaderboard.
+ */
 public class Leaderboard {
 
+    /** The name of the {@link Leaderboard}. */
     public String name;
-    private Comparator<LeaderboardEntry> entryComparator;
-    private Array<LeaderboardEntry> entries;
 
+    /** The score comparator of the {@link LeaderboardEntry}s. */
+    private Comparator<LeaderboardEntry> entryComparator;
+
+    /** The entries on the {@link Leaderboard}. */
+    private final Array<LeaderboardEntry> entries;
+
+    /**
+     * Constructor for the {@link Leaderboard}.
+     */
     public Leaderboard() {
         entries = new Array<>();
     }
 
+    /**
+     * Create and add a new {@link LeaderboardEntry} for the {@link Leaderboard}.
+     * @param name {@link String} : The name of the {@link LeaderboardEntry}.
+     * @param score {@code float} : The score of the {@link LeaderboardEntry}.
+     * @return {@link LeaderboardEntry} : The newly created {@link LeaderboardEntry}.
+     */
     public LeaderboardEntry addLeaderboardEntry(String name, float score) {
         // Make the entry
         LeaderboardEntry newEntry = new LeaderboardEntry(name, score);
@@ -23,10 +40,22 @@ public class Leaderboard {
         return newEntry;
     }
 
+    /**
+     * Sets the score comparator to compare the scores.
+     *
+     * @param comparator {@link Comparator<LeaderboardEntry>} : The {@link Comparator} to use.
+     */
     public void setComparator(Comparator<LeaderboardEntry> comparator) {
+        // Set the comparator
         this.entryComparator = comparator;
+        // And sort the array
+        this.entries.sort(entryComparator);
     }
 
+    /**
+     * Add a new {@link LeaderboardEntry} to the {@link Leaderboard}.
+     * @param newEntry {@link LeaderboardEntry} : The entry to add.
+     */
     public void addLeaderboardEntry(LeaderboardEntry newEntry) {
         // And add it, in the order using the comparator
         // If the comparator doesn't exist, just add it to the end
@@ -49,6 +78,11 @@ public class Leaderboard {
 
     }
 
+    /**
+     * Creates a copy of the {@link LeaderboardEntry} {@link Array}
+     * and returns it.
+     * @return {@link Array<LeaderboardEntry>} : A copy of the entries {@link Array}.
+     */
     public Array<LeaderboardEntry> copyLeaderboard() {
         // Create a new array
         Array<LeaderboardEntry> copy = new Array<>();
@@ -60,33 +94,50 @@ public class Leaderboard {
         return copy;
     }
 
+    /**
+     * Returns the {@link Array} of {@link LeaderboardEntry} directly.
+     * @return {@link Array<LeaderboardEntry>} : The entries {@link Array}.
+     */
     protected Array<LeaderboardEntry> getLeaderboard() {
         return entries;
     }
 
-    public boolean remove(String id, int index) {
+    /**
+     * Removes a {@link LeaderboardEntry} from the entries.
+     * @param index {@code int} : The index to remove.
+     * @return {@link LeaderboardEntry} : The {@link LeaderboardEntry} that was removed.
+     */
+    public LeaderboardEntry remove(int index) {
         // Check that the range is valid
-        if (index < 0 || index >= entries.size) return false;
+        if (index < 0 || index >= entries.size) return null;
 
         // Then remove the index
-        entries.removeIndex(index);
-        return true;
+        return entries.removeIndex(index);
     }
 
-    public boolean removeEntry(String id, String name) {
+    /**
+     * Removes all {@link LeaderboardEntry} from the entries if the
+     * name matches.
+     * @param name {@link String} : The name of the entry to remove.
+     * @return {@code int} : The number of {@link LeaderboardEntry}s that were removed.
+     */
+    public int removeEntry(String name) {
         // Loop through all the entries, backwards
-        boolean entryRemoved = false;
+        int entitiesRemoved = 0;
         for (int i = entries.size-1; i >= 0 ; i--) {
             // Check if the name matches
             if (entries.get(i).name.equals(name)) {
                 // If it does, remove the index and set to return true
                 entries.removeIndex(i);
-                entryRemoved = true;
+                entitiesRemoved++;
             }
         }
-        return entryRemoved;
+        return entitiesRemoved;
     }
 
+    /**
+     * @return {@link int} : The number of {@link LeaderboardEntry}s.
+     */
     public int size() {
         return entries.size;
     }

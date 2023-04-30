@@ -30,7 +30,7 @@ public class MissingScreen extends Screen {
         // If this screen is ever opened, go to the main screen after 1 second
         timeCount += delta;
         if (timeCount >= 1) {
-            getScreenController().setScreen(Constants.MAIN_SCREEN_ID);
+            getScreenController().goToScreen(Constants.MAIN_SCREEN_ID);
         }
     }
 

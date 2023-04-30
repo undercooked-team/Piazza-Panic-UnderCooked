@@ -71,7 +71,7 @@ public class WinScreen extends Screen {
                 nameInput = "???";
             }
             // If it's pressed, go to the LeaderBoard Screen.
-            game.screenController.setScreen(Constants.LEADERBOARD_SCREEN_ID);
+            game.screenController.goToScreen(Constants.LEADERBOARD_SCREEN_ID);
             // Get the Screen
             LeaderboardScreen leaderboardScreen = (LeaderboardScreen) game.screenController.getScreen(Constants.LEADERBOARD_SCREEN_ID);
             // And try to add the score

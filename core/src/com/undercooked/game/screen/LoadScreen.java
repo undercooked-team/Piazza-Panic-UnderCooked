@@ -12,22 +12,29 @@ import com.undercooked.game.MainGameClass;
 import com.undercooked.game.util.CameraController;
 import com.undercooked.game.util.Constants;
 
+/**
+ * The {@link Screen} used whilst changing between two different
+ * {@link Screen}s to load the next {@link Screen}.
+ */
 public class LoadScreen extends Screen {
+    private Screen previous;
+    private Screen next;
+    private final AssetManager assetManager;
+    private final MainGameClass game;
+    private final OrthographicCamera camera;
+    private long lastLoad;
 
-    Screen previous;
-    Screen next;
-    AssetManager assetManager;
-    MainGameClass game;
-    OrthographicCamera camera;
-    Viewport viewport;
-    long lastLoad;
-
+    /**
+     * Constructor for the {@link LoadScreen}.
+     *
+     * @param assetManager {@link AssetManager} : The {@link AssetManager} to load.
+     * @param game {@link MainGameClass} : The game's main class.
+     */
     public LoadScreen(AssetManager assetManager, MainGameClass game) {
         super(game);
         this.assetManager = assetManager;
         this.game = game;
         this.camera = CameraController.getCamera(Constants.UI_CAMERA_ID);
-        this.viewport = CameraController.getViewport(Constants.UI_CAMERA_ID);
     }
 
     @Override
@@ -46,6 +53,12 @@ public class LoadScreen extends Screen {
 
     }
 
+    /**
+     * Updating the {@link LoadScreen}.
+     * @param moveToNext {@link boolean} : Whether the game should move to the next
+     *                                     {@link Screen} if the game has finished
+     *                                     loading, or not.
+     */
     public void update(boolean moveToNext) {
 
         // Update the AssetManager for a short bit before moving on
@@ -90,6 +103,9 @@ public class LoadScreen extends Screen {
 
     }
 
+    /**
+     * Renders the loading bar at the bottom left of the window.
+     */
     public void renderBar() {
         // Then render a loading bar
         // Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -134,12 +150,21 @@ public class LoadScreen extends Screen {
 
     }
 
+    /**
+     * Sets the {@link #previous} and {@link #next} variables.
+     *
+     * @param previous {@link Screen} : The {@link Screen} that is just being changed from.
+     * @param next {@link Screen} : The {@link Screen} that is being changed to.
+     */
     public void setScreens(Screen previous, Screen next) {
         this.previous = previous;
         this.next = next;
     }
 
-    public void start(MainGameClass game) {
+    /**
+     * Start loading.
+     */
+    public void start() {
         // Make the game change to this screen
         game.setScreen(this);
 

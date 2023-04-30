@@ -1,34 +1,61 @@
 package com.undercooked.game.util.json;
 
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 
-public class JsonArray extends JsonVal<JsonVal> {
-    public JsonArray(String ID, JsonVal valueType) {
+/**
+ * A value used in a json format to specify a {@link JsonValue}'s value
+ * to be formatted as an {@link JsonValue.ValueType#array} of a type of
+ * {@link JsonVal}.
+ * @see JsonOr
+ */
+public class JsonArray extends JsonVal<JsonVal<?>> {
+
+    /**
+     * Constructor for the class that defaults {@code allowNull} to true.
+     * @param ID {@link String} : The id.
+     * @param valueType {@link Boolean} : The value type of the array contents.
+     */
+    public JsonArray(String ID, JsonVal<?> valueType) {
         super(ID, valueType);
     }
 
     @Override
-    public boolean isValue(JsonValue value) {
-        return value.isArray();
+    public boolean isValue(JsonValue jsonData) {
+        return jsonData.isArray();
     }
 
     @Override
-    public void setValue(JsonValue value, boolean existsBefore) {
-        value.setType(getType());
+    public void setValue(JsonValue jsonData, boolean existsBefore) {
+        jsonData.setType(getType());
     }
 
+    /**
+     * Make sure that it's an {@link JsonValue.ValueType#array} and, if it
+     * is, make sure that all of the {@code jsonData}'s children are also
+     * correct.
+     */
     @Override
-    public void checkChild(JsonValue child, boolean existsBefore) {
+    public void check(JsonValue jsonData, boolean existsBefore) {
+        // Make sure that the jsonData is an array
+        if (!isValue(jsonData)) {
+            // If it's not, make it an array
+            setType(jsonData);
+            // Clear it of all of its children
+            for (JsonValue jsonChild : jsonData) {
+                jsonChild.remove();
+            }
+            // And stop, as the array will be empty
+            return;
+        }
         // For all of them, check child
-        for (int i = child.size-1 ; i >= 0 ; i--) {
-            JsonValue val = child.get(i);
+        for (int i = jsonData.size-1; i >= 0 ; i--) {
+            JsonValue val = jsonData.get(i);
             if (!this.value.isValue(val)) {
                 // If it's not valid, remove it
-                overrideValue(child.get(i));
+                overrideValue(jsonData.get(i));
             } else {
                 // Otherwise, if it's valid, check the child
-                this.value.checkChild(child.get(i), existsBefore);
+                this.value.check(jsonData.get(i), existsBefore);
             }
         }
     }
