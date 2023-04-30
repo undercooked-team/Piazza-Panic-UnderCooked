@@ -1,6 +1,5 @@
 package com.undercooked.game.files;
 
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.JsonValue;
 import com.undercooked.game.util.DefaultJson;
 import com.undercooked.game.util.json.JsonFormat;
@@ -11,18 +10,26 @@ import com.undercooked.game.util.json.JsonFormat;
 public class SettingsControl {
 
     /** loaded = True if this class has loaded its data. False otherwise. */
-    boolean loaded;
+    private boolean loaded;
     /** Location of settings file. */
-    String fileLoc;
+    private final String fileLoc;
     /** json containing the settings. */
-    JsonValue settingsData;
+    private JsonValue settingsData;
 
+    /**
+     * Constructor for the {@link SettingsControl}.
+     *
+     * @param fileLoc {@link String} : The file location of the settings json.
+     */
     public SettingsControl(String fileLoc) {
         this.fileLoc = fileLoc;
         this.loaded = false;
     }
 
-    public boolean loadData() {
+    /**
+     * Loads the setting data from the file location.
+     */
+    public void loadData() {
         // it's now loaded
         loaded = true;
         // Try to load the file
@@ -38,9 +45,11 @@ public class SettingsControl {
             // Otherwise just format the json
             JsonFormat.formatJson(settingsData, DefaultJson.settingsFormat());
         }
-        return loaded;
     }
 
+    /**
+     * Unloads the settings data.
+     */
     public void unload() {
         // Forget the json
         settingsData = null;
@@ -48,13 +57,19 @@ public class SettingsControl {
         loaded = false;
     }
 
-    public boolean loadIfNotLoaded() {
+    /**
+     * Loads the settings data if it hasn't yet been loaded.
+     */
+    public void loadIfNotLoaded() {
         // Only load if it's not loaded.
         if (loaded)
-            return true;
-        return loadData();
+            return;
+        loadData();
     }
 
+    /**
+     * Saves the settings data.
+     */
     public void saveData() {
         // Only save if it's loaded
         if (!loaded)
@@ -62,6 +77,12 @@ public class SettingsControl {
         FileControl.saveJsonData(fileLoc, settingsData);
     }
 
+    /**
+     * Sets a {@code float} value within the settings data.
+     *
+     * @param key {@link String} : The key to set.
+     * @param val {@code float} : The value.
+     */
     private void setFloatValue(String key, float val) {
         // If the json is not null
         if (settingsData == null)
@@ -70,18 +91,32 @@ public class SettingsControl {
         settingsData.get(key).set(val, key);
     }
 
+    /**
+     * Set the music volume of the game.
+     * @param volume {@link float} : The volume to set the music to.
+     */
     public void setMusicVolume(float volume) {
         setFloatValue("music_volume", volume);
     }
 
+    /**
+     * Set the game sounds volume.
+     * @param volume {@link float} : The volume to set the game to.
+     */
     public void setGameVolume(float volume) {
         setFloatValue("game_volume", volume);
     }
 
+    /**
+     * @return {@code float} : The volume of the music in the settings data.
+     */
     public float getMusicVolume() {
         return settingsData.getFloat("music_volume");
     }
 
+    /**
+     * @return {@code float} : The volume of the game sounds in the settings data.
+     */
     public float getGameVolume() {
         return settingsData.getFloat("game_volume");
     }
