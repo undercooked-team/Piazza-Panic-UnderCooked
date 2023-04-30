@@ -8,13 +8,13 @@ public class JsonBool extends JsonVal<Boolean> {
     }
 
     @Override
-    public boolean isValue(JsonValue value) {
-        return value.isBoolean();
+    public boolean isValue(JsonValue jsonData) {
+        return jsonData.isBoolean();
     }
 
     @Override
-    public void setValue(JsonValue value, boolean existsBefore) {
-        value.set(this.value);
+    public void setValue(JsonValue jsonData, boolean existsBefore) {
+        jsonData.set(this.value);
     }
 
     @Override

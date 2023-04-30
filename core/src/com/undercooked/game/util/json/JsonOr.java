@@ -1,6 +1,5 @@
 package com.undercooked.game.util.json;
 
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 
 public class JsonOr extends JsonVal<JsonVal[]> {
@@ -10,10 +9,10 @@ public class JsonOr extends JsonVal<JsonVal[]> {
     }
 
     @Override
-    public boolean isValue(JsonValue value) {
+    public boolean isValue(JsonValue jsonData) {
         // Make sure at least one value matches
         for (JsonVal jsonVal : this.value) {
-            if (jsonVal.isValue(value)) {
+            if (jsonVal.isValue(jsonData)) {
                 return true;
             }
         }
@@ -22,9 +21,9 @@ public class JsonOr extends JsonVal<JsonVal[]> {
     }
 
     @Override
-    public void setValue(JsonValue value, boolean existsBefore) {
+    public void setValue(JsonValue jsonData, boolean existsBefore) {
         // Just set it to null if it tries to set here
-        value.setType(JsonValue.ValueType.nullValue);
+        jsonData.setType(JsonValue.ValueType.nullValue);
     }
 
     @Override
@@ -52,11 +51,11 @@ public class JsonOr extends JsonVal<JsonVal[]> {
     }
 
     @Override
-    public void checkChild(JsonValue child, boolean existsBefore) {
+    public void check(JsonValue jsonData, boolean existsBefore) {
         // Check if this has at least one or
         if (this.value.length == 0) {
             // If it doesn't, just set it
-            setValue(child, existsBefore);
+            setValue(jsonData, existsBefore);
             // and then stop here
             return;
         }
@@ -65,7 +64,7 @@ public class JsonOr extends JsonVal<JsonVal[]> {
         for (int i = 0 ; i < this.value.length ; i++) {
             JsonVal jsonVal = this.value[i];
             // Check if it's valid
-            if (jsonVal.isValue(child)) {
+            if (jsonVal.isValue(jsonData)) {
                 // If it is, break from the loop, and set the
                 // valid index
                 valid = i;
@@ -74,10 +73,10 @@ public class JsonOr extends JsonVal<JsonVal[]> {
         }
         // If it's invalid, just set it to check the first child
         if (valid < 0) {
-            this.value[0].checkChild(child, existsBefore);
+            this.value[0].check(jsonData, existsBefore);
             return;
         }
         // Otherwise, if it's valid, then use the valid child to set the value
-        this.value[valid].checkChild(child, existsBefore);
+        this.value[valid].check(jsonData, existsBefore);
     }
 }

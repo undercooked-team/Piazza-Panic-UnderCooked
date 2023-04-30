@@ -8,13 +8,13 @@ public class JsonType extends JsonVal<JsonValue.ValueType> {
     }
 
     @Override
-    public boolean isValue(JsonValue value) {
-        return value.type().equals(this.value);
+    public boolean isValue(JsonValue jsonData) {
+        return jsonData.type().equals(this.value);
     }
 
     @Override
-    public void setValue(JsonValue value, boolean existsBefore) {
-        setType(value);
+    public void setValue(JsonValue jsonData, boolean existsBefore) {
+        setType(jsonData);
     }
 
     @Override

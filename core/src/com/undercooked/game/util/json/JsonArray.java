@@ -1,6 +1,5 @@
 package com.undercooked.game.util.json;
 
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 
 public class JsonArray extends JsonVal<JsonVal> {
@@ -9,26 +8,26 @@ public class JsonArray extends JsonVal<JsonVal> {
     }
 
     @Override
-    public boolean isValue(JsonValue value) {
-        return value.isArray();
+    public boolean isValue(JsonValue jsonData) {
+        return jsonData.isArray();
     }
 
     @Override
-    public void setValue(JsonValue value, boolean existsBefore) {
-        value.setType(getType());
+    public void setValue(JsonValue jsonData, boolean existsBefore) {
+        jsonData.setType(getType());
     }
 
     @Override
-    public void checkChild(JsonValue child, boolean existsBefore) {
+    public void check(JsonValue jsonData, boolean existsBefore) {
         // For all of them, check child
-        for (int i = child.size-1 ; i >= 0 ; i--) {
-            JsonValue val = child.get(i);
+        for (int i = jsonData.size-1; i >= 0 ; i--) {
+            JsonValue val = jsonData.get(i);
             if (!this.value.isValue(val)) {
                 // If it's not valid, remove it
-                overrideValue(child.get(i));
+                overrideValue(jsonData.get(i));
             } else {
                 // Otherwise, if it's valid, check the child
-                this.value.checkChild(child.get(i), existsBefore);
+                this.value.check(jsonData.get(i), existsBefore);
             }
         }
     }

@@ -8,13 +8,13 @@ public class JsonInt extends JsonVal<Integer> {
     }
 
     @Override
-    public boolean isValue(JsonValue value) {
-        return value.isNumber();
+    public boolean isValue(JsonValue jsonData) {
+        return jsonData.isNumber();
     }
 
     @Override
-    public void setValue(JsonValue value, boolean existsBefore) {
-        value.set(this.value, null);
+    public void setValue(JsonValue jsonData, boolean existsBefore) {
+        jsonData.set(this.value, null);
     }
 
     @Override

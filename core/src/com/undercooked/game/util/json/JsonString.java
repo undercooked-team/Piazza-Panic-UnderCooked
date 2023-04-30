@@ -21,17 +21,17 @@ public class JsonString extends JsonVal<String> {
     }
 
     @Override
-    public boolean isValue(JsonValue value) {
-        return value.isString() || (allowNull && value.isNull());
+    public boolean isValue(JsonValue jsonData) {
+        return jsonData.isString() || (allowNull && jsonData.isNull());
     }
 
     @Override
-    public void setValue(JsonValue value, boolean existsBefore) {
+    public void setValue(JsonValue jsonData, boolean existsBefore) {
         // If null is allowed, then leave it alone
-        if (allowNull && value.isNull()) {
+        if (allowNull && jsonData.isNull()) {
             return;
         }
-        value.set(this.value);
+        jsonData.set(this.value);
     }
 
     @Override

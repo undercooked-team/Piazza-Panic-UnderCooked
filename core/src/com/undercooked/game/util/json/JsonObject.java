@@ -34,22 +34,22 @@ public class JsonObject extends JsonVal<Array<JsonVal>> {
     }
 
     @Override
-    public boolean isValue(JsonValue value) {
-        return value.isObject();
+    public boolean isValue(JsonValue jsonData) {
+        return jsonData.isObject();
     }
 
     @Override
-    public void setValue(JsonValue json, boolean existsBefore) {
+    public void setValue(JsonValue jsonData, boolean existsBefore) {
         // Format all the values within
-        JsonFormat.formatJson(json, this, existsBefore);
+        JsonFormat.formatJson(jsonData, this, existsBefore);
     }
 
     @Override
-    public void format(JsonValue value, boolean existsBefore) {
+    public void format(JsonValue jsonData, boolean existsBefore) {
         // Only continue if it existed before
         if (existsBefore) {
             // Try to format
-            setValue(value, true);
+            setValue(jsonData, true);
         }
     }
 
