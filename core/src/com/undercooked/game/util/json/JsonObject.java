@@ -4,33 +4,41 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 
-public class JsonObject extends JsonVal<Array<JsonVal>> {
+/**
+ * A value used in a json format to specify a {@link JsonValue} to
+ * have its value formatted as another {@link JsonValue}.
+ */
+public class JsonObject extends JsonVal<Array<JsonVal<?>>> {
 
+    /**
+     * @param ID {@link String} : The id.
+     */
     public JsonObject(String ID) {
-        super(ID, new Array<JsonVal>());
+        super(ID, new Array<JsonVal<?>>());
     }
+
+    /**
+     * Defaults to using a blank ID, as not all {@link JsonValue}s need an
+     * id, but all {@link JsonValue} children do.
+     */
     public JsonObject() {
         this("");
     }
 
-    public void addValue(JsonVal jsonVal) {
-        value.add(jsonVal);
-    }
-    public void addValue(String ID, JsonVal jsonVal) {
-        jsonVal.ID = ID;
+    /**
+     * Adds a {@link JsonVal} to be formatted in the {@link JsonValue}.
+     * @param jsonVal {@link JsonVal} : The {@link JsonVal} to add.
+     */
+    public void addValue(JsonVal<?> jsonVal) {
         value.add(jsonVal);
     }
 
-    public Array<JsonVal> getValues() {
+    /**
+     * @return {@link Array<JsonVal>} : Returns the list of {@link JsonVal} that
+     *                                  are in the {@link JsonObject}.
+     */
+    public Array<JsonVal<?>> getValues() {
         return value;
-    }
-    public JsonVal getValue(String ID) {
-        for (JsonVal val : value) {
-            if (val.ID.equals(ID)) {
-                return val;
-            }
-        }
-        return null;
     }
 
     @Override

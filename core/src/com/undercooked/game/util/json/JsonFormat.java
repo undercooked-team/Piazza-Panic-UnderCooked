@@ -40,7 +40,7 @@ public class JsonFormat {
             return null;
         }
 
-        Array<JsonVal> values = ideal.getValues();
+        Array<JsonVal<?>> values = ideal.getValues();
 
         for (int i = 0 ; i < values.size ; i++) {
             JsonVal jsonVal = values.get(i);
