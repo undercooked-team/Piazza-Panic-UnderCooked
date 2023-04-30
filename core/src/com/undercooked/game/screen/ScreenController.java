@@ -22,7 +22,7 @@ public class ScreenController {
     private void startLoading(Screen lastScreen, Screen nextScreen) {
         nextScreen.preLoad();
         loadScreen.setScreens(lastScreen, nextScreen);
-        loadScreen.start(game);
+        loadScreen.start();
     }
 
     public void backScreen() {
