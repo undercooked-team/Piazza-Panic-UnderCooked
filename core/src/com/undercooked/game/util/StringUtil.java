@@ -97,6 +97,17 @@ public class StringUtil {
         return formatTime(0, 0, seconds);
     }
 
+
+    /**
+     * Converts the time provided into a {@link String}.
+     *
+     * @param seconds {@code float}
+     * @return {@link String} : The time converted into a {@link String}.
+     */
+    public static String formatTime(float seconds) {
+        return formatTime((int) seconds);
+    }
+
     /**
      * Converts the time provided into a {@link String}, with 2 milliseconds.
      *

@@ -227,7 +227,6 @@ public class StationController {
 
 		for (Station station : stations) {
 			JsonValue stationData = station.serial(map);
-			System.out.println("Station Data: " + stationData);
 			if (stationData == null) continue;
 			stationsArrayRoot.addChild(stationData);
 		}

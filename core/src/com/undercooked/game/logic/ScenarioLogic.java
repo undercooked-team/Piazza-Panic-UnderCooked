@@ -28,7 +28,7 @@ import java.util.Random;
 public class ScenarioLogic extends ScenarioLoadLogic {
 
     /** The number of requests to serve. */
-    protected int requestTarget = 5;
+    protected int requestTarget;
 
     /**
      * Whether requests in the {@link #requestPool} can be added to the {@link #requests} array more than once.
@@ -292,7 +292,6 @@ public class ScenarioLogic extends ScenarioLoadLogic {
             if (currentCook != null) {
                 if (currentCook.isColliding(cellCollision)) {
                     valid = false;
-                    System.out.println("Cook colliding at " + currentCook.getX() + ", " + currentCook.getY());
                 }
             }
 
@@ -300,7 +299,6 @@ public class ScenarioLogic extends ScenarioLoadLogic {
             for (PowerUp powerUp : powerUps) {
                 if (powerUp.isColliding(cellCollision)) {
                     valid = false;
-                    System.out.println("Power up colliding at " + powerUp.getX() + ", " + powerUp.getY());
                 }
             }
 
