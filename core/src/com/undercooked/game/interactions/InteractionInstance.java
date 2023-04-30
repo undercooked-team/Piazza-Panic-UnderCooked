@@ -7,6 +7,9 @@ import com.undercooked.game.food.Items;
 import com.undercooked.game.station.Station;
 import com.undercooked.game.util.Listener;
 
+/**
+ * The class for controlling the variables of the {@link InteractionStep}.
+ */
 public class InteractionInstance {
     // Holds the variables needed by the StationInteractControl to give to the InteractionSteps.
     // This makes it so only 1 InteractionStep has to exist at one point for each Interaction.
@@ -20,15 +23,10 @@ public class InteractionInstance {
     /** The items within the game. Useful for Interactions. */
     public Items gameItems;
 
-    /** Listener to tell when the interaction is done */
-    public Listener<Boolean> successListener;
-    /** Listener for when the interaction should just stop completely */
-    public Listener<Boolean> endListener;
-
     /** The elapsed time for the Interaction */
     public float elapsedTime;
     /** The {@link AudioManager} to use to play the sound */
-    private AudioManager audioManager;
+    private final AudioManager audioManager;
     /** The result of the last delta check, the time since the last frame. */
     private float lastDeltaCheck;
 

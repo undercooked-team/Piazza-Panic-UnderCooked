@@ -15,11 +15,10 @@ import java.util.Comparator;
 /**
  * Use this static class to manipulate the leaderboards using the enum
  * LeaderboardNames.
- * <p>
+ * <br><br>
  * {@link #loadLeaderboard()} must be called before any of the functions
  * for interacting with the leaderboards in this class can be used.
  * Otherwise, they will all fail.
- * </p>
  */
 public final class LeaderboardController {
 
@@ -83,7 +82,10 @@ public final class LeaderboardController {
 		return "error";
 	}
 
-	private static Comparator<LeaderboardEntry> scenarioComparator = new Comparator<LeaderboardEntry>() {
+	/**
+	 * Comparator for the Scenario mode scores.
+	 */
+	private final static Comparator<LeaderboardEntry> scenarioComparator = new Comparator<LeaderboardEntry>() {
 		@Override
 		public int compare(LeaderboardEntry o1, LeaderboardEntry o2) {
 			// score being lower is better
@@ -96,7 +98,10 @@ public final class LeaderboardController {
 		}
 	};
 
-	private static Comparator<LeaderboardEntry> endlessComparator = new Comparator<LeaderboardEntry>() {
+	/**
+	 * Comparator for the Endless mode scores.
+	 */
+	private final static Comparator<LeaderboardEntry> endlessComparator = new Comparator<LeaderboardEntry>() {
 		@Override
 		public int compare(LeaderboardEntry o1, LeaderboardEntry o2) {
 			// score being lower is better
@@ -177,7 +182,6 @@ public final class LeaderboardController {
 		return 0;
 	}
 
-	static Json json;
 	/** Root JsonValue of Leaderboard. Contains:
 	 * <ul>
 		* <li>"Example": "leaderboard",
@@ -185,8 +189,12 @@ public final class LeaderboardController {
 		* <li>"ENDLESS": [...]
 	 * </ul>
 	 */
-	private static ObjectMap<GameType, ObjectMap<String, Leaderboard>> leaderboardData = new ObjectMap<>();
-	private static String leaderboardFile = "leaderboard.json";
+	private final static ObjectMap<GameType, ObjectMap<String, Leaderboard>> leaderboardData = new ObjectMap<>();
+
+	/** The file location of the leaderboard file in the data folder. */
+	private final static String leaderboardFile = "leaderboard.json";
+
+	/** Whether the leaderboards are loaded or not. */
 	private static boolean loaded = false;
 
 	/**
@@ -197,7 +205,7 @@ public final class LeaderboardController {
 	 */
 	public static void loadLeaderboard() {
 		// If leaderboardData is not null, then unload it first
-		if (leaderboardData != null) unloadLeaderboard();
+		unloadLeaderboard();
 
 		JsonValue root = FileControl.loadJsonData(leaderboardFile);
 		// Create leaderboard.json if it doesn't exist
@@ -254,10 +262,16 @@ public final class LeaderboardController {
 		loaded = false;
 	}
 
+	/**
+	 * Adds a {@link LeaderboardEntry} to the {@link Leaderboard} specified.
+	 * @param lType {@link GameType} : The type of {@link Leaderboard} to save the score to.
+	 * @param id {@link String} : The id of the {@link Leaderboard}.
+	 * @param leaderboardName {@link String} : The name to use for the {@link Leaderboard} if
+	 *                                         it doesn't have one already.
+	 * @param name {@link String} : The name of the {@link LeaderboardEntry}.
+	 * @param score {@code float} : The score of the {@link LeaderboardEntry}.
+	 */
 	public static void addEntry(GameType lType, String id, String leaderboardName, String name, float score) {
-		// Only continue if leaderboardData is not null
-		if (leaderboardData == null) return;
-
 		// Get the leaderboard by id
 		Leaderboard leaderboard = getLeaderboard(lType, id);
 		// If it's null, then add the id
@@ -301,6 +315,14 @@ public final class LeaderboardController {
 		return leaderboard.copyLeaderboard();
 	}
 
+	/**
+	 * Remove a {@link LeaderboardEntry} from a {@link Leaderboard}
+	 * @param lType {@link GameType} : The type of the {@link Leaderboard}.
+	 * @param id {@link String} : The id of the {@link Leaderboard}.
+	 * @param index {@int int} : The index of the {@link LeaderboardEntry}.
+	 * @return {@code boolean} : {@code true} if it was deleted successfully,
+	 * 							 {@code false} if not.
+	 */
 	public static boolean removeEntry(GameType lType, String id, int index) {
 		// Get the leaderboard by id
 		Leaderboard leaderboard = getLeaderboard(lType, id);
@@ -317,6 +339,14 @@ public final class LeaderboardController {
 		return true;
 	}
 
+	/**
+	 * Remove a {@link LeaderboardEntry} from a {@link Leaderboard}
+	 * @param lType {@link GameType} : The type of the {@link Leaderboard}.
+	 * @param id {@link String} : The id of the {@link Leaderboard}.
+	 * @param name {@link String} : The name in the {@link LeaderboardEntry}.
+	 * @return {@code boolean} : {@code true} if it was deleted successfully,
+	 * 							 {@code false} if not.
+	 */
 	public static boolean removeEntry(GameType lType, String id, String name) {
 		// Get the leaderboard by id
 		Leaderboard leaderboard = getLeaderboard(lType, id);
@@ -327,33 +357,32 @@ public final class LeaderboardController {
 		return leaderboard.removeEntry(id, name);
 	}
 
+	/**
+	 * Get a {@link Leaderboard} by its {@link GameType} and id.
+	 * @param lType {@link GameType} : The type of the {@link Leaderboard}.
+	 * @param id {@link String} : The id of the {@link Leaderboard}.
+	 * @return {@link Leaderboard} : The {@link Leaderboard} matching the type and id.
+	 */
 	public static Leaderboard getLeaderboard(GameType lType, String id) {
-		return getLeaderboard(lType, id, false);
-	}
-
-	private static Leaderboard getLeaderboard(GameType lType, String id, boolean addIfNull) {
 		// Get the array of entries
 		ObjectMap<String, Leaderboard> leaderboards = getLeaderboards(lType);
 		// If the id doesn't exist, add it if addIfNull is true
 		if (!leaderboards.containsKey(id)) {
-			if (!addIfNull) return null;
 			return addLeaderboard(lType, "missing name", id);
 		}
 		// Then return the leaderboard
 		return leaderboards.get(id);
 	}
 
+	/**
+	 * Returns all of the {@link Leaderboard}s of the {@link GameType}.
+	 * @param lType {@link GameType} : The {@link Leaderboard}s' type.
+	 * @return {@link ObjectMap<String, Leaderboard>} : The mapping of {@link Leaderboard}s and
+	 * 													their ids.
+	 */
 	private static ObjectMap<String, Leaderboard> getLeaderboards(GameType lType) {
-		return getLeaderboards(lType, false);
-	}
-
-	private static ObjectMap<String, Leaderboard> getLeaderboards(GameType lType, boolean addIfNull) {
-		// If leaderboard data is null, return null
-		if (leaderboardData == null) return null;
-
 		// If the leaderboard type doesn't exist, return null
 		if (!leaderboardData.containsKey(lType)) {
-			if (!addIfNull) return null;
 			ObjectMap<String, Leaderboard> newLeaderboards = new ObjectMap<>();
 			leaderboardData.put(lType, newLeaderboards);
 			return newLeaderboards;
@@ -362,6 +391,11 @@ public final class LeaderboardController {
 		return leaderboardData.get(lType);
 	}
 
+	/**
+	 * Returns all of the {@link Leaderboard} ids of the {@link GameType}.
+	 * @param gameType {@link GameType} : The {@link Leaderboard}s' type.
+	 * @return {@link Array<String>} : An {@link Array} of the {@link Leaderboard}s' ids.
+	 */
 	public static Array<String> getIDs(GameType gameType) {
 		// If the leaderboard type doesn't exist, return null
 		ObjectMap<String, Leaderboard> leaderboards = getLeaderboards(gameType);
@@ -371,13 +405,18 @@ public final class LeaderboardController {
 		return leaderboards.keys().toArray();
 	}
 
+	/**
+	 * Saves the leaderboard data to the leaderboard file in the data folder.
+	 */
 	public static void saveLeaderboard() {
-		// If leaderboard data is null, stop
-		if (leaderboardData == null) return;
 		// Convert all the data into a JsonValue
 		FileControl.saveJsonData(leaderboardFile, asJsonValue());
 	}
 
+	/**
+	 * Converts the leaderboard data into a {@link JsonValue}.
+	 * @return {@link JsonValue} : The leaderboard data in Json form.
+	 */
 	public static JsonValue asJsonValue() {
 		JsonValue root = new JsonValue(JsonValue.ValueType.object);
 		// Loop through each of the keys in the object map
@@ -413,6 +452,10 @@ public final class LeaderboardController {
 		return root;
 	}
 
+	/**
+	 * @return {@code boolean} : {@code true} if the leaderboard data is loaded,
+	 * 							 {@code false} if not.
+	 */
 	public static boolean isLoaded() {
 		return loaded;
 	}
