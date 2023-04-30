@@ -68,7 +68,7 @@ public final class LeaderboardController {
 	 *
 	 * @param currentLType {@link GameType} : The leaderboard to use.
 	 * @param score {@code float} : The score to get a {@link String} of.
-	 * @return
+	 * @return {@link String} : The score as a {@link String}.
 	 */
 	public static String scoreToString(GameType currentLType, float score) {
 		if (currentLType == null) return Float.toString(score);
@@ -123,7 +123,8 @@ public final class LeaderboardController {
 	 * <br>-1 means the right side is better.
 	 *
 	 * @param gameType {@link GameType} : The leaderboard to use.
-	 * @return
+	 * @return {@link Comparator<LeaderboardEntry>} : The {@link Comparator} for the scores
+	 * 												  of the {@link GameType}.
 	 */
 	public static Comparator<LeaderboardEntry> getScoreComparator(GameType gameType) {
 		if (gameType == null) return new Comparator<LeaderboardEntry>() {
@@ -148,14 +149,13 @@ public final class LeaderboardController {
 	 * Returns a comparison of the scores based on {@link GameType}.
 	 * This is because Scenarios favours lower time taken, while Endless mode
 	 * favours higher customers served.
-	 * <br>0 means they are equal.
-	 * <br>1 means score1 is better.
-	 * <br>-1 means score2 is better.
 	 *
 	 * @param gameType {@link GameType} : The leaderboard to check.
 	 * @param score1 {@link float} : The score of the first entry.
 	 * @param score2 {@link float} : The score of the second entry.
-	 * @return
+	 * @return {@link int} : 1 if {@code score1} is better,
+	 * 						 0 if they are the same,
+	 * 						 -1 if {@code score2} is better.
 	 */
 	public static int compareScore(GameType gameType, float score1, float score2) {
 		if (gameType == null) return 0;
@@ -303,7 +303,8 @@ public final class LeaderboardController {
 	 * Returns the sorted scores of a leaderboard using the id provided.
 	 * @param lType {@link GameType} : The leaderboard to use.
 	 * @param id {@link String} : The id of the leaderboard.
-	 * @return
+	 * @return {@link Array<LeaderboardEntry>} : An {@link Array} of the {@link LeaderboardEntry}s
+	 * 											 for the requested {@link Leaderboard}.
 	 */
 	public static Array<LeaderboardEntry> getEntries(GameType lType, String id) {
 		// Get the leaderboard by id
@@ -333,28 +334,29 @@ public final class LeaderboardController {
 		if (index < 0 || index >= leaderboard.size()) return false;
 
 		// Then, remove it
-		leaderboard.remove(id, index);
+		leaderboard.remove(index);
 
 		// Return true, as it was successfully removed
 		return true;
 	}
 
 	/**
-	 * Remove a {@link LeaderboardEntry} from a {@link Leaderboard}
+	 * Remove all {@link LeaderboardEntry} from a {@link Leaderboard}
+	 * that have a matching name.
+	 *
 	 * @param lType {@link GameType} : The type of the {@link Leaderboard}.
 	 * @param id {@link String} : The id of the {@link Leaderboard}.
 	 * @param name {@link String} : The name in the {@link LeaderboardEntry}.
-	 * @return {@code boolean} : {@code true} if it was deleted successfully,
-	 * 							 {@code false} if not.
+	 * @return {@code int} : The number of {@link LeaderboardEntry}s that were removed.
 	 */
-	public static boolean removeEntry(GameType lType, String id, String name) {
+	public static int removeEntry(GameType lType, String id, String name) {
 		// Get the leaderboard by id
 		Leaderboard leaderboard = getLeaderboard(lType, id);
 		// Only continue if it's not null
-		if (leaderboard == null) return false;
+		if (leaderboard == null) return -1;
 
 		// Tell the leaderboard to remove the entry
-		return leaderboard.removeEntry(id, name);
+		return leaderboard.removeEntry(name);
 	}
 
 	/**
