@@ -18,15 +18,13 @@ package de.tomgrill.gdxtesting.tests.filesTests;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 import org.junit.*;
 import org.junit.runners.MethodSorters;
 import org.junit.runner.RunWith;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.undercooked.game.files.FileControl;
@@ -41,10 +39,13 @@ import de.tomgrill.gdxtesting.GdxTestRunner;
 public class FileControlTests {
 
 	static String thisOS;
-	static File testSaveLoadDir = new File(FileControl.getDataPath() + "testSaveLoad68732/");
-	static File testSaveLoadFile = new File("testFile5769.json");
-	static File fullSaveLoadFilePath = new File(testSaveLoadDir.toString(), testSaveLoadFile.toString());
-	static File fullSaveLoadFilePath2 = new File(FileControl.getDataPath().toString(), testSaveLoadFile.toString());
+	static FileHandle testSaveLoadDir = new FileHandle(FileControl.getDataPath() + "testSaveLoad68732/");
+	static FileHandle testSaveLoadFile = new FileHandle("testFile5769.json");
+	static FileHandle fullSaveLoadFilePath = new FileHandle(
+			FileControl.dirAndName(testSaveLoadDir.toString(), testSaveLoadFile.toString()));
+	static FileHandle fullSaveLoadFilePath2 = new FileHandle(
+			FileControl.dirAndName(FileControl.getDataPath().toString(),
+					testSaveLoadFile.toString()));
 	static String testString = "This is a test string.";
 	static JsonValue testJsonRoot = new JsonValue(JsonValue.ValueType.object);
 
@@ -131,9 +132,7 @@ public class FileControlTests {
 		assertTrue("testDir not created", testSaveLoadDir.exists());
 		assertTrue("testFile not created", fullSaveLoadFilePath.exists());
 
-		String readFile = new String(Files.readAllBytes(
-				fullSaveLoadFilePath.toPath()), StandardCharsets.UTF_8);
-		readFile = readFile.substring(0, readFile.length() - 1);
+		String readFile = fullSaveLoadFilePath.readString().trim();
 
 		assertEquals("testFile not created with correct contents", testString, readFile);
 	}
@@ -143,9 +142,8 @@ public class FileControlTests {
 
 		// Use method to overwrite testFile
 		FileControl.saveToFile(testSaveLoadDir.toString(), testSaveLoadFile.toString(), testString);
-		String readFile = new String(Files.readAllBytes(
-				fullSaveLoadFilePath.toPath()), StandardCharsets.UTF_8);
-		readFile = readFile.substring(0, readFile.length() - 1);
+
+		String readFile = fullSaveLoadFilePath.readString().trim();
 
 		assertEquals("testFile not overwritten with correct contents", testString, readFile);
 	}
@@ -155,9 +153,8 @@ public class FileControlTests {
 
 		// Use method to save testFile
 		FileControl.saveData(testSaveLoadFile.toString(), testString);
-		String readFile = new String(Files.readAllBytes(
-				fullSaveLoadFilePath2.toPath()), StandardCharsets.UTF_8);
-		readFile = readFile.substring(0, readFile.length() - 1);
+
+		String readFile = fullSaveLoadFilePath.readString().trim();
 
 		assertEquals("testFile not saved with correct contents", testString, readFile);
 	}
@@ -166,8 +163,7 @@ public class FileControlTests {
 	public void t31LoadFileNormalCase() throws IOException {
 
 		// Use method to load testFile
-		String outString = FileControl.loadFile(testSaveLoadDir.toString(), testSaveLoadFile.toString());
-		outString = outString.substring(0, outString.length() - 1);
+		String outString = FileControl.loadFile(testSaveLoadDir.toString(), testSaveLoadFile.toString()).trim();
 
 		assertEquals("testFile not loaded with correct contents", testString, outString);
 	}
@@ -183,8 +179,7 @@ public class FileControlTests {
 	public void t32LoadData() throws IOException {
 
 		// Use method to load testFile
-		String outString = FileControl.loadData(testSaveLoadFile.toString());
-		outString = outString.substring(0, outString.length() - 1);
+		String outString = FileControl.loadData(testSaveLoadFile.toString()).trim();
 
 		assertEquals("testFile not loaded with correct contents", testString, outString);
 	}
@@ -196,8 +191,7 @@ public class FileControlTests {
 		// Use method to load testFile
 		// * Note that the internal = true cannot be tested using unit tests so easily
 		// and thus has been omitted from the unit testing
-		String outString = FileControl.loadFile(testSaveLoadDir.toString(), testSaveLoadFile.toString(), false);
-		outString = outString.substring(0, outString.length() - 1);
+		String outString = FileControl.loadFile(testSaveLoadDir.toString(), testSaveLoadFile.toString(), false).trim();
 
 		assertTrue("testDir not created", testSaveLoadDir.exists());
 		assertTrue("testFile not created", fullSaveLoadFilePath.exists());
@@ -208,7 +202,7 @@ public class FileControlTests {
 	// file, so there's no need to test for both, from here on out
 
 	@Test
-	public void t41SaveJsonFile() {
+	public void t41SaveJsonFileHandle() {
 		FileControl.saveJsonFile(testSaveLoadDir.toString(), testSaveLoadFile.toString(), testJsonRoot);
 
 		assertEquals("Json value was not saved properly", testJsonRoot.toJson(JsonWriter.OutputType.json),
@@ -224,8 +218,9 @@ public class FileControlTests {
 	}
 
 	@Test
-	public void t43LoadJsonFile() {
-		JsonValue outJson = FileControl.loadJsonFile(testSaveLoadDir.toString(), testSaveLoadFile.toString(), false);
+	public void t43LoadJsonFileHandle() {
+		JsonValue outJson = FileControl.loadJsonFile(testSaveLoadDir.toString(), testSaveLoadFile.toString(),
+				false);
 
 		assertEquals("Json value was not loaded properly", testJsonRoot.toJson(JsonWriter.OutputType.json),
 				outJson.toJson(JsonWriter.OutputType.json));
