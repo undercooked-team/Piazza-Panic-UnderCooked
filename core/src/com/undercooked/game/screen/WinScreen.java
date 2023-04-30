@@ -10,10 +10,15 @@ import com.undercooked.game.MainGameClass;
 import com.undercooked.game.util.Constants;
 import com.undercooked.game.GameType;
 
+/**
+ * A class for the Win {@link Screen} which allows the player to
+ * input a name, and press Enter to add their score to a
+ * {@link com.undercooked.game.util.leaderboard.Leaderboard}.
+ */
 public class WinScreen extends Screen {
 
     private String nameInput;
-    public float score;
+    private float score;
     private GlyphLayout scoreText;
     private GlyphLayout nameGlyph;
     private GlyphLayout text;
@@ -21,6 +26,10 @@ public class WinScreen extends Screen {
     private String leaderboardID;
     private String leaderboardName;
 
+    /**
+     * Constructor for the {@link WinScreen}.
+     * @param game {@link MainGameClass} : The {@link MainGameClass} of the game.
+     */
     public WinScreen(MainGameClass game) {
         super(game);
     }
@@ -50,6 +59,12 @@ public class WinScreen extends Screen {
         updateNameGlyph();
     }
 
+    /**
+     * Returns a key that is just pressed in the range provided.
+     * @param start {@code int} : The start of the range, inclusive.
+     * @param end {@code int} : The end of the range, inclusive.
+     * @return {@link String} : The display name of the key pressed.
+     */
     public String getKey(int start, int end) {
         for (int i = start ; i <= end ; i++) {
             if (Gdx.input.isKeyJustPressed(i)) {
@@ -59,10 +74,18 @@ public class WinScreen extends Screen {
         return null;
     }
 
-    public void updateNameGlyph() {
+    /**
+     * Update the {@link #nameGlyph}
+     */
+    private void updateNameGlyph() {
         this.nameGlyph.setText(game.font, nameInput);
     }
 
+    /**
+     * Update the {@link WinScreen}, checking for if the player is inputting
+     * a name, or trying to submit the name they have already input.
+     * @param delta {@code float} : The time since the last frame.
+     */
     public void update(float delta) {
         // Check for input "enter"
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
@@ -77,7 +100,7 @@ public class WinScreen extends Screen {
             // And try to add the score
             leaderboardScreen.addLeaderBoardData(gameType, leaderboardID, leaderboardName, nameInput, score);
             // And then set the leaderboard screen to view the leaderboard
-            leaderboardScreen.goToLeaderboard(gameType);
+            leaderboardScreen.goToLeaderboardType(gameType);
             leaderboardScreen.showLeaderboard(leaderboardID);
             // And stop here
             return;
@@ -139,14 +162,28 @@ public class WinScreen extends Screen {
         game.batch.end();
     }
 
+    /**
+     * Set the {@link GameType} that the {@link com.undercooked.game.util.leaderboard.LeaderboardEntry}
+     * will be saved to.
+     * @param gameType {@link GameType} : The leaderboard type to save to.
+     */
     public void setLeaderboardType(GameType gameType) {
         this.gameType = gameType;
     }
 
+    /**
+     * Set the id of the {@link com.undercooked.game.util.leaderboard.Leaderboard} that will be saved to.
+     * @param leaderboardID {@link String} : The id of the leaderboard to save to.
+     */
     public void setLeaderboardID(String leaderboardID) {
         this.leaderboardID = leaderboardID;
     }
 
+    /**
+     * The name to set the {@link com.undercooked.game.util.leaderboard.Leaderboard} to if it
+     * does not exist already.
+     * @param leaderboardName {@link String} : The name of the leaderboard.
+     */
     public void setLeaderboardName(String leaderboardName) {
         this.leaderboardName = leaderboardName;
     }
@@ -176,6 +213,10 @@ public class WinScreen extends Screen {
 
     }
 
+    /**
+     * Must come from the {@link GameScreen}, so get the score from
+     * it and update the {@link #scoreText} text.
+     */
     @Override
     public void fromScreen(Screen screen) {
         // It shouldn't ever reach this screen if not from the

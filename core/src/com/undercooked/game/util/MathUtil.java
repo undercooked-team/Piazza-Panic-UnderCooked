@@ -2,8 +2,18 @@ package com.undercooked.game.util;
 
 import com.badlogic.gdx.math.Rectangle;
 
+/**
+ * A class that provides functions for useful calculations.
+ */
 public class MathUtil {
 
+    /**
+     * Calculates and returns the distance between the two {@link Rectangle}s.
+     *
+     * @param rect1 {@link Rectangle}
+     * @param rect2 {@link Rectangle}
+     * @return {@code double} : The distance between the two {@link Rectangle}s.
+     */
     public static double distanceBetweenRectangles(Rectangle rect1, Rectangle rect2) {
 
         // If either of the rectangles are null, return infinity

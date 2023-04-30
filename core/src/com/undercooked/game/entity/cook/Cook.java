@@ -25,6 +25,10 @@ import com.undercooked.game.util.Constants;
 import com.undercooked.game.util.Listener;
 import com.undercooked.game.util.Observer;
 
+/**
+ * A class for the player's way of playing and interacting with the
+ * game {@link Map} and other {@link com.undercooked.game.entity.Entity}s.
+ */
 public class Cook extends MoveableEntity {
 	private static final int FRAME_COLS = 5, FRAME_ROWS = 4;
 
@@ -36,27 +40,44 @@ public class Cook extends MoveableEntity {
 	private TextureRegion currentFrame;
 	private float stateTime = 0;
 
-	private Rectangle interactCollision;
+	private final Rectangle interactCollision;
 	private MapCell interactTarget;
 	private Station stationTarget;
 	private int holdLimit;
+
+	/** The {@link Station} that the {@link Cook} is locked to. */
 	public Station lockedTo = null;
-	public boolean holding = false;
+
+	/** The {@link Item}s that the {@link Cook} is currently holding. */
 	public ItemStack heldItems;
 	
-	Map map;
+	private final Map map;
+
+	/** Multiplier for the speed of the {@link Cook}. */
 	protected float speedMultiplier;
+
+	/** The {@link Listener} to tell when the {@link Cook} is trying to serve an {@link Item}. */
 	protected Listener<Cook> serveListener;
+
+	/** The {@link Listener} to tell when the {@link Cook} interacts with a register {@link MapCell}. */
 	protected Listener<MapCell> interactRegisterListener;
+
+	/** The {@link Listener} to tell when the {@link Cook} interacts with a phone {@link MapCell}. */
 	protected Listener<MapCell> interactPhoneListener;
+
+	/** The {@link Listener} to tell when the {@link Cook} buys something. */
 	protected Listener<Integer> moneyUsedListener;
+
+	/** The {@link Observer} to find out how much money the player has. */
 	protected Observer<Integer> moneyObserver;
 
 	/**
 	 * Cook entity constructor
 	 * 
-	 * @param pos     - x y position vector in pixels
-	 * @param cookNum - cook number, changes texture
+	 * @param pos {@link Vector2} : The position of the {@link Cook}.
+	 * @param cookNum {@link int} : The number of the cook {@link Texture} to use.
+	 * @param textureManager {@link TextureManager} : The {@link TextureManager} to use.
+	 * @param map {@link Map} : The {@link Map} to use for collisions.
 	 */
 	public Cook(Vector2 pos, int cookNum, TextureManager textureManager, Map map) {
 		super();
@@ -96,7 +117,10 @@ public class Cook extends MoveableEntity {
 		// setWalkTexture("entities/cook_walk_" + cookno + ".png");
 	}
 
-	public void checkInput(float delta) {
+	/**
+	 * Check the player's inputs.
+	 */
+	public void checkInput() {
 		// Check inputs, and change things based on the result
 		dirX = 0;
 		dirY = 0;
@@ -113,22 +137,22 @@ public class Cook extends MoveableEntity {
 		if (InputController.isKeyPressed(Keys.cook_down)) {
 			dirY -= 1;
 			setWalkFrames(0);
-			direction = new Vector2(0, -1);
+			direction.set(0, -1);
 		}
 		if (InputController.isKeyPressed(Keys.cook_up)) {
 			dirY += 1;
 			setWalkFrames(2);
-			direction = new Vector2(0, 1);
+			direction.set(0, 1);
 		}
 		if (InputController.isKeyPressed(Keys.cook_left)) {
 			dirX -= 1;
 			setWalkFrames(1);
-			direction = new Vector2(-1, 0);
+			direction.set(-1, 0);
 		}
 		if (InputController.isKeyPressed(Keys.cook_right)) {
 			dirX += 1;
 			setWalkFrames(3);
-			direction = new Vector2(1, 0);
+			direction.set(1, 0);
 		}
 	}
 
@@ -271,9 +295,9 @@ public class Cook extends MoveableEntity {
 	}
 
 	/**
-	 * Update cook using user input
+	 * Update the {@link Cook}.
 	 * 
-	 * @param delta - The time difference from the last frame
+	 * @param delta {@code float} : The time since the last frame.
 	 */
 	public void update(float delta) {
 		// Update super
@@ -333,11 +357,6 @@ public class Cook extends MoveableEntity {
 		dirY = 0;
 	}
 
-	/**
-	 * Draw the {@link Cook}.
-	 * 
-	 * @param batch
-	 */
 	@Override
 	public void draw(SpriteBatch batch) {
 		batch.draw(currentFrame, pos.x, pos.y, 64, 128);
@@ -355,7 +374,7 @@ public class Cook extends MoveableEntity {
 	/**
 	 * Draw the top half of the {@link Cook} at the location provided.
 	 * 
-	 * @param batch {@link SpriteBatch} : The {@link SpriteBatch} to draw with.
+	 * @param batch {@link SpriteBatch} : The {@link SpriteBatch} to use.
 	 * @param x     {@code float} : The {@code x} position to draw at.
 	 * @param y     {@code float} : The {@code y} position to draw at.
 	 */
@@ -365,6 +384,11 @@ public class Cook extends MoveableEntity {
 		batch.draw(chef_top, x, y, 128, 128);
 	}
 
+	/**
+	 * Draw the items that the {@link Cook} is holding.
+	 *
+	 * @param batch {@link SpriteBatch} : The {@link SpriteBatch} to use.
+	 */
 	public void drawHeldItems(SpriteBatch batch) {
 		int itemIndex = 0;
 		int currentOffset = 0;
@@ -379,7 +403,8 @@ public class Cook extends MoveableEntity {
 	}
 
 	/**
-	 * Sets the speed multiplier of the {@link Cook}.
+	 * Set the speed multiplier of the {@link Cook}.
+	 *
 	 * @param multiplier {@code float} : The value to multiply speed by.
 	 */
 	public void setSpeed(float multiplier) {
@@ -387,7 +412,7 @@ public class Cook extends MoveableEntity {
 	}
 
 	/**
-	 * Sets the maximum number of items the {@link Cook} can hold.
+	 * Set the maximum number of items the {@link Cook} can hold.
 	 *
 	 * @param maxItems {@code int} : The maximum number of items
 	 */
@@ -396,9 +421,9 @@ public class Cook extends MoveableEntity {
 	}
 
 	/**
-	 * Set the texture to draw with
+	 * Set the texture to draw the {@link Cook}.
 	 * 
-	 * @param path - Filepath to texture
+	 * @param path {@link String} : The path to the {@link Texture}.
 	 */
 	private void setWalkTexture(String path) {
 		Texture walkSheet = textureManager.get(path);
@@ -411,7 +436,7 @@ public class Cook extends MoveableEntity {
 	/**
 	 * Set specific walk frames
 	 * 
-	 * @param row - row on the sprite sheet to draw
+	 * @param row {@code int} : The row on the {@link #spriteSheet}.
 	 */
 	private void setWalkFrames(int row) {
 		/*
@@ -424,62 +449,64 @@ public class Cook extends MoveableEntity {
 	}
 
 	/**
-	 * Return cook x pixel coordinate
-	 * 
-	 * @return cook x pixel coordinate
+	 * @return {@code float} : The x position.
 	 */
 	public float getX() {
 		return pos.x;
 	}
 
 	/**
-	 * Return cook y pixel coordinate
-	 * 
-	 * @return cook y pixel coordinate
+	 * @return {@code float} : The u position.
 	 */
 	public float getY() {
 		return pos.y;
 	}
 
 	/**
-	 * Return cook width
-	 * 
-	 * @return cook width
+	 * @return {@code float} : The collision width.
 	 */
 	public float getWidth() {
 		return collision.width;
 	}
 
 	/**
-	 * return cook height
-	 * 
-	 * @return cook height
+	 * @return {@code float} : The collision height.
 	 */
 	public float getHeight() {
 		return collision.height;
 	}
 
 	/**
-	 * Return cook direction vector
-	 * 
-	 * @return cook direction vector
+	 * @return {@link Vector2} : The direction the {@link Cook} is facing..
 	 */
 	public Vector2 getDirection() {
 		return direction;
 	}
 
-	public int getCookNo() {
-		return cookno;
-	}
-
+	/**
+	 * @return {@link MapCell} : The current {@link MapCell} interaction target
+	 * 							 of the {@link Cook}.
+	 */
 	public MapCell getInteractTarget() {
 		return interactTarget;
 	}
 
+	/**
+	 * @return {@link Station} : The current {@link Station} interaction target
+	 * 							 of the {@link Cook}.
+	 *                           Returns {@code null}, even if {@link #getInteractTarget()}
+	 *                           does not, if the {@link Station} is an invalid target.
+	 */
 	public Station getStationTarget() {
 		return stationTarget;
 	}
 
+	/**
+	 * Returns whether the {@link Cook} can hold a number more {@link Item}s.
+	 * @param number {@code int} : The number of check.
+	 * @return {@code boolean} : {@code true} if the {@link Cook} can hold the {@link Item},
+	 * 							 {@code false} if not.
+	 */
 	public boolean canAddItems(int number) {
 		if (number <= 0) {
 			return true;
@@ -488,10 +515,23 @@ public class Cook extends MoveableEntity {
 		return !(heldItems.size() + number > holdLimit);
 	}
 
+	/**
+	 * Returns whether the {@link Cook} can hold at least one more {@link Item}s.
+	 * @return {@code boolean} : {@code true} if the {@link Cook} can hold the {@link Item},
+	 * 							 {@code false} if not.
+	 */
 	public boolean canAddItem() {
 		return canAddItems(1);
 	}
 
+	/**
+	 * Tries to add an {@link Item} to the {@link Cook}'s held items,
+	 * but fails if it goes over their hold limit.
+	 *
+	 * @param item {@link Item} : The {@link Item} to add.
+	 * @return {@code boolean} : {@code true} if it was able to be added,
+	 * 							 {@code false} if it was not.
+	 */
 	public boolean addItem(Item item) {
 		// Continue only if it can add it
 		if (!canAddItem()) {
@@ -503,6 +543,12 @@ public class Cook extends MoveableEntity {
 		return true;
 	}
 
+	/**
+	 * Take an item from the top of the {@link Cook}'s held items.
+	 *
+	 * @return {@link Item} : The {@link Item} at the top of the {@link ItemStack},
+	 * 						  or {@code null} if there is none.
+	 */
 	public Item takeItem() {
 		// Continue only if the Cook has an item to remove
 		if (heldItems.size() <= 0) {
@@ -514,11 +560,19 @@ public class Cook extends MoveableEntity {
 		return poppedItem;
 	}
 
+	/**
+	 * Clears the {@link Cook}'s held items, and updates the current {@link Texture}
+	 */
 	public void clear() {
 		heldItems.clear();
 		updateTexture();
 	}
 
+	/**
+	 * Locks the {@link Cook} to a {@link Station}.
+	 *
+	 * @param station {@link Station} : The {@link Station} to lock the {@link Cook} to.
+	 */
 	public void lockToStation(Station station) {
 		// If not already locked to a Station
 		if (lockedTo != null) {
@@ -530,6 +584,10 @@ public class Cook extends MoveableEntity {
 		station.lockCook(this);
 	}
 
+	/**
+	 * Unlocks the {@link Cook} from the {@link Station} they are locked to,
+	 * if they are locked to one.
+	 */
 	public void unlock() {
 		// If lockedTo is null, then just return
 		if (lockedTo == null) {
@@ -542,6 +600,10 @@ public class Cook extends MoveableEntity {
 		stationTemp.unlockCook(this);
 	}
 
+	/**
+	 * Updates the {@link Cook}'s current {@link Texture}s depending on
+	 * if they are holding {@link Item}s or not.
+	 */
 	public void updateTexture() {
 		if (heldItems.size() > 0) {
 			setWalkTexture("entities/cook_walk_hands_" + cookno + ".png");
@@ -551,9 +613,12 @@ public class Cook extends MoveableEntity {
 	}
 
 	/**
-	 * Return the {@link Cook} as a {@link String}
+	 * Serializes the {@link Cook} into an {@link JsonValue} so that
+	 * it can be stored externally.
+	 *
+	 * @return {@link JsonValue} : The {@link Cook} in Json form.
 	 */
-	public JsonValue serial(Map map) {
+	public JsonValue serial() {
 		// Return JsonValue
 		JsonValue cookRoot = new JsonValue(JsonValue.ValueType.object);
 		cookRoot.addChild("cookno", new JsonValue(cookno));

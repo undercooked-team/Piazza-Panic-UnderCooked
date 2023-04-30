@@ -75,13 +75,7 @@ public class GameRenderer {
     private final Comparator<Entity> entityCompare = new Comparator<Entity>() {
         @Override
         public int compare(Entity o1, Entity o2) {
-            if (o1.getY() > o2.getY()) {
-                return -1;
-            }
-            if (o2.getY() > o1.getY()) {
-                return 1;
-            }
-            return 0;
+            return Float.compare(o2.getY(), o1.getY());
         }
     };
 
@@ -379,7 +373,7 @@ public class GameRenderer {
         font.draw(batch, text, Constants.V_WIDTH-310, 64);
 
         // Draw the money
-        String money = String.format("%.2f", logic.getMoney()/100f);;
+        String money = String.format("%.2f", logic.getMoney()/100f);
         text.setText(font, money);
         batch.draw(moneyTex, Constants.V_WIDTH-200-texSize/2f, 50-texSize/2f, texSize, texSize);
         font.draw(batch, text, Constants.V_WIDTH-150, 64);
@@ -424,7 +418,7 @@ public class GameRenderer {
             batch.end();
         }
 
-        String timerText = "Time: " + StringUtil.formatSeconds(logic.getElapsedTime());
+        String timerText = "Time: " + StringUtil.formatTime(logic.getElapsedTime());
         font.getData().setScale(1F);
         text.setText(font, timerText);
         float timerX = Constants.V_WIDTH/2f;
@@ -473,6 +467,7 @@ public class GameRenderer {
 
     /**
      * Load the {@link GameRenderer}'s {@link Texture}s.
+     * @param textureGroup {@link String} : The texture group to use.
      * @param textureManager {@link TextureManager} : The {@link TextureManager} to use.
      */
     public void load(String textureGroup, TextureManager textureManager) {

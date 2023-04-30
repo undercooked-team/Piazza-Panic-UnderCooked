@@ -19,21 +19,44 @@ import com.undercooked.game.station.StationController;
 import com.undercooked.game.util.CameraController;
 import com.undercooked.game.util.Constants;
 
+/**
+ * The main game class of the game. This is the class starts the game,
+ * creating all other classes that run the game
+ */
 public class MainGameClass extends Game {
+
+	/** The main screen music of the game. */
 	public Music mainScreenMusic;
+
+	/** The game music. */
 	public Music gameMusic;
-	public static float musicVolumeScale;
-	public static float gameVolumeScale;
+
+	/** The {@link ScreenController} that controls the {@link Screen}s of the game. */
 	public final ScreenController screenController;
 	private final AssetManager assetManager;
+
+	/** The {@link AudioManager} which controls audio for the game. */
 	public final AudioManager audioManager;
+
+	/** The {@link TextureManager} which controls {@link Texture}s for the game. */
 	public final TextureManager textureManager;
+
+	/** The {@link MapManager} which creates the {@link com.undercooked.game.map.Map}s for the game. */
 	public final MapManager mapManager;
+
+	/** The {@link AudioSettings} which controls the audio settings from within the game. */
 	public final AudioSettings audioSettings;
+
+	/** The {@link SettingsControl} which controls how the settings json file is loaded, modified and stored. */
 	public final SettingsControl settingsControl;
-	public final StationController stationController;
+
+	/** The {@link SpriteBatch} to render the {@link Texture}s of the game. */
 	public static SpriteBatch batch;
+
+	/** The {@link BitmapFont} to render the text for the game. */
 	public static BitmapFont font;
+
+	/** The {@link BitmapFont} to render shapes for the game. */
 	public static ShapeRenderer shapeRenderer;
 
 	/**
@@ -49,7 +72,6 @@ public class MainGameClass extends Game {
 		textureManager = new TextureManager(assetManager);
 		mapManager = new MapManager(textureManager, audioManager);
 		screenController = new ScreenController(this, assetManager);
-		stationController = new StationController();
 	}
 
 	/**
@@ -114,32 +136,46 @@ public class MainGameClass extends Game {
 		CameraController.getViewport(Constants.UI_CAMERA_ID).update(width, height);
 	}
 
+	/**
+	 * @return {@link Screen} : The currently selected {@link Screen}.
+	 */
 	public Screen getScreen() {
 		return (Screen) super.getScreen();
 	}
 
+	/**
+	 * @return {@link AudioManager} : The {@link AudioManager} for the game.
+	 */
 	public AudioManager getAudioManager() {
 		return audioManager;
 	}
 
+	/**
+	 * @return {@link TextureManager} : The {@link TextureManager} for the game.
+	 */
 	public TextureManager getTextureManager() {
 		return textureManager;
 	}
 
+	/**
+	 * @return {@link AudioSettings} : The {@link AudioSettings} for the game.
+	 */
 	public AudioSettings getAudioSettings() {
 		return audioSettings;
 	}
 
+	/**
+	 * @return {@link SpriteBatch} : The {@link SpriteBatch} for the game.
+	 */
 	public static SpriteBatch getSpriteBatch() {
 		return batch;
 	}
 
+	/**
+	 * @return {@link ShapeRenderer} : The {@link ShapeRenderer} for the game.
+	 */
 	public static ShapeRenderer getShapeRenderer() {
 		return shapeRenderer;
-	}
-
-	public void unloadCurrentScreen() {
-		screenController.unload((Screen) screen);
 	}
 
 	@Override

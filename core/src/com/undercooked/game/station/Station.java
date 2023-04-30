@@ -58,6 +58,11 @@ public class Station extends MapEntity {
 
 	/** If the {@link Station} has collision or not. */
 	public boolean hasCollision;
+
+	/**
+	 * Constructor for the {@link Station}.
+	 * @param stationData {@link StationData} : The {@link StationData} of the {@link Station}.
+	 */
 	public Station(StationData stationData) {
 		super();
 		setStationData(stationData);
@@ -75,7 +80,7 @@ public class Station extends MapEntity {
 	 * @param delta {@code float} : The time since the last frame.
 	 * @param powerUpMultiplier {@code float} : The multiplier from power ups.
 	 */
-	public void update(float delta,float powerUpMultiplier) {
+	public void update(float delta, float powerUpMultiplier) {
 		// Only continue if not disabled
 		if (disabled)
 			return;
@@ -103,6 +108,9 @@ public class Station extends MapEntity {
 	 * Called when the player is trying to buy the {@link Station}.
 	 * 
 	 * @param money {@code int} : The money provided.
+	 * @return {@code boolean} : {@code true} if the {@link Station} can be bought with
+	 * 								the money provided,
+	 * 							 {@code false} if it could not.
 	 */
 	public boolean buy(int money) {
 		// If money < price, then the purchase has failed
@@ -220,7 +228,7 @@ public class Station extends MapEntity {
 		int numFound = 0;
 		for (Item item : items) {
 			// If item's ID and itemID match...
-			if (item.getID() == itemID) {
+			if (item.getID().equals(itemID)) {
 				// Increase numFound
 				numFound += 1;
 			}

@@ -16,14 +16,30 @@ import com.undercooked.game.logic.tutorial.TutorialStep;
 import com.undercooked.game.util.CameraController;
 import com.undercooked.game.util.Constants;
 
+/**
+ * The class for rendering the {@link TutorialLogic} logic.
+ */
 public class TutorialRenderer extends GameRenderer {
 
+    /** The {@link TutorialLogic} being rendered. */
     TutorialLogic logic;
-    public TutorialRenderer(TutorialLogic logic, SpriteBatch batch, ShapeRenderer shape, BitmapFont font, Array renderEntities) {
-        super(logic, batch, shape, font, renderEntities);
+
+    /**
+     * Constructor for the {@link TutorialLogic}.
+     * @param logic {@link TutorialLogic} : The {@link TutorialLogic} to render.
+     * @param batch {@link SpriteBatch} : The {@link SpriteBatch} to use.
+     * @param shape {@link ShapeRenderer} : The {@link ShapeRenderer} to use.
+     * @param font {@link BitmapFont} : The {@link BitmapFont} to use.
+     */
+    public TutorialRenderer(TutorialLogic logic, SpriteBatch batch, ShapeRenderer shape, BitmapFont font) {
+        super(logic, batch, shape, font);
         this.logic = logic;
     }
 
+    /**
+     * Constructor for the {@link TutorialLogic}.
+     * @param logic {@link TutorialLogic} : The {@link TutorialLogic} to render.
+     */
     public TutorialRenderer(TutorialLogic logic) {
         super();
         this.logic = logic;

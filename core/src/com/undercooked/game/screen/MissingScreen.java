@@ -3,9 +3,18 @@ package com.undercooked.game.screen;
 import com.undercooked.game.MainGameClass;
 import com.undercooked.game.util.Constants;
 
+/**
+ * A screen for if the code tries to go ta screen that doesn't exist.
+ */
 public class MissingScreen extends Screen {
+
+    /** The time that has passed.*/
     float timeCount;
 
+    /**
+     * Constructor for the {@link MissingScreen}.
+     * @param game {@link MainGameClass} : The {@link MainGameClass} of the game.
+     */
     protected MissingScreen(MainGameClass game) {
         super(game);
     }

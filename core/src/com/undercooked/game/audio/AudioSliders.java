@@ -30,6 +30,8 @@ public class AudioSliders {
      * @param y {@code float} : The {@code y} position of the {@link AudioSliders}.
      * @param width {@code float} : The width of the {@link AudioSliders}.
      * @param height {@code float} : The height of the {@link AudioSliders}.
+     * @param backgroundTex {@link Texture} : The {@link Texture} for the background behind
+     *                                        the {@link Slider}s.
      */
     public AudioSliders(float x, float y, float width, float height, Texture backgroundTex) {
         this.x = x;

@@ -15,10 +15,19 @@ import com.undercooked.game.interactions.InteractionStep;
  */
 public class WaitStep extends InteractionStep {
 
+    /** The width of the timer. */
     static final float width = 50F;
+
+    /** The height of the timer. */
     static final float height = 10F;
+
+    /** The background padding of the timer. */
     static final float padding = 5F;
+
+    /** Double of the padding. */
     static final float paddingDouble = padding*2;
+
+    /** The offset of the timer from the {@link com.undercooked.game.station.Station}. */
     static final float offsetY = 32F;
 
     @Override
@@ -31,14 +40,32 @@ public class WaitStep extends InteractionStep {
         }
     }
 
+    /**
+     * Called when the {@link WaitStep} has finished counting down.
+     *
+     * @param instance {@link InteractionInstance} : The interaction instance.
+     * @param cook {@link Cook} : The {@link Cook} locked to the {@link com.undercooked.game.station.Station}.
+     */
     public void waitFinished(InteractionInstance instance, Cook cook) {
         finished(instance, cook, null, null, true);
     }
 
+    /**
+     * Returns the current percentage that the timer has gone through.
+     *
+     * @param instance {@link InteractionInstance} : The interaction instance.
+     * @return {@code float} : The percentage that the timer has completed.
+     */
     public float getDrawPercent(InteractionInstance instance) {
         return Math.min(1f, instance.elapsedTime / time);
     }
 
+    /**
+     * Sets the colour being used to show the timer progress bar.
+     *
+     * @param instance {@link InteractionInstance} : The interaction instance.
+     * @param shape {@link ShapeRenderer} : The {@link ShapeRenderer} to change the colour of.
+     */
     public void setBarColor(InteractionInstance instance, ShapeRenderer shape) {
         shape.setColor(Color.GREEN);
     }

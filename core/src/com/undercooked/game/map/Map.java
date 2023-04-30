@@ -720,6 +720,8 @@ public class Map {
      * Returns whether an {@link Entity} would be colliding with a
      * {@link MapCellType#COLLIDABLE} {@link MapCell} at the specified position or not.
      * @param entity {@link Entity} : The {@link Entity} to check.
+     * @param x {@code float} : The x position to check the {@link Entity} at.
+     * @param y {@code float} : The y position to check the {@link Entity} at.
      * @return {@code boolean} : {@code true} if the {@link Entity} would be colliding
      *                              with a {@link MapCell},
      *                           {@code false} if not.
@@ -802,13 +804,14 @@ public class Map {
      * Loads all the {@link com.badlogic.gdx.graphics.Texture}s of the
      * {@link MapEntity}s.
      * @param textureManager The {@link TextureManager} to load using.
+     * @param textureGroup {@link String} : The texture group to use.
      */
-    public void loadAll(TextureManager textureManager, String textureID) {
+    public void loadAll(TextureManager textureManager, String textureGroup) {
         for (int x = 0 ; x < fullWidth ; x++) {
             for (int y = 0 ; y < fullHeight ; y++) {
                 MapCell thisCell = getCellFull(x,y);
                 if (thisCell != null) {
-                    thisCell.load(textureManager, textureID);
+                    thisCell.load(textureManager, textureGroup);
                 }
             }
         }
@@ -818,13 +821,14 @@ public class Map {
      * Loads just the floor tiles of the MapCells
      * @param textureManager {@link TextureManager} : The {@link TextureManager}
      *                                                to use.
+     * @param textureGroup {@link String} : The texture group to use.
      */
-    public void loadFloor(TextureManager textureManager, String textureID) {
+    public void loadFloor(TextureManager textureManager, String textureGroup) {
         for (int x = 0 ; x < fullWidth ; x++) {
             for (int y = 0 ; y < fullHeight ; y++) {
                 MapCell thisCell = getCellFull(x,y);
                 if (thisCell != null) {
-                    thisCell.loadFloor(textureManager, textureID);
+                    thisCell.loadFloor(textureManager, textureGroup);
                 }
             }
         }

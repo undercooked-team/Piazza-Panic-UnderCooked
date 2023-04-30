@@ -144,6 +144,8 @@ public abstract class GameLogic {
         this.customerController = new CustomerController(textureManager);
         this.interactions = new Interactions();
 
+        this.stationController = new StationController();
+
         this.textureManager = textureManager;
         this.audioManager = audioManager;
 
@@ -589,7 +591,7 @@ public abstract class GameLogic {
             requestsData.addChild("", request.serial());
         }
 
-        gameRoot.addChild("cooks", cookController.serializeCooks(map));
+        gameRoot.addChild("cooks", cookController.serializeCooks());
         gameRoot.addChild("stations", stationController.serializeStations(map));
         gameRoot.addChild("customers", customerController.serializeCustomers());
 

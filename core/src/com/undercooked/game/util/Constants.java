@@ -96,6 +96,7 @@ public final class Constants {
     public static final String DEFAULT_MAP = "<main>:empty";
     /** The default {@link com.badlogic.gdx.graphics.Texture} to load if one fails to load. */
     public static final String DEFAULT_TEXTURE = "items/missing.png";
+    /** The default {@link com.badlogic.gdx.graphics.Texture} to use for a floor tile. */
     public static final String DEFAULT_FLOOR_TILE = "<main>:floor/floor_tile.png";
     /** The default {@link com.badlogic.gdx.audio.Music} to load if one fails to load. */
     public static final String DEFAULT_MUSIC = "game/sounds/frying.mp3";

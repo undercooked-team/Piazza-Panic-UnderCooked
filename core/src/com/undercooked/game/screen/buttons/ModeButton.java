@@ -10,33 +10,49 @@ import com.undercooked.game.GameType;
 import com.undercooked.game.assets.TextureManager;
 import com.undercooked.game.util.Listener;
 
+/**
+ * A class for the mode button, allowing for selecting between the
+ * {@link GameType#SCENARIO} and {@link GameType#ENDLESS} modes.
+ */
 public class ModeButton {
-    GameType currentType;
-    TextureManager textureManager;
-    Button scenarioBtn;
-    Button endlessBtn;
-    TextureRegionDrawable scenarioBtnDrawable;
-    TextureRegionDrawable endlessBtnDrawable;
-    Listener<GameType> listener;
-    final float defaultButtonWidth = 473f;
-    final float defaultButtonHeight = 144f;
-    float buttonWidth;
-    float buttonHeight;
-    float x, y;
+    private GameType currentType;
+    private final TextureManager textureManager;
+    private Button scenarioBtn;
+    private Button endlessBtn;
+    private TextureRegionDrawable scenarioBtnDrawable;
+    private TextureRegionDrawable endlessBtnDrawable;
+    private Listener<GameType> listener;
+    private float buttonWidth;
+    private float buttonHeight;
+    private float x;
+    private float y;
 
+    /**
+     * Constructor for the {@link ModeButton}.
+     *
+     * @param textureManager {@link TextureManager} : The {@link TextureManager} to use.
+     */
     public ModeButton(TextureManager textureManager) {
         currentType = GameType.SCENARIO;
         setScale(1f);
         this.textureManager = textureManager;
     }
 
-    public void load(String textureID) {
-        textureManager.load(textureID, "uielements/mode/scenario.png");
-        textureManager.load(textureID, "uielements/mode/scenario_off.png");
-        textureManager.load(textureID, "uielements/mode/endless.png");
-        textureManager.load(textureID, "uielements/mode/endless_off.png");
+    /**
+     * Set the {@link TextureManager} to load the {@link com.badlogic.gdx.graphics.Texture}s
+     * of the {@link Button}s using the texture group.
+     * @param textureGroup {@link String} : The texture group to use.
+     */
+    public void load(String textureGroup) {
+        textureManager.load(textureGroup, "uielements/mode/scenario.png");
+        textureManager.load(textureGroup, "uielements/mode/scenario_off.png");
+        textureManager.load(textureGroup, "uielements/mode/endless.png");
+        textureManager.load(textureGroup, "uielements/mode/endless_off.png");
     }
 
+    /**
+     * Unload all of the {@link com.badlogic.gdx.graphics.Texture}s of the {@link Button}s.
+     */
     public void unload() {
         textureManager.unloadTexture("uielements/mode/scenario.png");
         textureManager.unloadTexture("uielements/mode/scenario_off.png");
@@ -44,6 +60,9 @@ public class ModeButton {
         textureManager.unloadTexture("uielements/mode/endless_off.png");
     }
 
+    /**
+     * Post load the {@link ModeButton} to set up the {@link Button}s.
+     */
     public void postLoad() {
         scenarioBtnDrawable = new TextureRegionDrawable();
         scenarioBtn = new Button(scenarioBtnDrawable);
@@ -66,6 +85,9 @@ public class ModeButton {
         updateButtonSize();
     }
 
+    /**
+     * Update the {@link com.badlogic.gdx.graphics.Texture}s of the {@link Button}s.
+     */
     public void update() {
         // Don't continue if either of the drawables are null
         if (scenarioBtnDrawable == null || endlessBtnDrawable == null) return;
@@ -82,18 +104,31 @@ public class ModeButton {
                 scenarioBtnDrawable.setRegion(new TextureRegion(textureManager.get("uielements/mode/scenario_off.png")));
                 return;
         }
-        return;
     }
 
+    /**
+     * Add the {@link Button}s to a {@link Stage}.
+     * @param stage {@link Stage} : The {@link Stage} to add the {@link Button}s to.
+     */
     public void addToStage(Stage stage) {
         stage.addActor(scenarioBtn);
         stage.addActor(endlessBtn);
     }
 
+    /**
+     * Set the current {@link GameType} of the {@link ModeButton}.
+     * @param gameType {@link GameType} : The new {@link GameType}.
+     */
     public void setCurrentType(GameType gameType) {
         setCurrentType(gameType, false);
     }
 
+    /**
+     * Set the current {@link GameType} of the {@link ModeButton}.
+     * @param gameType {@link GameType} : The new {@link GameType}.
+     * @param tellListener {@code boolean} : Whether it should ({@code true}) tell
+     *                                       the listener or not ({@code false}).
+     */
     private void setCurrentType(GameType gameType, boolean tellListener) {
         GameType beforeType = this.currentType;
         this.currentType = gameType;
@@ -107,6 +142,13 @@ public class ModeButton {
         }
     }
 
+    /**
+     * Set the position of the {@link Button}s.
+     * <br><br>
+     * The x is the center position between them.
+     * @param x {@code float} : The new x position.
+     * @param y {@code float} : The new y position.
+     */
     public void setPosition(float x, float y) {
         this.x = x;
         this.y = y;
@@ -122,6 +164,10 @@ public class ModeButton {
             endlessBtn.setPosition(x,y);
     }
 
+    /**
+     * Set the {@link Listener} for when the {@link Button}s are pressed.
+     * @param listener {@link Listener<GameType>} : The {@link Listener} to tell.
+     */
     public void setListener(Listener<GameType> listener) {
         this.listener = listener;
     }
@@ -137,21 +183,36 @@ public class ModeButton {
         setPosition(x, y);
     }
 
+    /**
+     * Set the scale of the {@link Button}s.
+     * @param scale {@code float} : The new scale.
+     */
     public void setScale(float scale) {
+        float defaultButtonWidth = 473f;
         buttonWidth = scale * defaultButtonWidth;
+        float defaultButtonHeight = 144f;
         buttonHeight = scale * defaultButtonHeight;
 
         updateButtonSize();
     }
 
+    /**
+     * @return {@code float} : The width of the {@link Button}s.
+     */
     public float getButtonWidth() {
         return buttonWidth;
     }
 
+    /**
+     * @return {@code float} : The height of the {@link Button}s.
+     */
     public float getButtonHeight() {
         return buttonHeight;
     }
 
+    /**
+     * @return {@code GameType} : The currently selected {@link GameType}.
+     */
     public GameType getCurrentType() {
         return currentType;
     }

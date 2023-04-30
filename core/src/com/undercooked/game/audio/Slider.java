@@ -231,6 +231,7 @@ public class Slider {
      * Set the value of the {@link Slider}, clamped between the
      * minimum and maximum percentage.
      * @param value {@code float} : The value to set to.
+     * @return {@code float} : The value it was set to.
      */
     public float setValue(float value) {
         float percent = value / (maxValue - minValue);
@@ -240,6 +241,7 @@ public class Slider {
     /**
      * Set the percentage value of the {@link Slider}, 0 - 1.
      * @param percent {@code float} : The percentage to set to.
+     * @return {@code float} : The percentage it was set to.
      */
     public float setPercent(float percent) {
         this.percent = Math.max(Math.min(percent, 1F), 0F);
