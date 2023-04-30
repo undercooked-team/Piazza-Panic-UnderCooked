@@ -17,12 +17,21 @@ import com.undercooked.game.screen.GameScreen;
 import com.undercooked.game.util.Constants;
 import com.undercooked.game.util.Listener;
 
+/**
+ * A class for the logic of making the game give a Tutorial to the player.
+ */
 public class TutorialLogic extends ScenarioLoadLogic {
 
     private TutorialStep currentStep;
     private Array<TutorialStep> tutorialSteps;
     private Listener<TutorialStep> stepFinishListener;
 
+    /**
+     * Constructor for the {@link TutorialLogic}.
+     * @param game {@link GameScreen} : The {@link GameScreen} that will use the {@link TutorialLogic}.
+     * @param textureManager {@link TextureManager} : The {@link TextureManager} to use.
+     * @param audioManager {@link AudioManager} : The {@link AudioManager} to use.
+     */
     public TutorialLogic(GameScreen game, TextureManager textureManager, AudioManager audioManager) {
         super(game, textureManager, audioManager);
         id = "<main>:tutorial";
@@ -129,6 +138,9 @@ public class TutorialLogic extends ScenarioLoadLogic {
 
     }
 
+    /**
+     * Go to the next step of the tutorial.
+     */
     public void nextStep() {
         // If there is not a next step, then the tutorial is done. Return to main screen
         if (tutorialSteps.isEmpty()) {
@@ -244,6 +256,11 @@ public class TutorialLogic extends ScenarioLoadLogic {
         tutorialSteps.add(new TutorialStep("That's all you need to know to start playing. Good luck!\n(Enter)", textSpeed));
     }
 
+    /**
+     * Tell the current {@link TutorialStep} something based on what class it is.
+     * @param value {@link Object} : The value to tell.
+     * @return {@code boolean} : Whether the {@link TutorialStep} was told or not.
+     */
     private boolean tellStep(Object value) {
         if (currentStep.getClass().equals(TutorialRegisterInteractStep.class) && value.getClass().equals(MapCell.class)) {
             currentStep.finished();
@@ -283,6 +300,9 @@ public class TutorialLogic extends ScenarioLoadLogic {
         return false;
     }
 
+    /**
+     * @return {@link TutorialStep} : The currently active {@link TutorialStep}.
+     */
     public TutorialStep getCurrentStep() {
         return currentStep;
     }
