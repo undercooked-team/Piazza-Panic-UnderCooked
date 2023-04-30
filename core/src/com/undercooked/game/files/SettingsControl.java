@@ -50,7 +50,7 @@ public class SettingsControl {
     /**
      * Unloads the settings data.
      */
-    public void unload() {
+    private void unload() {
         // Forget the json
         settingsData = null;
         // and it's not loaded
@@ -87,12 +87,18 @@ public class SettingsControl {
         // If the json is not null
         if (settingsData == null)
             return;
+
+        // Validate val is inbetween 0 and 1 inclusive
+        if (val < 0 || val > 1)
+            throw new IllegalArgumentException("Value must be between 0 and 1 inclusive.");
+
         // Then set the value
         settingsData.get(key).set(val, key);
     }
 
     /**
      * Set the music volume of the game.
+     *
      * @param volume {@link float} : The volume to set the music to.
      */
     public void setMusicVolume(float volume) {
@@ -101,6 +107,7 @@ public class SettingsControl {
 
     /**
      * Set the game sounds volume.
+     *
      * @param volume {@link float} : The volume to set the game to.
      */
     public void setGameVolume(float volume) {

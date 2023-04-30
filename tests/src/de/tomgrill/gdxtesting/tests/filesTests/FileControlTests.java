@@ -22,32 +22,48 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import org.junit.*;
+import org.junit.runners.MethodSorters;
 import org.junit.runner.RunWith;
 
+import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.JsonWriter;
 import com.undercooked.game.files.FileControl;
 import com.undercooked.game.util.Constants;
 
 import de.tomgrill.gdxtesting.GdxTestRunner;
 
 @RunWith(GdxTestRunner.class)
+// ! TESTS ARE RUN IN ALPHABETICAL ORDER !
+// * Start every test with t[0-9][0-9][...] to determine the order they run in
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FileControlTests {
 
-	String thisOS;
+	static String thisOS;
+	static File testSaveLoadDir = new File(FileControl.getDataPath() + "testSaveLoad68732/");
+	static File testSaveLoadFile = new File("testFile5769.json");
+	static File fullSaveLoadFilePath = new File(testSaveLoadDir.toString(), testSaveLoadFile.toString());
+	static File fullSaveLoadFilePath2 = new File(FileControl.getDataPath().toString(), testSaveLoadFile.toString());
+	static String testString = "This is a test string.";
+	static JsonValue testJsonRoot = new JsonValue(JsonValue.ValueType.object);
 
-	@Before
-	public void getSystemProperty() {
+	@BeforeClass
+	public static void getSystemProperty() {
 		// As it is not recommended to change the system properties, I want to ensure
 		// the original properties are restored after tests are complete.
 		thisOS = System.getProperty("os.name");
 	}
 
+	@BeforeClass
+	public static void initializeTestData() {
+		testJsonRoot.addChild("child", new JsonValue(testString));
+	}
+
 	// DATAPATH TESTS {#61e,28}
 	// #region
 	@Test
-	public void getLinuxDataPath() {
+	public void t11getLinuxDataPath() {
 		System.setProperty("os.name", "Linux");
 		String expLinFP = String.format("%s/data/%s/", System.getProperty("user.dir"), Constants.DATA_FILE);
 		String outString = FileControl.getDataPath();
@@ -56,7 +72,7 @@ public class FileControlTests {
 	}
 
 	@Test
-	public void getWindowsDataPath() {
+	public void t12getWindowsDataPath() {
 		System.setProperty("os.name", "Windows");
 		String expWinFP = String.format("%s/%s/", System.getenv("APPDATA"), Constants.DATA_FILE);
 		String outString = FileControl.getDataPath();
@@ -65,7 +81,7 @@ public class FileControlTests {
 	}
 
 	@Test
-	public void getDefaultDataPath() {
+	public void t13getDefaultDataPath() {
 		System.setProperty("os.name", "ilabfkli{}1!s#");
 		String expDefFP = String.format("/data/%s/", Constants.DATA_FILE);
 		String outString = FileControl.getDataPath();
@@ -75,7 +91,7 @@ public class FileControlTests {
 	// #endregion
 
 	@Test
-	public void testFormatDir() {
+	public void t21testFormatDir() {
 		String[] testDirs = new String[] {
 				"/here/is/my/linux/dir",
 				"C:\\here\\is\\my\\windows\\dir",
@@ -105,43 +121,137 @@ public class FileControlTests {
 	}
 
 	@Test
-	public void testSaveToFile() throws IOException {
-		File testDir = new File(FileControl.getDataPath() + "testSaveToFile/");
-		File testFile = new File("testFile.json");
-		File fulltestPath = new File(testDir.toString() + testFile.toString());
-		String testString = "This is a test string";
-		String testString2 = "This is a test string 2";
-
+	public void t22SaveToFileCreatesDirAndFilesAndWritesCorrectly() throws IOException {
 		// Remove fulltestPath if it exists
-		if (fulltestPath.exists()) {
-			fulltestPath.delete();
-		}
-		// Remove testDir if it exists
-		if (testDir.exists()) {
-			testDir.delete();
-		}
+		fullSaveLoadFilePath.delete();
+		testSaveLoadDir.delete();
+
 		// Use method to create testDir and testFile
-		FileControl.saveToFile(testDir.toString(), testFile.toString(), testString);
-		assertTrue("testDir not created", testDir.exists());
-		assertTrue("testFile not created", testFile.exists());
-		assertEquals("testFile not created with correct contents", testString,
-				new String(Files.readAllBytes(Paths.get(testDir.toString(), testFile.toString())),
-						StandardCharsets.UTF_8));
+		FileControl.saveToFile(testSaveLoadDir.toString(), testSaveLoadFile.toString(), testString);
+		assertTrue("testDir not created", testSaveLoadDir.exists());
+		assertTrue("testFile not created", fullSaveLoadFilePath.exists());
 
-		// Use method to overwrite testFile
-		FileControl.saveToFile(testDir.toString(), testFile.toString(), testString2);
-		assertEquals("testFile not overwritten with correct contents", testString2,
-				new String(Files.readAllBytes(Paths.get(testDir.toString(), testFile.toString())),
-						StandardCharsets.UTF_8));
+		String readFile = new String(Files.readAllBytes(
+				fullSaveLoadFilePath.toPath()), StandardCharsets.UTF_8);
+		readFile = readFile.substring(0, readFile.length() - 1);
 
-		// Test Cleanup
-		fulltestPath.delete();
-		testDir.delete();
+		assertEquals("testFile not created with correct contents", testString, readFile);
 	}
 
-	@After
-	public void restoreSystemProperty() {
+	@Test
+	public void t23SaveToFileOverwritesToFileCorrectly() throws IOException {
+
+		// Use method to overwrite testFile
+		FileControl.saveToFile(testSaveLoadDir.toString(), testSaveLoadFile.toString(), testString);
+		String readFile = new String(Files.readAllBytes(
+				fullSaveLoadFilePath.toPath()), StandardCharsets.UTF_8);
+		readFile = readFile.substring(0, readFile.length() - 1);
+
+		assertEquals("testFile not overwritten with correct contents", testString, readFile);
+	}
+
+	@Test
+	public void t24SaveData() throws IOException {
+
+		// Use method to save testFile
+		FileControl.saveData(testSaveLoadFile.toString(), testString);
+		String readFile = new String(Files.readAllBytes(
+				fullSaveLoadFilePath2.toPath()), StandardCharsets.UTF_8);
+		readFile = readFile.substring(0, readFile.length() - 1);
+
+		assertEquals("testFile not saved with correct contents", testString, readFile);
+	}
+
+	@Test
+	public void t31LoadFileNormalCase() throws IOException {
+
+		// Use method to load testFile
+		String outString = FileControl.loadFile(testSaveLoadDir.toString(), testSaveLoadFile.toString());
+		outString = outString.substring(0, outString.length() - 1);
+
+		assertEquals("testFile not loaded with correct contents", testString, outString);
+	}
+
+	@Test
+	public void t31LoadFileErrorCase() throws IOException {
+
+		assertEquals("Should fail gracefully when file does not exist", "",
+				FileControl.loadFile("some/Random-directory/hey/7218hdwq", "nonexistentfile.txt"));
+	}
+
+	@Test
+	public void t32LoadData() throws IOException {
+
+		// Use method to load testFile
+		String outString = FileControl.loadData(testSaveLoadFile.toString());
+		outString = outString.substring(0, outString.length() - 1);
+
+		assertEquals("testFile not loaded with correct contents", testString, outString);
+	}
+
+	@Test
+	public void t33LoadFileCreatesDirectoryIfFileDoesNotExist() {
+		removeTestDirs();
+
+		// Use method to load testFile
+		// * Note that the internal = true cannot be tested using unit tests so easily
+		// and thus has been omitted from the unit testing
+		String outString = FileControl.loadFile(testSaveLoadDir.toString(), testSaveLoadFile.toString(), false);
+		outString = outString.substring(0, outString.length() - 1);
+
+		assertTrue("testDir not created", testSaveLoadDir.exists());
+		assertTrue("testFile not created", fullSaveLoadFilePath.exists());
+		assertEquals("testFile should be empty", "", outString);
+	}
+
+	// By this point, the save and load data methods will create and overwrite the
+	// file, so there's no need to test for both, from here on out
+
+	@Test
+	public void t41SaveJsonFile() {
+		FileControl.saveJsonFile(testSaveLoadDir.toString(), testSaveLoadFile.toString(), testJsonRoot);
+
+		assertEquals("Json value was not saved properly", testJsonRoot.toJson(JsonWriter.OutputType.json),
+				FileControl.loadFile(testSaveLoadDir.toString(), testSaveLoadFile.toString()).trim());
+	}
+
+	@Test
+	public void t42SaveJsonData() {
+		FileControl.saveJsonData(testSaveLoadFile.toString(), testJsonRoot);
+
+		assertEquals("Json value was not saved properly", testJsonRoot.toJson(JsonWriter.OutputType.json),
+				FileControl.loadData(testSaveLoadFile.toString()).trim());
+	}
+
+	@Test
+	public void t43LoadJsonFile() {
+		JsonValue outJson = FileControl.loadJsonFile(testSaveLoadDir.toString(), testSaveLoadFile.toString(), false);
+
+		assertEquals("Json value was not loaded properly", testJsonRoot.toJson(JsonWriter.OutputType.json),
+				outJson.toJson(JsonWriter.OutputType.json));
+	}
+
+	@Test
+	public void t44LoadJsonData() {
+		JsonValue outJson = FileControl.loadJsonData(testSaveLoadFile.toString());
+
+		assertEquals("Json value was not loaded properly", testJsonRoot.toJson(JsonWriter.OutputType.json),
+				outJson.toJson(JsonWriter.OutputType.json));
+	}
+
+	// TODO LoadJsonAsset
+	// TODO GetAssetPath
+
+	@AfterClass
+	public static void restoreSystemProperty() {
 		// Restore original system properties
 		System.setProperty("os.name", thisOS);
+	}
+
+	@AfterClass
+	public static void removeTestDirs() {
+		fullSaveLoadFilePath.delete();
+		testSaveLoadDir.delete();
+		fullSaveLoadFilePath2.delete();
 	}
 }

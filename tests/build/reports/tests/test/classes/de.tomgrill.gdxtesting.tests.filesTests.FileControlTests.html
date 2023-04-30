@@ -23,13 +23,13 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">5</div>
+<div class="counter">15</div>
 <p>tests</p>
 </div>
 </td>
 <td>
 <div class="infoBox" id="failures">
-<div class="counter">1</div>
+<div class="counter">0</div>
 <p>failures</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">4.017s</div>
+<div class="counter">0.019s</div>
 <p>duration</p>
 </div>
 </td>
@@ -50,8 +50,8 @@
 </div>
 </td>
 <td>
-<div class="infoBox failures" id="successRate">
-<div class="percent">80%</div>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
 <p>successful</p>
 </div>
 </td>
@@ -61,22 +61,122 @@
 <div id="tabs">
 <ul class="tabLinks">
 <li>
-<a href="#tab0">Failed tests</a>
+<a href="#tab0">Tests</a>
 </li>
 <li>
-<a href="#tab1">Tests</a>
+<a href="#tab1">Standard output</a>
+</li>
+<li>
+<a href="#tab2">Standard error</a>
 </li>
 </ul>
 <div id="tab0" class="tab">
-<h2>Failed tests</h2>
-<div class="test">
-<a name="testSaveToFile"></a>
-<h3 class="failures">testSaveToFile</h3>
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">t11getLinuxDataPath</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">t12getWindowsDataPath</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">t13getDefaultDataPath</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">t21testFormatDir</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">t22SaveToFileCreatesDirAndFilesAndWritesCorrectly</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">t23SaveToFileOverwritesToFileCorrectly</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">t24SaveData</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">t31LoadFileErrorCase</td>
+<td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">t31LoadFileNormalCase</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">t32LoadData</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">t33LoadFileCreatesDirectoryIfFileDoesNotExist</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">t41SaveJsonFile</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">t42SaveJsonData</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">t43LoadJsonFile</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">t44LoadJsonData</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
 <span class="code">
-<pre>java.lang.AssertionError: testFile not created
-	at org.junit.Assert.fail(Assert.java:89)
-	at org.junit.Assert.assertTrue(Assert.java:42)
-	at de.tomgrill.gdxtesting.tests.filesTests.FileControlTests.testSaveToFile(FileControlTests.java:126)
+<pre>File doesn't exist: testFile5769.json
+Loading json from /home/hamza/Documents/GitHub/Piazza-Panic-UnderCooked/tests/data/PiazzaPanic_UnderCooked/testFile5769.json
+</pre>
+</span>
+</div>
+<div id="tab2" class="tab">
+<h2>Standard error</h2>
+<span class="code">
+<pre>com.badlogic.gdx.utils.GdxRuntimeException: File not found: some/Random-directory/hey/7218hdwq/nonexistentfile.txt (Internal)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:142)
+	at com.badlogic.gdx.files.FileHandle.length(FileHandle.java:641)
+	at com.badlogic.gdx.files.FileHandle.estimateLength(FileHandle.java:239)
+	at com.badlogic.gdx.files.FileHandle.readString(FileHandle.java:204)
+	at com.badlogic.gdx.files.FileHandle.readString(FileHandle.java:197)
+	at com.undercooked.game.files.FileControl.loadFile(FileControl.java:151)
+	at com.undercooked.game.files.FileControl.loadFile(FileControl.java:167)
+	at de.tomgrill.gdxtesting.tests.filesTests.FileControlTests.t31LoadFileErrorCase(FileControlTests.java:179)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -85,8 +185,6 @@
 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
-	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
-	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:27)
 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
 	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
 	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
@@ -98,44 +196,6 @@
 </span>
 </div>
 </div>
-<div id="tab1" class="tab">
-<h2>Tests</h2>
-<table>
-<thead>
-<tr>
-<th>Test</th>
-<th>Duration</th>
-<th>Result</th>
-</tr>
-</thead>
-<tr>
-<td class="success">getDefaultDataPath</td>
-<td class="success">0.001s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">getLinuxDataPath</td>
-<td class="success">0s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">getWindowsDataPath</td>
-<td class="success">0s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testFormatDir</td>
-<td class="success">0.002s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="failures">testSaveToFile</td>
-<td class="failures">4.014s</td>
-<td class="failures">failed</td>
-</tr>
-</table>
-</div>
-</div>
 <div id="footer">
 <p>
 <div>
@@ -143,7 +203,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 7.5.1</a> at 29 Apr 2023, 20:23:04</p>
+<a href="http://www.gradle.org">Gradle 7.5.1</a> at 30 Apr 2023, 22:04:49</p>
 </div>
 </div>
 </body>
