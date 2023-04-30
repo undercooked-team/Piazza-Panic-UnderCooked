@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -26,73 +25,43 @@ import com.undercooked.game.util.CameraController;
 import com.undercooked.game.util.Constants;
 import com.undercooked.game.util.SaveLoadGame;
 
+
+/**
+ * A class for the main {@link Screen} of the game,
+ * which is opened when the game starts.
+ */
 public class MainScreen extends Screen {
-	float v = 0;
-	float s = 0;
 
-	int gameResolutionX;
-	int gameResolutionY;
+	private final float buttonwidth;
+	private final float buttonheight;
 
-	float buttonwidth;
-	float buttonheight;
+	private Texture background;
 
-	float xSliderMin;
-	float xSliderMax;
+	private final OrthographicCamera camera;
+	private final Viewport viewport;
 
-	float sliderWidth;
+	private Stage stage;
 
-	Rectangle volSlide;
-	Rectangle volSlideBackgr;
-	Rectangle musSlide;
-	Rectangle musSlideBackgr;
-
-	Texture background;
-
-	OrthographicCamera camera;
-	Viewport viewport;
-
-	Stage stage;
-
-	enum STATE {
-		main, audio, leaderboard, new_game;
+	private enum State {
+		MAIN,
+		AUDIO
 	}
 
-	STATE state;
+	private State state;
+
+	private AudioSliders audioSliders;
+	private Slider musicSlider, gameSlider;
 
 
 	/**
 	 * Constructor for main menu screen
 	 * 
-	 * @param game - Entry point class
+	 * @param game {@link MainGameClass} : The {@link MainGameClass} of the game.
 	 */
 	public MainScreen(final MainGameClass game) {
 		super(game);
-		this.gameResolutionX = Constants.V_WIDTH;
-		this.gameResolutionY = Constants.V_HEIGHT;
-		this.buttonwidth = (float) gameResolutionX / 3;
-		this.buttonheight = (float) gameResolutionY / 6;
-
-
-
-		this.volSlide = new Rectangle();
-		volSlide.width = 3 * buttonheight / 12;
-		volSlide.height = 3 * buttonheight / 12;
-
-		this.volSlideBackgr = new Rectangle();
-		volSlideBackgr.width = 2 * buttonwidth / 6;
-		volSlideBackgr.height = buttonheight / 6;
-
-		this.musSlide = new Rectangle();
-		musSlide.width = 3 * buttonheight / 12;
-		musSlide.height = 3 * buttonheight / 12;
-
-		this.musSlideBackgr = new Rectangle();
-		musSlideBackgr.width = 2 * buttonwidth / 6;
-		musSlideBackgr.height = buttonheight / 6;
-
-		this.xSliderMin = gameResolutionX / 2.0f + buttonwidth / 12;
-		this.xSliderMax = xSliderMin + volSlideBackgr.width;
-		this.sliderWidth = volSlideBackgr.width;
+		this.buttonwidth = Constants.V_WIDTH / 3f;
+		this.buttonheight = Constants.V_HEIGHT / 6f;
 
 		this.camera = CameraController.getCamera(Constants.UI_CAMERA_ID);
 		this.viewport = CameraController.getViewport(Constants.UI_CAMERA_ID);
@@ -127,18 +96,7 @@ public class MainScreen extends Screen {
 		// AudioManager post load
 		game.audioManager.postLoad();
 
-		float currentMusicVolumeSliderX = (MainGameClass.musicVolumeScale * sliderWidth) + xSliderMin;
-		float currentGameVolumeSliderX = (MainGameClass.gameVolumeScale * sliderWidth) + xSliderMin;
-		volSlide.setPosition(currentGameVolumeSliderX, 2 * gameResolutionY / 5.0f - buttonheight / 2 + buttonheight / 6
-				+ volSlideBackgr.height / 2 - volSlide.height / 2);
-		volSlideBackgr.setPosition((gameResolutionX / 2.0f) + buttonwidth / 12,
-				2 * gameResolutionY / 5.0f - buttonheight / 2 + buttonheight / 6);
-		musSlide.setPosition(currentMusicVolumeSliderX, 2 * gameResolutionY / 5.0f - buttonheight / 2
-				+ 4 * buttonheight / 6 + musSlideBackgr.height / 2 - musSlide.height / 2);
-		musSlideBackgr.setPosition((gameResolutionX / 2.0f) + buttonwidth / 12,
-				2 * gameResolutionY / 5.0f - buttonheight / 2 + 4 * buttonheight / 6);
-
-		state = STATE.main;
+		state = State.MAIN;
 
 		game.mainScreenMusic = game.audioManager.getMusic("audio/music/MainScreenMusic.ogg");
 
@@ -166,19 +124,19 @@ public class MainScreen extends Screen {
 		loadGameBtn.setSize(buttonwidth, buttonheight);
 		tutorialBtn.setSize(buttonwidth, buttonheight);
 
-		startBtn.setPosition(gameResolutionX / 10.0f, 4 * gameResolutionY / 5.0f - buttonheight / 2);
-		leaderboardBtn.setPosition(gameResolutionX / 10.0f, 3 * gameResolutionY / 5.0f - buttonheight / 2);
-		audioBtn.setPosition(gameResolutionX / 10.0f, 2 * gameResolutionY / 5.0f - buttonheight / 2);
-		exitBtn.setPosition(gameResolutionX / 10.0f, gameResolutionY / 5.0f - buttonheight / 2);
-		loadGameBtn.setPosition(gameResolutionX / 10.0f + startBtn.getWidth() + 50, 4 * gameResolutionY / 5.0f - buttonheight / 2);
-		tutorialBtn.setPosition(gameResolutionX / 10.0f + startBtn.getWidth() + 50, 3 * gameResolutionY / 5.0f - buttonheight / 2);
+		startBtn.setPosition(Constants.V_WIDTH / 10.0f, 4 * Constants.V_HEIGHT / 5.0f - buttonheight / 2);
+		leaderboardBtn.setPosition(Constants.V_WIDTH / 10.0f, 3 * Constants.V_HEIGHT / 5.0f - buttonheight / 2);
+		audioBtn.setPosition(Constants.V_WIDTH / 10.0f, 2 * Constants.V_HEIGHT / 5.0f - buttonheight / 2);
+		exitBtn.setPosition(Constants.V_WIDTH / 10.0f, Constants.V_HEIGHT / 5.0f - buttonheight / 2);
+		loadGameBtn.setPosition(Constants.V_WIDTH / 10.0f + startBtn.getWidth() + 50, 4 * Constants.V_HEIGHT / 5.0f - buttonheight / 2);
+		tutorialBtn.setPosition(Constants.V_WIDTH / 10.0f + startBtn.getWidth() + 50, 3 * Constants.V_HEIGHT / 5.0f - buttonheight / 2);
 
 		audioBtn.addListener(new ClickListener() {
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				if (state == STATE.main) {
-					state = STATE.audio;
+				if (state == State.MAIN) {
+					state = State.AUDIO;
 				} else {
-					state = STATE.main;
+					state = State.MAIN;
 				}
 				super.touchUp(event, x, y, pointer, button);
 			}
@@ -246,22 +204,11 @@ public class MainScreen extends Screen {
 		gameSlider.setTouchable(Touchable.disabled);
 	}
 
-	/**
-	 * What should be done when the screen is shown
-	 */
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
 	}
 
-	AudioSliders audioSliders;
-	Slider musicSlider, gameSlider;
-
-	/**
-	 * Main menu render method
-	 * 
-	 * @param delta - some change in time
-	 */
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
@@ -277,17 +224,17 @@ public class MainScreen extends Screen {
 		changeScreen(state);
 
 		if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
-			state = STATE.main;
+			state = State.MAIN;
 		}
 	}
 
 	/**
 	 * Change screen to specified state
 	 * 
-	 * @param state - state to change screen to
+	 * @param state {@link State} : The {@link State} to set the screen to.
 	 */
-	public void changeScreen(STATE state) {
-		if (state == STATE.audio) {
+	public void changeScreen(State state) {
+		if (state == State.AUDIO) {
 
 			musicSlider.setTouchable(Touchable.enabled);
 			gameSlider.setTouchable(Touchable.enabled);
@@ -303,6 +250,9 @@ public class MainScreen extends Screen {
 		}
 	}
 
+	/**
+	 * Load the game if there is data from a saved game to load.
+	 */
 	public void loadGame() {
 		JsonValue saveData = SaveLoadGame.loadGameJson();
 		if (saveData == null) return;
@@ -340,12 +290,6 @@ public class MainScreen extends Screen {
 		SaveLoadGame.loadGame(gameLogic, saveData);
 	}
 
-	/**
-	 * Resize window
-	 * 
-	 * @param width  - new window width
-	 * @param height - new window height
-	 */
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
