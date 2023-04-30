@@ -17,17 +17,26 @@ import com.undercooked.game.util.CameraController;
 import com.undercooked.game.util.Constants;
 import com.undercooked.game.util.SaveLoadGame;
 
+/**
+ * A class for the {@link PauseScreen} when the player
+ * pauses the {@link GameScreen} as they are playing.
+ */
 public class PauseScreen extends Screen {
 
-    Screen displayScreen;
-    SpriteBatch batch;
-    Stage stage;
-    Texture menuBack;
-    AudioSliders audioSliders;
+    private Screen displayScreen;
+    private final SpriteBatch batch;
+    private Stage stage;
+    private AudioSliders audioSliders;
+
+    /** The {@link GameScreen} that paused the game. */
     GameScreen gameScreen;
 
     private boolean saveEnabled;
 
+    /**
+     * Constructor for the {@link PauseScreen}.
+     * @param game {@link MainGameClass} : The {@link MainGameClass} for the game.
+     */
     public PauseScreen(MainGameClass game) {
         super(game);
         this.batch = MainGameClass.batch;
@@ -63,16 +72,6 @@ public class PauseScreen extends Screen {
     }
 
     /**
-     * Go to the previous screen.
-     */
-    private void previous() {
-        // Go to the previous screen.
-        game.screenController.backScreen();
-        // Set the screen to null.
-        displayScreen = null;
-    }
-
-    /**
      * Set the {@link Screen} to display on the {@link PauseScreen}.
      * @param screen The {@link Screen}.
      */
@@ -88,7 +87,6 @@ public class PauseScreen extends Screen {
     public void postLoad() {
         // Set up the Stage
         TextureManager textureManager = getTextureManager();
-        menuBack = textureManager.get("uielements/background.png");
 
         // Create the Buttons
         Button unpause = new Button(new TextureRegionDrawable(textureManager.get("uielements/game/resume.png")));
@@ -151,6 +149,9 @@ public class PauseScreen extends Screen {
 
     }
 
+    /**
+     * Quit to the main menu.
+     */
     public void quitToMenu() {
         // Go to the main menu, if still on the pause screen
         if (!getScreenController().onScreen(Constants.PAUSE_SCREEN_ID)) return;
@@ -189,13 +190,23 @@ public class PauseScreen extends Screen {
 
     }
 
+    /**
+     * Resume the game.
+     */
     private void resumeGame() {
         if (!getScreenController().onScreen(Constants.PAUSE_SCREEN_ID)) return;
-        previous();
+        // Go to the previous screen.
+        game.screenController.backScreen();
+        // Set the screen to null.
+        displayScreen = null;
     }
 
-    public void renderScreen() {
-
+    /**
+     * @param canSave {@code boolean} : {@code true} if the game can be saved,
+     *                                  {@code false} if not.
+     */
+    public void setSaveEnabled(boolean canSave) {
+        this.saveEnabled = canSave;
     }
 
     @Override
@@ -221,9 +232,5 @@ public class PauseScreen extends Screen {
     @Override
     public void dispose() {
 
-    }
-
-    public void setSaveEnabled(boolean canSave) {
-        this.saveEnabled = canSave;
     }
 }
