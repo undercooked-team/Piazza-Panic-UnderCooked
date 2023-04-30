@@ -172,7 +172,7 @@ public class MapManager {
         // width has a few more added, primarily on the left.
         int fullWidth = width + 4,
                 fullHeight = height + 1;
-        Map returnMap = new Map(width, height, fullWidth, fullHeight, textureManager);
+        Map returnMap = new Map(width, height, fullWidth, fullHeight);
         int offsetX = 4, offsetY = 1;
         returnMap.setOffsetX(offsetX);
         returnMap.setOffsetY(offsetY);

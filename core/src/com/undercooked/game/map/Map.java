@@ -1,7 +1,6 @@
 package com.undercooked.game.map;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -13,21 +12,60 @@ import com.undercooked.game.util.MathUtil;
 
 import java.awt.*;
 
+/**
+ * The class for the map of the game.
+ */
 public class Map {
+    /** A 2 dimensional {@link Array} of {@link MapCell}s. */
+    private final Array<Array<MapCell>> map;
 
-    Array<Array<MapCell>> map;
-    private TextureManager textureManager;
-    private int width, fullWidth;
-    private int height, fullHeight;
+    /** The width of the play area. */
+    private final int width;
+
+    /** The width of the full map. */
+    private final int fullWidth;
+
+    /** The height of the play area. */
+    private final int height;
+
+    /** The height of the full map. */
+    private final int fullHeight;
+
+    /** The offset x of the play area on the full map. */
     private int offsetX;
+
+    /** The offset y of the play area on the full map. */
     private int offsetY;
+
+    /**
+     * A cell that is used when referring to a cell outside the {@link Map}.
+     * <br><br>
+     * It is positioned at {@code -fullWidth-1, -fullHeight-1}.
+     * */
     public final MapCell outOfBounds = new MapCell(true, false, false);
 
-    public Map(int width, int height, TextureManager textureManager) {
-        this(width,height,width,height, textureManager);
+    /**
+     * Constructor for the {@link Map}.
+     * <br><br>
+     * This constructor sets the play area to be the same size as the
+     * full map size.
+     *
+     * @param width {@code float} : The width of the {@link Map}.
+     * @param height {@code float} : The height of the {@link Map}.
+     */
+    public Map(int width, int height) {
+        this(width,height,width,height);
     }
 
-    public Map(int width, int height, int fullWidth, int fullHeight, TextureManager textureManager) {
+    /**
+     * Constructor for the {@link Map}.
+     *
+     * @param width {@code float} : The play area width of the {@link Map}.
+     * @param height {@code float} : The play area height of the {@link Map}.
+     * @param fullWidth {@code float} : The full width of the {@link Map}.
+     * @param fullHeight {@code float} : The full height of the {@link Map}.
+     */
+    public Map(int width, int height, int fullWidth, int fullHeight) {
         // Initialise the columns
         map = new Array<>();
         // Then initialise the rows
@@ -38,18 +76,20 @@ public class Map {
         this.height = height;
         this.fullWidth = fullWidth;
         this.fullHeight = fullHeight;// Then init the map (so that it's empty)
-        this.textureManager = textureManager;
-        this.outOfBounds.setX(-fullWidth);
-        this.outOfBounds.setY(-fullHeight);
+        this.outOfBounds.setX(-fullWidth-1);
+        this.outOfBounds.setY(-fullHeight-1);
         init();
     }
 
+    /**
+     * Initialization of the {@link Map}.
+     */
     private void init() {
         // Clear the array
         map.clear();
         // Load all the values
         for (int x = 0; x < fullWidth; x++) {
-            Array thisCol = new Array<MapCell>();
+            Array<MapCell> thisCol = new Array<>();
             map.add(thisCol);
             for (int y = 0; y < fullHeight; y++) {
                 MapCell newCell = new MapCell();
@@ -61,6 +101,11 @@ public class Map {
         }
     }
 
+    /**
+     * Reset a cell at a position.
+     * @param x {@code int} : The {@code x} position of the {@link MapCell}.
+     * @param y {@code int} : The {@code y} position of the {@link MapCell}.
+     */
     public void resetCell(int x, int y) {
         MapCell cell = getCellFull(x,y);
         if (cell != null) {
@@ -68,6 +113,11 @@ public class Map {
         }
     }
 
+    /**
+     * Reset a {@link MapCell}.
+     *
+     * @param cell {@link MapCell} : The {@link MapCell} to reset.
+     */
     public void resetCell(MapCell cell) {
         cell.setInteractable(false);
         cell.setCollidable(false);
@@ -76,6 +126,14 @@ public class Map {
         cell.setBelowTile(Constants.DEFAULT_FLOOR_TILE);
     }
 
+    /**
+     * Returns whether a position is a valid cell on the full map or not.
+     *
+     * @param x {@code int} : The {@code x} position.
+     * @param y {@code int} : The {@code y} position.
+     * @return {@code boolean} : {@code true} if the position is valid,
+     *                           {@code false} if not.
+     */
     protected boolean validCellFull(int x, int y) {
         if (x < 0 || x >= fullWidth) {
             return false;
@@ -86,6 +144,14 @@ public class Map {
         return true;
     }
 
+    /**
+     * Returns whether a position is a valid cell on the play area or not.
+     *
+     * @param x {@code int} : The {@code x} position.
+     * @param y {@code int} : The {@code y} position.
+     * @return {@code boolean} : {@code true} if the position is valid,
+     *                           {@code false} if not.
+     */
     public boolean validCell(int x, int y) {
         if (x < 0 || x >= width) {
             return false;
@@ -96,10 +162,31 @@ public class Map {
         return true;
     }
 
+    /**
+     * Returns the {@link MapCell} at the position, defaulting to
+     * allowing getting the {@link #outOfBounds} {@link MapCell}.
+     * @param x {@code int} : The {@code x} position of the {@link MapCell}.
+     * @param y {@code int} : The {@code y} position of the {@link MapCell}.
+     * @return {@link MapCell} : The {@link MapCell} at the position.
+     */
     public MapCell getCellFull(int x, int y) {
         return getCellFull(x, y, true);
     }
 
+    /**
+     * Returns the {@link MapCell} at the position.
+     * <br><br>
+     * If trying to find a {@link MapCell} that's not in the valid area,
+     * it will return either {@link #outOfBounds} or {@code null} depending
+     * on the value of {@code allowOutOfBounds}.
+     *
+     * @param x {@code int} : The {@code x} position of the {@link MapCell}.
+     * @param y {@code int} : The {@code y} position of the {@link MapCell}.
+     * @param allowOutOfBounds {@code boolean} : If out of bounds, returns
+     *                                           {@link #outOfBounds} if {@code true} or
+     *                                           {@code null} if {@code false}.
+     * @return {@link MapCell} : The {@link MapCell} at the position.
+     */
     public MapCell getCellFull(int x, int y, boolean allowOutOfBounds) {
         // Make sure it's a valid cell position
         // If not, then return null
@@ -114,26 +201,61 @@ public class Map {
         return map.get(x).get(y);
     }
 
+    /**
+     * Returns the {@link MapCell} at the position inside the play area,
+     * defaulting to  allowing getting the {@link #outOfBounds} {@link MapCell}.
+     * @param x {@code int} : The {@code x} position of the {@link MapCell}.
+     * @param y {@code int} : The {@code y} position of the {@link MapCell}.
+     * @return {@link MapCell} : The {@link MapCell} at the position.
+     */
     public MapCell getCell(int x, int y) {
         return getCell(x, y, true);
     }
 
+    /**
+     * Returns the {@link MapCell} at the position inside the play area.
+     * <br><br>
+     * If trying to find a {@link MapCell} that's not in the valid area,
+     * it will return either {@link #outOfBounds} or {@code null} depending
+     * on the value of {@code allowOutOfBounds}.
+     *
+     * @param x {@code int} : The {@code x} position of the {@link MapCell}.
+     * @param y {@code int} : The {@code y} position of the {@link MapCell}.
+     * @param allowOutOfBounds {@code boolean} : If out of bounds, returns
+     *                                           {@link #outOfBounds} if {@code true} or
+     *                                           {@code null} if {@code false}.
+     * @return {@link MapCell} : The {@link MapCell} at the position.
+     */
     public MapCell getCell(int x, int y, boolean allowOutOfBounds) {
-        return getCellFull(x+offsetX,y+offsetY, allowOutOfBounds);
-        // Make sure it's a valid cell position
-        // If not, then return null
-        /*if (!validCell(x,y)) {
+        if (!validCell(x,y)) {
+            if (allowOutOfBounds) {
+                return outOfBounds;
+            }
             return null;
         }
-
-        // If it's a valid cell, then return the cell
-        return map.get(x).get(y);*/
+        return getCellFull(x+offsetX,y+offsetY, allowOutOfBounds);
     }
 
+    /**
+     * Set the x offset of the play area.
+     * <br><br>
+     * Limited in the range of 0 to the full map width minus the
+     * play area width.
+     *
+     * @param offsetX {@code int} : The new {@code x} offset of the play area.
+     */
     public void setOffsetX(int offsetX) {
         this.offsetX = Math.max(Math.min(offsetX, fullWidth-width), 0);
     }
 
+    /**
+     * Set the y offset of the play area.
+     * <br><br>
+     * Limited in the range of 0 to the full map height minus the
+     * play area height.
+     *
+     * @param offsetY {@code int} : The new {@code y} offset of the play area.
+     */
     public void setOffsetY(int offsetY) {
         this.offsetY = Math.max(Math.min(offsetY, fullHeight-height), 0);
     }
@@ -165,18 +287,34 @@ public class Map {
         return found;
     }
 
-    protected void setFullMapCell(int x, int y, MapCell cell) {
-        map.get(x).set(y, cell);
-    }
-
-    protected void setMapCell(int x, int y, MapCell cell) {
-        setFullMapCell(x+offsetX, y+offsetY, cell);
-    }
-
-    protected Array<Entity> addFullMapEntity(MapEntity entity, int x, int y, String floorTile) {
+    /**
+     * Add a {@link MapEntity} to the full map.
+     *
+     * @param entity {@link MapEntity} : The {@link MapEntity} to add.
+     * @param x {@code int} : The {@code x} position to place the {@link MapEntity} at.
+     * @param y {@code int} : The {@code y} position to place the {@link MapEntity} at.
+     * @param floorTile {@link String} : The asset path to the floor tile {@link com.badlogic.gdx.graphics.Texture}
+     *                                   to use. If null, no floor {@link com.badlogic.gdx.graphics.Texture}.
+     * @return {@link Array<Entity>} : An {@link Array} of all {@link MapEntity} that were removed
+     *                                 from the {@link Map}.
+     */
+    public Array<Entity> addFullMapEntity(MapEntity entity, int x, int y, String floorTile) {
         return addFullMapEntity(entity, x, y, floorTile, false);
     }
 
+    /**
+     * Add a {@link MapEntity} to the full map.
+     *
+     * @param entity {@link MapEntity} : The {@link MapEntity} to add.
+     * @param x {@code int} : The {@code x} position to place the {@link MapEntity} at.
+     * @param y {@code int} : The {@code y} position to place the {@link MapEntity} at.
+     * @param floorTile {@link String} : The asset path to the floor tile {@link com.badlogic.gdx.graphics.Texture}
+     *                                   to use. If null, no floor {@link com.badlogic.gdx.graphics.Texture}.
+     * @param hasCollision {@code boolean} : Whether the {@link MapCell}s that the {@link MapEntity} take up
+     *                                    will or will not have collision.
+     * @return {@link Array<Entity>} : An {@link Array} of all {@link MapEntity} that were removed
+     *                                 from the {@link Map}.
+     */
     public Array<Entity> addFullMapEntity(MapEntity entity, int x, int y, String floorTile, boolean hasCollision) {
         Array<Entity> removedEntities = new Array<>();
         // And now add the entity
@@ -262,15 +400,33 @@ public class Map {
         return removedEntities;
     }
 
+    /**
+     * Add a {@link MapEntity} to the play area.
+     *
+     * @param entity {@link MapEntity} : The {@link MapEntity} to add.
+     * @param x {@code int} : The {@code x} position to place the {@link MapEntity} at.
+     * @param y {@code int} : The {@code y} position to place the {@link MapEntity} at.
+     * @param floorTile {@link String} : The asset path to the floor tile {@link com.badlogic.gdx.graphics.Texture}
+     *                                   to use. If null, no floor {@link com.badlogic.gdx.graphics.Texture}.
+     * @return {@link Array<Entity>} : An {@link Array} of all {@link MapEntity} that were removed
+     *                                 from the {@link Map}.
+     */
     public Array<Entity> addMapEntity(MapEntity entity, int x, int y, String floorTile) {
         return addMapEntity(entity, x, y, floorTile, false);
     }
 
     /**
-     * Adds an entity to the map at the specified grid coordinates x and y.
-     * @param entity The {@link MapEntity} to add.
-     * @param x The {@code x} position of the {@link MapEntity}.
-     * @param y The {@code y} position of the {@link MapEntity}.
+     * Add a {@link MapEntity} to the play area.
+     *
+     * @param entity {@link MapEntity} : The {@link MapEntity} to add.
+     * @param x {@code int} : The {@code x} position to place the {@link MapEntity} at.
+     * @param y {@code int} : The {@code y} position to place the {@link MapEntity} at.
+     * @param floorTile {@link String} : The asset path to the floor tile {@link com.badlogic.gdx.graphics.Texture}
+     *                                   to use. If null, no floor {@link com.badlogic.gdx.graphics.Texture}.
+     * @param hasCollision {@code boolean} : Whether the {@link MapCell}s that the {@link MapEntity} take up
+     *                                    will or will not have collision.
+     * @return {@link Array<Entity>} : An {@link Array} of all {@link MapEntity} that were removed
+     *                                 from the {@link Map}.
      */
     public Array<Entity> addMapEntity(MapEntity entity, int x, int y, String floorTile, boolean hasCollision) {
         // Make sure the range is valid
@@ -290,114 +446,120 @@ public class Map {
     }
 
     /**
-     * Check if the entity is colliding with any tiles, using the entity's
-     * x and y.
-     * @param entity The {@link Entity} to check.
-     * @return {@code True} if colliding, {@code False} if not.
-     */
-    public MapCell getCollision(Entity entity) {
-        return getCollision(entity.collision);
-    }
-
-    public MapCell getCollision(Entity entity, float x, float y) {
-        return getCollision(new Rectangle(x, y, entity.collision.width, entity.collision.height));
-    }
-
-    public MapCell getCollision(Rectangle collision) {
-        return getCollision(collision, CollisionType.COLLIDABLE);
-    }
-
-    public MapCell getCollision(Rectangle collision, boolean returnClosest) {
-        return getCollision(collision, returnClosest, CollisionType.COLLIDABLE);
-    }
-
-    public MapCell getCollision(Rectangle collision, CollisionType collisionType) {
-        return getCollision(collision, false, collisionType);
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public float getFullWidth() {
-        return fullWidth;
-    }
-
-    public float getFullHeight() {
-        return fullHeight;
-    }
-
-    public float getOffsetX() {
-        return offsetX;
-    }
-
-    public int getOffsetY() {
-        return offsetY;
-    }
-
-    /**
      * Randomly gets a cell in the range provided, given that it's NOT of the type
-     * {@code collisionType}.
+     * {@code mapCellType}.
      *
      * @param x {@code int} : Left-most x
      * @param y {@code int} : Bottom-most x
      * @param width {@code int} : The width
      * @param height {@code int} : The height
-     * @param collisionType {@code int} : Collision Type to not include
-     * @return
+     * @param mapCellType {@code int} : The {@link MapCellType} to ignore.
+     * @return {@link MapCell} : A random {@link MapCell} in the range provided that
+     *                           matches the {@code mapCellType} condition.
      */
-    public MapCell randomOpenCellRange(int x, int y, int width, int height, CollisionType collisionType) {
+    public MapCell randomOpenCellRange(int x, int y, int width, int height, MapCellType mapCellType) {
         // Make an array of open cells
-        Array<MapCell> openCells = openCellsRangeFull(x, y, width, height, collisionType);
+        Array<MapCell> openCells = openCellsRangeFull(x, y, width, height, mapCellType);
         // If the array is empty, return nothing
         if (openCells.size == 0) return null;
 
         // Otherwise return a random cell
         return openCells.random();
     }
+
+    /**
+     * Get any random open cell from the play area.
+     * @return {@link MapCell} : The random {@link MapCell}.
+     */
     public MapCell randomOpenCell() {
-        return randomOpenCell(CollisionType.ANY);
-    }
-    public MapCell randomOpenCell(CollisionType collisionType) {
-        return randomOpenCellRange(offsetX, offsetY, width-1, height-1, collisionType);
+        return randomOpenCell(MapCellType.ANY);
     }
 
+    /**
+     * Get any random open cell from the play area that doesn't
+     * match the {@link MapCellType}.
+     * @param mapCellType {@link MapCellType} : The {@link MapCellType} to ignore.
+     * @return {@link MapCell} : The random {@link MapCell}.
+     */
+    public MapCell randomOpenCell(MapCellType mapCellType) {
+        return randomOpenCellRange(offsetX, offsetY, width-1, height-1, mapCellType);
+    }
+
+    /**
+     * Get any random open cell from the full map.
+     * @return {@link MapCell} : The random {@link MapCell}.
+     */
     public MapCell randomOpenCellFull() {
-        return randomOpenCellFull(CollisionType.ANY);
+        return randomOpenCellFull(MapCellType.ANY);
     }
 
-    public MapCell randomOpenCellFull(CollisionType collisionType) {
-        return randomOpenCellRange(0,0,fullWidth,fullHeight, collisionType);
+    /**
+     * Get any random open cell from the full map that doesn't
+     * match the {@link MapCellType}.
+     * @param mapCellType {@link MapCellType} : The {@link MapCellType} to ignore.
+     * @return {@link MapCell} : The random {@link MapCell}.
+     */
+    public MapCell randomOpenCellFull(MapCellType mapCellType) {
+        return randomOpenCellRange(0,0,fullWidth,fullHeight, mapCellType);
     }
 
+    /**
+     * Returns all open cells from the play area.
+     * @return {@link Array<MapCell>} : An {@link Array} of the open {@link MapCell}s.
+     */
     public Array<MapCell> openCells() {
-        return openCells(CollisionType.ANY);
+        return openCells(MapCellType.ANY);
     }
 
-    public Array<MapCell> openCells(CollisionType collisionType) {
-        return openCellsRangeFull(offsetX, offsetY, width-1, height-1, collisionType);
+    /**
+     * Returns all open cells from the play area that don't
+     * match the {@link MapCellType}.
+     * @param mapCellType {@link MapCellType} : The {@link MapCellType} to ignore.
+     * @return {@link MapCell} : The random {@link MapCell}.
+     */
+    public Array<MapCell> openCells(MapCellType mapCellType) {
+        return openCellsRangeFull(offsetX, offsetY, width-1, height-1, mapCellType);
     }
 
+    /**
+     * Returns all open cells from the full map.
+     * @return {@link Array<MapCell>} : An {@link Array} of the open {@link MapCell}s.
+     */
     public Array<MapCell> openCellsFull() {
-        return openCells(CollisionType.ANY);
+        return openCells(MapCellType.ANY);
     }
 
-    public Array<MapCell> openCellsFull(CollisionType collisionType) {
-        return openCellsRangeFull(0, 0, fullWidth, fullHeight, collisionType);
+    /**
+     * Returns all open cells from the full map that don't
+     * match the {@link MapCellType}.
+     * @param mapCellType {@link MapCellType} : The {@link MapCellType} to ignore.
+     * @return {@link MapCell} : The random {@link MapCell}.
+     */
+    public Array<MapCell> openCellsFull(MapCellType mapCellType) {
+        return openCellsRangeFull(0, 0, fullWidth, fullHeight, mapCellType);
     }
 
-    public Array<MapCell> openCellsRangeFull(int x, int y, int width, int height, CollisionType collisionType) {// Make an array of open cells
+    /**
+     * Returns all the open cells in the range, given that it's NOT of the type
+     * {@code mapCellType}.
+     *
+     * @param x {@code int} : Left-most x
+     * @param y {@code int} : Bottom-most x
+     * @param width {@code int} : The width
+     * @param height {@code int} : The height
+     * @param mapCellType {@code int} : The {@link MapCellType} to ignore.
+     * @return {@link Array<MapCell>} : An {@link Array} of all {@link MapCell}s
+     *                                  in the range provided that match the
+     *                                  {@code mapCellType} condition.
+     */
+    public Array<MapCell> openCellsRangeFull(int x, int y, int width, int height, MapCellType mapCellType) {// Make an array of open cells
         Array<MapCell> openCells = new Array<>();
         // Loop through the locations, and add them to the array if they're open cells
         // (Those being cells with no collision)
         for (int i = x ; i < x + width ; i++) {
             for (int j = y ; j < y + height ; j++) {
                 MapCell thisCell = getCellFull(i,j);
-                switch (collisionType) {
+                switch (mapCellType) {
                     case COLLIDABLE:
                         if (!thisCell.isCollidable()) {
                             openCells.add(thisCell);
@@ -420,14 +582,33 @@ public class Map {
         return openCells;
     }
 
-
-    public enum CollisionType {
+    /**
+     * The different types of cells on the map.
+     */
+    public enum MapCellType {
+        /** A {@link MapCell} that is anything but empty. */
         ANY,
+
+        /** A {@link MapCell} that has collision. */
         COLLIDABLE,
+
+        /** A {@link MapCell} that is interactable. */
         INTERACTABLE
     }
 
-    public MapCell getCollision(Rectangle collision, boolean returnClosest, CollisionType collisionType) {
+    /**
+     * Returns the {@link MapCell} that the {@code collision} {@link Rectangle}
+     * is overlapping.
+     *
+     * @param collision {@link Rectangle} : The collision to check against the {@link Map}.
+     * @param returnClosest {@code boolean} : If {@code true}, return the closest {@link MapCell}
+     *                                          to the {@code collision},
+     *                                        otherwise just return the first {@link MapCell} found,
+     *                                          if any.
+     * @param mapCellType {@link MapCellType} : The {@link MapCellType} to check collision for.
+     * @return {@link MapCell} : The {@link MapCell} found, or {@code null} if none found.
+     */
+    public MapCell getCollision(Rectangle collision, boolean returnClosest, MapCellType mapCellType) {
         // Get the range of cell X to cellY
         int cellX    = MapManager.posToGridFloor(collision.x);
         int cellXMax = MapManager.posToGridFloor(collision.x + collision.width);
@@ -461,7 +642,7 @@ public class Map {
                 if (cell.mapEntity == null) {
                     continue;
                 }
-                switch (collisionType) {
+                switch (mapCellType) {
                     case COLLIDABLE:
                         // If it's not a collidable, then skip
                         if (!cell.isCollidable()) {
@@ -523,29 +704,53 @@ public class Map {
         return null;
     }
 
-
+    /**
+     * Returns whether an {@link Entity} is colliding with a
+     * {@link MapCellType#COLLIDABLE} {@link MapCell} or not.
+     * @param entity {@link Entity} : The {@link Entity} to check.
+     * @return {@code boolean} : {@code true} if the {@link Entity} is colliding
+     *                              with a {@link MapCell},
+     *                           {@code false} if not.
+     */
     public boolean checkCollision(Entity entity) {
         return checkCollision(entity.collision);
     }
 
+    /**
+     * Returns whether an {@link Entity} would be colliding with a
+     * {@link MapCellType#COLLIDABLE} {@link MapCell} at the specified position or not.
+     * @param entity {@link Entity} : The {@link Entity} to check.
+     * @return {@code boolean} : {@code true} if the {@link Entity} would be colliding
+     *                              with a {@link MapCell},
+     *                           {@code false} if not.
+     */
     public boolean checkCollision(Entity entity, float x, float y) {
         return checkCollision(new Rectangle(x, y, entity.collision.width, entity.collision.height));
     }
 
-    public boolean checkCollision(Rectangle collision) {
-        return checkCollision(collision, CollisionType.COLLIDABLE);
+    /**
+     * Returns whether an {@link Rectangle} is colliding with a
+     * {@link MapCellType#COLLIDABLE} {@link MapCell} or not.
+     * @param rectangle {@link Entity} : The {@link Rectangle} to check.
+     * @return {@code boolean} : {@code true} if the {@link Rectangle} is colliding
+     *                              with a {@link MapCell},
+     *                           {@code false} if not.
+     */
+    public boolean checkCollision(Rectangle rectangle) {
+        return checkCollision(rectangle, MapCellType.COLLIDABLE);
     }
 
-    public boolean checkCollision(Rectangle collision, boolean returnClosest) {
-        return checkCollision(collision, returnClosest, CollisionType.COLLIDABLE);
-    }
-
-    public boolean checkCollision(Rectangle collision, CollisionType collisionType) {
-        return checkCollision(collision, false, collisionType);
-    }
-
-    public boolean checkCollision(Rectangle collision, boolean returnClosest, CollisionType collisionType) {
-        MapCell collidingCell = getCollision(collision, returnClosest, collisionType);
+    /**
+     * Returns whether an {@link Rectangle} is colliding with a
+     * {@link MapCell} or not.
+     * @param rectangle {@link Entity} : The {@link Rectangle} to check.
+     * @param mapCellType {@link MapCellType} : The {@link MapCellType} to check for.
+     * @return {@code boolean} : {@code true} if the {@link Rectangle} is colliding
+     *                              with a {@link MapCell},
+     *                           {@code false} if not.
+     */
+    public boolean checkCollision(Rectangle rectangle, MapCellType mapCellType) {
+        MapCell collidingCell = getCollision(rectangle, false, mapCellType);
 
         // If it's null, then return false
         if (collidingCell == null) {
@@ -553,13 +758,19 @@ public class Map {
         }
 
         // Custom checks
-        if (collisionType != CollisionType.COLLIDABLE && collidingCell == outOfBounds) {
+        if (mapCellType != MapCellType.COLLIDABLE && collidingCell == outOfBounds) {
             return false;
         }
+
         // Return true
         return true;
     }
 
+    /**
+     * Draw the floor tiles.
+     *
+     * @param batch {@link SpriteBatch} : The {@link SpriteBatch} to use.
+     */
     public void drawGround (SpriteBatch batch) {
         // Draw a tile for every cell of the map.
         for (int x = 0 ; x < fullWidth ; x++) {
@@ -569,6 +780,11 @@ public class Map {
         }
     }
 
+    /**
+     * Draw the shape debug.
+     *
+     * @param shape {@link ShapeRenderer} : The {@link ShapeRenderer} to use.
+     */
     public void drawDebug(ShapeRenderer shape) {
         for (int x = 0 ; x < fullWidth ; x++) {
             for (int y = 0 ; y < fullHeight ; y++) {
@@ -631,6 +847,10 @@ public class Map {
     }
 
     // Draw function
+    /**
+     * @return {@link Array<MapEntity>} : All of the {@link MapEntity}s from the
+     *                                    {@link MapCell}s.
+     */
     public Array<MapEntity> getAllEntities() {
         Array<MapEntity> entities = new Array<>();
         // Loop through all the cells
@@ -655,6 +875,123 @@ public class Map {
         }
         // Return all the entities.
         return entities;
+    }
+
+    /**
+     * Get a {@link MapCellType#COLLIDABLE} {@link MapCell} that an
+     * {@link Entity} is colliding with, if they are colliding with one.
+     * <br><br>
+     * Just returns the first {@link MapCell} found to be colliding.
+     *
+     * @param entity {@link Entity} : The {@link Entity} to check.
+     * @return {@link MapCell} : The {@link MapCell} they are colliding with,
+     *                           or {@code null} if they are not colliding with any.
+     */
+    public MapCell getCollision(Entity entity) {
+        return getCollision(entity.collision);
+    }
+
+    /**
+     * Get a {@link MapCellType#COLLIDABLE} {@link MapCell} that an
+     * {@link Entity} is colliding with if they were are the position
+     * specified, if they are colliding with one.
+     * <br><br>
+     * Returns the first {@link MapCell} found to be colliding.
+     *
+     * @param entity {@link Entity} : The {@link Entity} to check.
+     * @param x {@link float} : The {@code x} to check the collision at.
+     * @param y {@link float} : The {@code y} to check the collision at.
+     * @return {@link MapCell} : The {@link MapCell} they are colliding with,
+     *                           or {@code null} if they are not colliding with any
+     */
+    public MapCell getCollision(Entity entity, float x, float y) {
+        return getCollision(new Rectangle(x, y, entity.collision.width, entity.collision.height));
+    }
+
+    /**
+     * Get a {@link MapCellType#COLLIDABLE} {@link MapCell} that an
+     * {@link Rectangle} is colliding with, if they are colliding with one.
+     * <br><br>
+     * Returns the first {@link MapCell} found to be colliding.
+     *
+     * @param rectangle {@link Rectangle} : The {@link Rectangle} to check.
+     * @return {@link MapCell} : The {@link MapCell} they are colliding with,
+     *                           or {@code null} if they are not colliding with any.
+     */
+    public MapCell getCollision(Rectangle rectangle) {
+        return getCollision(rectangle, MapCellType.COLLIDABLE);
+    }
+
+    /**
+     * Get a {@link MapCellType#COLLIDABLE} {@link MapCell} that an
+     * {@link Rectangle} is colliding with, if they are colliding with one.
+     *
+     * @param rectangle {@link Rectangle} : The {@link Rectangle} to check.
+     * @param returnClosest {@code boolean} : Whether the closest {@link MapCell} to
+     *                                        the {@link Rectangle} should be returned
+     *                                        or not.
+     * @return {@link MapCell} : The {@link MapCell} they are colliding with,
+     *                           or {@code null} if they are not colliding with any.
+     */
+    public MapCell getCollision(Rectangle rectangle, boolean returnClosest) {
+        return getCollision(rectangle, returnClosest, MapCellType.COLLIDABLE);
+    }
+
+    /**
+     * Get a {@link MapCellType#COLLIDABLE} {@link MapCell} that an
+     * {@link Rectangle} is colliding with, if they are colliding with one.
+     * <br><br>
+     * Returns the first {@link MapCell} found to be colliding.
+     *
+     * @param rectangle {@link Rectangle} : The {@link Rectangle} to check.
+     * @param mapCellType {@link MapCellType} : The {@link MapCellType} to check for.
+     * @return {@link MapCell} : The {@link MapCell} they are colliding with,
+     *                           or {@code null} if they are not colliding with any.
+     */
+    public MapCell getCollision(Rectangle rectangle, MapCellType mapCellType) {
+        return getCollision(rectangle, false, mapCellType);
+    }
+
+    /**
+     * @return {@code int} : The width of the play area.
+     */
+    public int getWidth() {
+        return width;
+    }
+
+    /**
+     * @return {@code int} : The height of the play area.
+     */
+    public int getHeight() {
+        return height;
+    }
+
+    /**
+     * @return {@code int} : The width of the full map.
+     */
+    public int getFullWidth() {
+        return fullWidth;
+    }
+
+    /**
+     * @return {@code int} : The height of the full map.
+     */
+    public int getFullHeight() {
+        return fullHeight;
+    }
+
+    /**
+     * @return {@code int} : The {@code x} offset of the play area.
+     */
+    public int getOffsetX() {
+        return offsetX;
+    }
+
+    /**
+     * @return {@code int} : The {@code y} offset of the play area.
+     */
+    public int getOffsetY() {
+        return offsetY;
     }
 
     /**
