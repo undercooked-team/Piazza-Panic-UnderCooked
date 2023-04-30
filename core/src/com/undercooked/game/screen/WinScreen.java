@@ -18,7 +18,7 @@ import com.undercooked.game.GameType;
 public class WinScreen extends Screen {
 
     private String nameInput;
-    public float score;
+    private float score;
     private GlyphLayout scoreText;
     private GlyphLayout nameGlyph;
     private GlyphLayout text;
@@ -213,6 +213,10 @@ public class WinScreen extends Screen {
 
     }
 
+    /**
+     * Must come from the {@link GameScreen}, so get the score from
+     * it and update the {@link #scoreText} text.
+     */
     @Override
     public void fromScreen(Screen screen) {
         // It shouldn't ever reach this screen if not from the

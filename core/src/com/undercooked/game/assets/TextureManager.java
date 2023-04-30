@@ -162,7 +162,12 @@ public class TextureManager {
     }
 
     /**
-     * Unload all textures of a group
+     * Unload all textures of a group, with an option to delete {@link Texture}s
+     * that are loaded more than once or not.
+     *
+     * @param textureGroup {@link String} : The texture group to unload.
+     * @param unloadRepeats {@code boolean} : {@code true} if all {@link Texture}s should be unloaded,
+     *                                        {@code false} if only one occurrence should be unloaded.
      */
     public void unload(String textureGroup, boolean unloadRepeats) {
         // If the textureGroup doesn't exist, just return
@@ -192,8 +197,9 @@ public class TextureManager {
     }
 
     /**
-     * Unload all textures of a group, by default only unloading
-     * each file once.
+     * Unload one of each occurrence of every {@link Texture} of a group.
+     *
+     * @param textureGroup {@link String} : The texture group to unload.
      */
     public void unload(String textureGroup) {
         unload(textureGroup, false);
@@ -201,6 +207,7 @@ public class TextureManager {
 
     /**
      * Unload a single texture from all groups, completely.
+     * @param texture {@link String} : The texture path to unload.
      */
     public void unloadTexture(String texture) {
         for (String key : textures.keys()) {
@@ -210,5 +217,13 @@ public class TextureManager {
                 paths.removeIndex(pathIndex);
             }
         }
+    }
+
+    /**
+     * Unload a single texture asset from all groups, completely.
+     * @param assetPath {@link String} : The asset path to unload.
+     */
+    public void unloadTextureAsset(String assetPath) {
+        unloadTexture(FileControl.getAssetPath(assetPath, "textures"));
     }
 }
