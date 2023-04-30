@@ -14,10 +14,19 @@ import com.undercooked.game.assets.TextureManager;
 import com.undercooked.game.util.CameraController;
 import com.undercooked.game.util.Constants;
 
+/**
+ * A class for the Loss {@link Screen} which allows the player to
+ * either retry the scenario they were just playing, or quit back to
+ * the menu.
+ */
 public class LossScreen extends Screen {
 
     private Stage stage;
 
+    /**
+     * Constructor for the {@link LossScreen}.
+     * @param game {@link MainGameClass} : The {@link MainGameClass} of the game.
+     */
     public LossScreen(MainGameClass game) {
         super(game);
     }

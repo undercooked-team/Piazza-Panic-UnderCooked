@@ -451,9 +451,4 @@ public class LeaderboardScreen extends Screen {
 		// TODO Auto-generated method stub
 
 	}
-
-	public void create() {
-		// TODO Auto-generated method stub
-
-	}
 }
