@@ -319,7 +319,7 @@ public final class LeaderboardController {
 	 * Remove a {@link LeaderboardEntry} from a {@link Leaderboard}
 	 * @param lType {@link GameType} : The type of the {@link Leaderboard}.
 	 * @param id {@link String} : The id of the {@link Leaderboard}.
-	 * @param index {@int int} : The index of the {@link LeaderboardEntry}.
+	 * @param index {@code int} : The index of the {@link LeaderboardEntry}.
 	 * @return {@code boolean} : {@code true} if it was deleted successfully,
 	 * 							 {@code false} if not.
 	 */
