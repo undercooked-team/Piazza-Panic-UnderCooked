@@ -39,6 +39,7 @@ public class SettingsControlTests {
 
 	static SettingsControl setCon;
 	static String settingsFilename = "settingsTest.json";
+	static String fullSettingsPath = FileControl.dirAndName(FileControl.getDataPath(), settingsFilename);
 
 	@BeforeClass
 	public static void setup() {
@@ -81,7 +82,6 @@ public class SettingsControlTests {
 	@Test
 	public void t21SaveData() {
 		setCon.saveData();
-		String fullSettingsPath = FileControl.dirAndName(FileControl.getDataPath(), settingsFilename);
 		assertTrue(new File(fullSettingsPath).exists());
 		JsonValue expected = new JsonValue(JsonValue.ValueType.object);
 		expected.addChild("music_volume", new JsonValue(0.3f));
@@ -90,6 +90,12 @@ public class SettingsControlTests {
 		do {
 			assertEquals(expected.child.asFloat(), actual.child.asFloat(), 0.01f);
 		} while (expected.next != null && actual.next != null);
+	}
+
+	@AfterClass
+	public static void deleteTestSettingsFileAndDir() {
+		new File(fullSettingsPath).delete();
+		new File(FileControl.getDataPath()).delete();
 	}
 
 }

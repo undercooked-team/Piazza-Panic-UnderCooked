@@ -46,11 +46,14 @@ public class AudioManager {
     /** The volume of the sound groups. */
     ObjectMap<String, VolumeGroup> soundVolumes;
 
-    /** The {@link AssetManager} that will be used to load, get and unload the audio. */
+    /**
+     * The {@link AssetManager} that will be used to load, get and unload the audio.
+     */
     AssetManager assetManager;
 
     /**
      * Constructor to set up the Maps for music, sound and volumes.
+     * 
      * @param assetManager {@link AssetManager} : The {@link AssetManager} to use.
      */
     public AudioManager(AssetManager assetManager) { // , SoundStateChecker soundStateChecker) {
@@ -91,9 +94,10 @@ public class AudioManager {
 
     /**
      * Returns whether the asset path is or is not loaded.
+     * 
      * @param path {@link String} : The path to the asset.
      * @return {@code boolean} : {@code true} if it is loaded,
-     *                           {@code false} if it is not.
+     *         {@code false} if it is not.
      */
     public boolean assetLoaded(String path) {
         return assetManager.isLoaded("game/" + FileControl.toPath(path, "sounds"));
@@ -102,10 +106,11 @@ public class AudioManager {
     /**
      * Returns the {@link Music} if it has been loaded,
      * or the default music if it has not.
+     * 
      * @param path {@link String} : The link to the {@link Music} file.
      * @return {@link Music} : The {@link Music} if it has been loaded,
-     *                         or the {@link Constants#DEFAULT_MUSIC} file
-     *                         if not.
+     *         or the {@link Constants#DEFAULT_MUSIC} file
+     *         if not.
      */
     public Music getMusic(String path) {
         // Try to get the music
@@ -126,10 +131,11 @@ public class AudioManager {
     /**
      * Returns the {@link Music} asset if it has been loaded,
      * or the default music if it has not.
+     * 
      * @param path {@link String} : The asset path to the {@link Music} file.
      * @return {@link Music} : The {@link Music} if it has been loaded,
-     *                         or the {@link Constants#DEFAULT_MUSIC} file
-     *                         if not.
+     *         or the {@link Constants#DEFAULT_MUSIC} file
+     *         if not.
      */
     public Music getMusicAsset(String path) {
         if (path == null) {
@@ -141,12 +147,15 @@ public class AudioManager {
     /**
      * Adds the {@link Music} file at the {@code path} to be
      * loaded by the {@link AssetManager}.
-     * @param path {@link String} : The path to the music.
-     * @param musicVolumeGroup {@link String} : The volume group for the {@link Music}
-     *                                    to be a part of.
-     * @return {@code boolean} : {@code true} if it was able to successfully add the file
-     *                           to be loaded by the {@link AssetManager},
-     *                           {@code false} if it was not.
+     * 
+     * @param path             {@link String} : The path to the music.
+     * @param musicVolumeGroup {@link String} : The volume group for the
+     *                         {@link Music}
+     *                         to be a part of.
+     * @return {@code boolean} : {@code true} if it was able to successfully add the
+     *         file
+     *         to be loaded by the {@link AssetManager},
+     *         {@code false} if it was not.
      */
     public boolean loadMusic(String path, String musicVolumeGroup) {
         try {
@@ -168,16 +177,18 @@ public class AudioManager {
         return true;
     }
 
-
     /**
      * Adds the {@link Music} file at the {@code path} to be
      * loaded by the {@link AssetManager}.
-     * @param path {@link String} : The asset path to the music.
-     * @param musicVolumeGroup {@link String} : The volume group for the {@link Music}
-     *                                         to be a part of.
-     * @return {@code boolean} : {@code true} if it was able to successfully add the file
-     *                           to be loaded by the {@link AssetManager},
-     *                           {@code false} if it was not.
+     * 
+     * @param path             {@link String} : The asset path to the music.
+     * @param musicVolumeGroup {@link String} : The volume group for the
+     *                         {@link Music}
+     *                         to be a part of.
+     * @return {@code boolean} : {@code true} if it was able to successfully add the
+     *         file
+     *         to be loaded by the {@link AssetManager},
+     *         {@code false} if it was not.
      */
     public boolean loadMusicAsset(String path, String musicVolumeGroup) {
         if (path == null) {
@@ -187,8 +198,10 @@ public class AudioManager {
     }
 
     /**
-     * Unloads the {@link Music} {@code path} from the {@link AssetManager}, and removes it from
+     * Unloads the {@link Music} {@code path} from the {@link AssetManager}, and
+     * removes it from
      * the volume groups.
+     * 
      * @param path {@link String} : The path to unload.
      */
     public void unloadMusic(String path) {
@@ -204,12 +217,14 @@ public class AudioManager {
     }
 
     /**
-     * Unloads the {@link Sound} {@code path} from the {@link AssetManager}, and removes it from
+     * Unloads the {@link Sound} {@code path} from the {@link AssetManager}, and
+     * removes it from
      * the volume groups.
+     * 
      * @param path {@link String} : The path to unload.
      * @return {@link Sound} : The {@link Sound} if it has been loaded,
-     *                         or the {@link Constants#DEFAULT_MUSIC} file
-     *                         if not.
+     *         or the {@link Constants#DEFAULT_MUSIC} file
+     *         if not.
      */
     public Sound getSound(String path) {
         // Try to get the music
@@ -230,10 +245,11 @@ public class AudioManager {
     /**
      * Returns the {@link Sound} asset if it has been loaded,
      * or the default music if it has not.
+     * 
      * @param path {@link String} : The asset path to the {@link Sound} file.
      * @return {@link Sound} : The {@link Sound} if it has been loaded,
-     *                         or the {@link Constants#DEFAULT_MUSIC} file
-     *                         if not.
+     *         or the {@link Constants#DEFAULT_MUSIC} file
+     *         if not.
      */
     public Sound getSoundAsset(String path) {
         if (path == null) {
@@ -245,12 +261,15 @@ public class AudioManager {
     /**
      * Adds the {@link Sound} file at the {@code path} to be
      * loaded by the {@link AssetManager}.
-     * @param path {@link String} : The path to the music.
-     * @param soundVolumeGroup {@link String} : The volume group for the {@link Sound}
-     *                                    to be a part of.
-     * @return {@code boolean} : {@code true} if it was able to successfully add the file
-     *                           to be loaded by the {@link AssetManager},
-     *                           {@code false} if it was not.
+     * 
+     * @param path             {@link String} : The path to the music.
+     * @param soundVolumeGroup {@link String} : The volume group for the
+     *                         {@link Sound}
+     *                         to be a part of.
+     * @return {@code boolean} : {@code true} if it was able to successfully add the
+     *         file
+     *         to be loaded by the {@link AssetManager},
+     *         {@code false} if it was not.
      */
     public boolean loadSound(String path, String soundVolumeGroup) {
         // Try to load the sound
@@ -274,16 +293,18 @@ public class AudioManager {
         return true;
     }
 
-
     /**
      * Adds the {@link Sound} file at the {@code path} to be
      * loaded by the {@link AssetManager}.
-     * @param path {@link String} : The asset path to the music.
-     * @param soundVolumeGroup {@link String} : The volume group for the {@link Sound}
-     *                                         to be a part of.
-     * @return {@code boolean} : {@code true} if it was able to successfully add the file
-     *                           to be loaded by the {@link AssetManager},
-     *                           {@code false} if it was not.
+     * 
+     * @param path             {@link String} : The asset path to the music.
+     * @param soundVolumeGroup {@link String} : The volume group for the
+     *                         {@link Sound}
+     *                         to be a part of.
+     * @return {@code boolean} : {@code true} if it was able to successfully add the
+     *         file
+     *         to be loaded by the {@link AssetManager},
+     *         {@code false} if it was not.
      */
     public boolean loadSoundAsset(String path, String soundVolumeGroup) {
         return loadSound(FileControl.getAssetPath(path, "sounds"), soundVolumeGroup);
@@ -302,6 +323,7 @@ public class AudioManager {
     /**
      * Update all of the {@link Music}s' volumes for the group specified to the
      * value set in {@link #setMusicVolume(float, String)}.
+     * 
      * @param musicVolumeGroup {@link String} : The group to update the volume of.
      */
     public void updateMusicVolumes(String musicVolumeGroup) {
@@ -324,7 +346,8 @@ public class AudioManager {
 
     /**
      * Set the volume of the {@link Music}s for the specified volume group.
-     * @param volume {@link float} : The volume to set it to (0.0 - 1.0).
+     * 
+     * @param volume           {@link float} : The volume to set it to (0.0 - 1.0).
      * @param musicVolumeGroup {@link String} : The volume group to set it for.
      */
     public void setMusicVolume(float volume, String musicVolumeGroup) {
@@ -342,7 +365,8 @@ public class AudioManager {
 
     /**
      * Set the volume of the {@link Sound}s for the specified volume group.
-     * @param volume {@link float} : The volume to set it to (0.0 - 1.0).
+     * 
+     * @param volume           {@link float} : The volume to set it to (0.0 - 1.0).
      * @param soundVolumeGroup {@link String} : The volume group to set it for.
      */
     public void setSoundVolume(float volume, String soundVolumeGroup) {
@@ -397,6 +421,7 @@ public class AudioManager {
 
     /**
      * Unload all of the {@link Music} in the specified music volume group.
+     * 
      * @param musicVolumeGroup {@link String} : The music volume group to unload.
      */
     public void unload(String musicVolumeGroup) {
