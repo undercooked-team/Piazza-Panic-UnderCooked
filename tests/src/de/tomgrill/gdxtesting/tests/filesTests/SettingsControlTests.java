@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package de.tomgrill.gdxtesting.tests;
+package de.tomgrill.gdxtesting.tests.filesTests;
 
 import static org.junit.Assert.*;
 
@@ -33,7 +33,7 @@ public class SettingsControlTests {
 
 	@Before
 	public void setup() {
-		SettingsControl setCon = new SettingsControl("settingsTest.json");
+		setCon = new SettingsControl("settingsTest.json");
 	}
 
 	/** Test loadData() loads the data in settings.json. */
