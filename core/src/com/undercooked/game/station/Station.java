@@ -75,7 +75,7 @@ public class Station extends MapEntity {
 	 * @param delta {@code float} : The time since the last frame.
 	 * @param powerUpMultiplier {@code float} : The multiplier from power ups.
 	 */
-	public void update(float delta,float powerUpMultiplier) {
+	public void update(float delta, float powerUpMultiplier) {
 		// Only continue if not disabled
 		if (disabled)
 			return;
@@ -220,7 +220,7 @@ public class Station extends MapEntity {
 		int numFound = 0;
 		for (Item item : items) {
 			// If item's ID and itemID match...
-			if (item.getID() == itemID) {
+			if (item.getID().equals(itemID)) {
 				// Increase numFound
 				numFound += 1;
 			}

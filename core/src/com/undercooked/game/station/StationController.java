@@ -1,7 +1,5 @@
 package com.undercooked.game.station;
 
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -14,7 +12,6 @@ import com.undercooked.game.interactions.Interactions;
 import com.undercooked.game.logic.GameLogic;
 import com.undercooked.game.map.Map;
 import com.undercooked.game.map.MapManager;
-import com.undercooked.game.screen.GameScreen;
 import com.undercooked.game.util.DefaultJson;
 import com.undercooked.game.util.json.JsonFormat;
 
@@ -30,7 +27,7 @@ public class StationController {
 	 */
 	public Array<Station> stations;
 	/**
-	 * An {@link ObjectMap<String, StationData>} that links a
+	 * An {@link ObjectMap} that links a
 	 * {@link Station}'s id to the {@link StationData} that it
 	 * has loaded.
 	 */
@@ -38,8 +35,6 @@ public class StationController {
 
 	/**
 	 * Constructor for the {@link StationController}.
-	 * This sets up the {@link Array<Station>} for {@link #stations}
-	 * and the {@link ObjectMap<String, StationData>} for {@link #stationData}.
 	 */
 	public StationController() {
 		this.stations = new Array<>();
@@ -51,7 +46,8 @@ public class StationController {
 	 * for all {@link Station}s that are stored by the {@link #stations}
 	 * {@link Array}.
 	 * 
-	 * @param delta
+	 * @param delta {@code float} : The time since the last frame.
+	 * @param powerUpMultiplier {@code float} : The multiplier from power ups.
 	 */
 	public void update(float delta, float powerUpMultiplier) {
 		// Update all the stations.
@@ -210,7 +206,7 @@ public class StationController {
 	}
 
 	/**
-	 * @param stationID
+	 * @param stationID {@link String} : The id of the {@link Station}.
 	 * @return {@code boolean} : {@code true} if the station data loaded has the station id,
 	 * 							 {@code false} if it does not.
 	 */
