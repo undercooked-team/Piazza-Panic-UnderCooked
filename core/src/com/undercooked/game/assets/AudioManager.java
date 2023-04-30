@@ -96,7 +96,7 @@ public class AudioManager {
      *                           {@code false} if it is not.
      */
     public boolean assetLoaded(String path) {
-        return assetManager.isLoaded("game/" + FileControl.toPath(path, "sounds"));
+        return assetManager.isLoaded(FileControl.getAssetPath(path, "sounds"));
     }
 
     /**
