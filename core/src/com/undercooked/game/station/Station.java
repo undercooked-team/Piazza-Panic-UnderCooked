@@ -23,23 +23,45 @@ import com.undercooked.game.map.MapManager;
 import static com.undercooked.game.MainGameClass.shapeRenderer;
 
 /**
- * Represents a station.
- * 
+ * The class for the Stations that appear on the {@link Map}.
  */
 public class Station extends MapEntity {
+	/**
+	 * The station's {@link StationInteractControl}, for its interactions.
+	 * @see Interactions
+	 */
 	StationInteractControl interactControl;
+
+	/** The {@link StationData} of the {@link Station}. */
 	private StationData stationData;
+
+	/** The {@link Item}s that the {@link Station} is holding. */
 	public ItemStack items;
-	private Array<Cook> lockedCooks;
+	
+	/** The {@link Cook}s that are locked to the {@link Station}. */
+	private final Array<Cook> lockedCooks;
+	
+	/** 
+	 * The amount of money needed to unlock the {@link Station}.
+	 * Set with {@link #setPrice(int)}.
+	 * <br><br>
+	 * If the price is <= 0, then the {@link Station} will be
+	 * enabled.
+	 * <br>If the price is > 0, it will be disabled.
+	 */
 	private int price;
+
+	/**
+	 * Whether the {@link Station} is disabled or not.
+	 * <br><br>
+	 * If it is disabled, it will be drawn darker. Interactions
+	 * will not work, and items can't be dropped onto or picked up
+	 * from them.
+	 */
 	private boolean disabled;
 
+	/** If the {@link Station} has collision or not. */
 	public boolean hasCollision;
-
-	public void setDisabled(boolean value) {
-		disabled = value;
-	}
-
 	public Station(StationData stationData) {
 		super();
 		setStationData(stationData);
@@ -51,12 +73,12 @@ public class Station extends MapEntity {
 		setHeight(stationData.getHeight());
 	}
 
-	public void setStationData(StationData stationData) {
-		this.stationData = stationData;
-		this.id = stationData.getID();
-		setPrice(stationData.getPrice());
-	}
-
+	/**
+	 * Updates the interactions of the {@link Station}.
+	 *
+	 * @param delta {@code float} : The time since the last frame.
+	 * @param powerUpMultiplier {@code float} : The multiplier from power ups.
+	 */
 	public void update(float delta,float powerUpMultiplier) {
 		// Only continue if not disabled
 		if (disabled)
@@ -97,10 +119,14 @@ public class Station extends MapEntity {
 		return true;
 	}
 
-	public void create() {
-
-	}
-
+	/**
+	 * Returns where an item should appear visually on the {@link Station}
+	 * offset from the middle of it.
+	 *
+	 * @param num {@code int} : The position to get.
+	 * @return {@link Vector2} : Relative position from the center of
+	 * 							 the {@link Station}.
+	 */
 	public Vector2 itemPos(int num) {
 		// Make sure num is in range
 		num = Math.abs(num);
@@ -157,22 +183,18 @@ public class Station extends MapEntity {
 		interactControl.drawPost(batch);
 	}
 
+	@Override
 	public void draw(ShapeRenderer shape) {
 		// Draw the interaction
 		interactControl.draw(shape);
 	}
 
 	/**
+	 * Creates the {@link StationInteractControl} for the {@link Station}.
 	 *
-	 * @param text Text to be drawn.
-	 * @param pos  Position to draw at.
+	 * @param audioManager {@link AudioManager} : The {@link AudioManager} to use.
+	 * @param gameItems {@link Items} : The {@link Items} to of the game.
 	 */
-	public void drawText(SpriteBatch batch, String text, Vector2 pos) {
-		batch.begin();
-		MainGameClass.font.draw(batch, text, pos.x, pos.y);
-		batch.end();
-	}
-
 	public void makeInteractionController(AudioManager audioManager, Items gameItems) {
 		this.interactControl = new StationInteractControl(this, audioManager, gameItems);
 		updateStationInteractions();
@@ -211,6 +233,13 @@ public class Station extends MapEntity {
 		return numFound >= number;
 	}
 
+	/**
+	 * Returns if the {@link Station} can hold items or not.
+	 * @param number {@link int} : The number of items that are trying to
+	 *                             be added.
+	 * @return {@code boolean} : {@code true} if the items can be held,
+	 * 							 {@code false} if they cannot.
+	 */
 	public boolean canHoldItems(int number) {
 		if (number <= 0) {
 			return true;
@@ -219,10 +248,23 @@ public class Station extends MapEntity {
 		return !(items.size() + number > stationData.getHoldCount());
 	}
 
+	/**
+	 * Returns if the {@link Station} can hold an item or not.
+	 * @return {@code boolean} : {@code true} if an item can be held,
+	 * 							 {@code false} if it cannot.
+	 */
 	public boolean canHoldItem() {
 		return canHoldItems(1);
 	}
 
+	/**
+	 * Adds an {@link Item} to the {@link Station}'s {@link ItemStack},
+	 * if it can hold it.
+	 *
+	 * @param item {@link Item} : The {@link Item} to add.
+	 * @return {@code boolean} : {@code true} if the {@link Item} could be added,
+	 * 							 {@code false} if it cannot.
+	 */
 	public boolean addItem(Item item) {
 		// Only continue if it CAN add an item
 		if (!canHoldItem()) {
@@ -235,6 +277,12 @@ public class Station extends MapEntity {
 		return true;
 	}
 
+	/**
+	 * Takes the topmost {@link Item} from the {@link Station}'s
+	 * {@link ItemStack}.
+	 *
+	 * @return {@link Item} : The {@link Item} that was taken.
+	 */
 	public Item takeItem() {
 		// Only continue if it has an item
 		if (items.size() <= 0) {
@@ -248,6 +296,9 @@ public class Station extends MapEntity {
 		return returnItem;
 	}
 
+	/**
+	 * Clears the {@link Station}'s {@link ItemStack}.
+	 */
 	public void clear() {
 		// Clear all items
 		items.clear();
@@ -255,8 +306,33 @@ public class Station extends MapEntity {
 		updateStationInteractions();
 	}
 
+	/**
+	 * Updates the current interaction that is being done
+	 * by the {@link Station}.
+	 */
 	public void updateStationInteractions() {
 		interactControl.setCurrentInteraction(interactControl.findValidInteraction(items));
+	}
+
+	/**
+	 * Set the {@link StationData} that the {@link Station} is
+	 * using.
+	 *
+	 * @param stationData {@link StationData} : The {@link StationData} to use.
+	 */
+	public void setStationData(StationData stationData) {
+		this.stationData = stationData;
+		this.id = stationData.getID();
+		setPrice(stationData.getPrice());
+	}
+
+	/**
+	 * Set whether the {@link Station} is disabled or not.
+	 * @param disabled {@code boolean} : Whether the {@link Station} is disabled
+	 *                                   or not.
+	 */
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
 	}
 
 	/**
@@ -282,36 +358,74 @@ public class Station extends MapEntity {
 		return hasItem(null, 1);
 	}
 
+	/**
+	 * Updates the {@link Station}'s possible interactions that can
+	 * be taken
+	 */
 	public void updateInteractions() {
 		this.interactControl.updatePossibleInteractions(stationData.getID());
 	}
 
+	/**
+	 * Sets the {@link Interactions} class instance that will be used for
+	 * the {@link StationInteractControl}.
+	 *
+	 * @param interactions {@link Interactions} : The {@link Interactions} to use.
+	 */
 	public void setInteractions(Interactions interactions) {
 		this.interactControl.setInteractions(interactions);
 	}
 
+	/**
+	 * Set the price of the {@link Station}.
+	 * <br><br>
+	 * If the price is <= 0, the {@link Station} will be enabled.
+	 * <br>If the price is > 0, then the {@link Station} will be disabled.
+	 * @param price {@code int} : The price of the {@link Station}.
+	 */
 	public void setPrice(int price) {
 		this.price = price;
 		// Set it to be disabled or not depending on the price
 		this.disabled = (price > 0);
 	}
 
+	/**
+	 * @return {@code int} : The price of the {@link Station}.
+	 */
 	public int getPrice() {
 		return price;
 	}
 
+	/**
+	 * @return {@code boolean} : {@code true} if the {@link Station} is disabled,
+	 * 							 {@code false} if not.
+	 */
 	public boolean isDisabled() {
 		return this.disabled;
 	}
 
+	/**
+	 * @return {@code boolean} : {@code true} if a {@link Cook} is locked,
+	 * 							 {@code false} if not.
+	 */
 	public boolean hasCookLocked() {
 		return this.lockedCooks.size > 0;
 	}
 
+	/**
+	 * @param cook {@link Cook} : The {@link Cook} to check is locked to the {@link Station}.
+	 * @return {@code boolean} : {@code true} if the {@link Cook} is locked,
+	 * 							 {@code false} if not.
+	 */
 	public boolean hasCookLocked(Cook cook) {
 		return this.lockedCooks.contains(cook, true);
 	}
 
+	/**
+	 * Locks a {@link Cook} to the {@link Station}.
+	 *
+	 * @param cook {@link Cook} : The {@link Cook} to lock.
+	 */
 	public void lockCook(Cook cook) {
 		// If the cook isn't already locked...
 		if (hasCookLocked(cook)) {
@@ -323,6 +437,11 @@ public class Station extends MapEntity {
 		cook.lockToStation(this);
 	}
 
+	/**
+	 * Unlocks a {@link Cook} from the {@link Station}.
+	 *
+	 * @param cook {@link Cook} : The {@link Cook} to unlock.
+	 */
 	public void unlockCook(Cook cook) {
 		// If the cook is locked...
 		if (!hasCookLocked(cook)) {
@@ -334,12 +453,18 @@ public class Station extends MapEntity {
 		cook.unlock();
 	}
 
+	/**
+	 * Unlocks all of the {@link Cook}s on the {@link Station}.
+	 */
 	public void unlockCooks() {
 		for (int i = lockedCooks.size - 1; i >= 0; i--) {
 			unlockCook(lockedCooks.get(i));
 		}
 	}
 
+	/**
+	 * Resets the {@link Station}.
+	 */
 	public void reset() {
 		// Clear the station
 		clear();
@@ -350,13 +475,20 @@ public class Station extends MapEntity {
 		}
 	}
 
+	/**
+	 * Stops the {@link Station}'s current interaction.
+	 */
 	public void stop() {
 		// Stop the interaction
 		interactControl.stop();
 	}
 
 	/**
-	 * Serialize the station class.
+	 * Serializes the {@link Station} as a {@link JsonValue} to
+	 * be stored externally.
+	 *
+	 * @param map {@link Map} : The {@link Map} that the {@link Station} is on.
+	 * @return {@link JsonValue} : The {@link Station} in Json format.
 	 */
 	public JsonValue serial(Map map) {
 		// If the station is not unlocked, or if it has no items on it, then just ignore
