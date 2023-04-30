@@ -1,7 +1,16 @@
 package com.undercooked.game.util;
 
+/**
+ * A class that provides functions for {@link String}s.
+ */
 public class StringUtil {
 
+    /**
+     * Converts the input into Title Case.
+     *
+     * @param text {@link String} : The text to convert to Title Case.
+     * @return {@link String} : The text in Title Case.
+     */
     public static String convertToTitleCase(String text) {
         if (text == null || text.isEmpty()) {
             return text;
@@ -24,6 +33,14 @@ public class StringUtil {
         return output.toString();
     }
 
+    /**
+     * Converts the time provided into a {@link String}.
+     *
+     * @param hours {@code int}
+     * @param minutes {@code int}
+     * @param seconds {@code int}
+     * @return {@link String} : The time converted into a {@link String}.
+     */
     public static String formatTime(int hours, int minutes, int seconds) {
         // Seconds and minutes can only be, at most, 59
         if (seconds >= 60) {
@@ -58,24 +75,47 @@ public class StringUtil {
         return output;
     }
 
+    /**
+     * Converts the time provided into a {@link String}.
+     *
+     * @param minutes {@code int}
+     * @param seconds {@code int}
+     * @return {@link String} : The time converted into a {@link String}.
+     */
     public static String formatTime(int minutes, int seconds) {
         return formatTime(0, minutes, seconds);
     }
 
+
+    /**
+     * Converts the time provided into a {@link String}.
+     *
+     * @param seconds {@code int}
+     * @return {@link String} : The time converted into a {@link String}.
+     */
     public static String formatTime(int seconds) {
         return formatTime(0, 0, seconds);
     }
 
-    public static String formatSeconds(int seconds) {
-        return formatTime(seconds);
-    }
-
+    /**
+     * Converts the time provided into a {@link String}, with 2 milliseconds.
+     *
+     * @param seconds {@link float} : The number of seconds.
+     * @return {@link String} : The time converted into a {@link String}.
+     */
     public static String formatSeconds(float seconds) {
-        return formatSeconds((int) seconds);
+        return formatSeconds(seconds, 2);
     }
 
+    /**
+     * Converts the time provided into a {@link String}, with milliseconds.
+     *
+     * @param seconds {@link float} : The number of seconds.
+     * @param numOfMillis {@code int} : The number of milliseconds to display.
+     * @return {@link String} : The time converted into a {@link String}.
+     */
     public static String formatSeconds(float seconds, int numOfMillis) {
-        String time = formatSeconds((int) seconds);
+        String time = formatTime((int) seconds);
         // Then remove the second portion
         String millis = Integer.toString((int) Math.floor((Math.pow(10, numOfMillis)) * (seconds - Math.floor(seconds))));
         // If the length of the string is too short, then add 0s
