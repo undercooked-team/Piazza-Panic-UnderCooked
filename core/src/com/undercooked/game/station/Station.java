@@ -58,6 +58,11 @@ public class Station extends MapEntity {
 
 	/** If the {@link Station} has collision or not. */
 	public boolean hasCollision;
+
+	/**
+	 * Constructor for the {@link Station}.
+	 * @param stationData {@link StationData} : The {@link StationData} of the {@link Station}.
+	 */
 	public Station(StationData stationData) {
 		super();
 		setStationData(stationData);
@@ -103,6 +108,9 @@ public class Station extends MapEntity {
 	 * Called when the player is trying to buy the {@link Station}.
 	 * 
 	 * @param money {@code int} : The money provided.
+	 * @return {@code boolean} : {@code true} if the {@link Station} can be bought with
+	 * 								the money provided,
+	 * 							 {@code false} if it could not.
 	 */
 	public boolean buy(int money) {
 		// If money < price, then the purchase has failed
