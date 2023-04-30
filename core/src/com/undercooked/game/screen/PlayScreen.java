@@ -35,11 +35,14 @@ import com.undercooked.game.util.Listener;
 import com.undercooked.game.util.json.JsonFormat;
 import com.undercooked.game.util.json.JsonObject;
 
+/**
+ * A class for the play {@link Screen} in which the player
+ * selects the scenario that they want to play.
+ */
 public class PlayScreen extends Screen {
 
     private Stage stage;
     private OrthographicCamera camera;
-    private Viewport viewport;
     private Texture background;
     private Sprite plate;
     private GlyphLayout title;
@@ -58,7 +61,7 @@ public class PlayScreen extends Screen {
     private boolean showCustomerNumber;
     private int customerNumber; // The number of requests to serve in the Custom mode
     private GlyphLayout customerNumberText;
-    private float customerNumberScale = 2f;
+    private final float customerNumberScale = 2f;
     private int currentIndex;
     private Array<JsonValue> scenarioArray;
 
@@ -67,8 +70,6 @@ public class PlayScreen extends Screen {
     private final float titlePadding = 200;
     private final float descScale = 1;
     private final float descPadding = 100;
-
-    private final float diffBtnY = 200;
     private final String[] scenarioFiles = {
             "custom",
             "everything",
@@ -77,6 +78,10 @@ public class PlayScreen extends Screen {
             "everything_with_powerups"
     };
 
+    /**
+     * Constructor for the {@link PlayScreen}.
+     * @param game {@link MainGameClass} : The {@link MainGameClass} of the game.
+     */
     public PlayScreen(MainGameClass game) {
         super(game);
     }
@@ -103,10 +108,9 @@ public class PlayScreen extends Screen {
         game.audioManager.loadMusic("audio/music/MainScreenMusic.ogg", Constants.MUSIC_GROUP);
 
         camera = CameraController.getCamera(Constants.UI_CAMERA_ID);
-        viewport = CameraController.getViewport(Constants.UI_CAMERA_ID);
 
         // Create the stage
-        stage = new Stage(viewport, game.batch);
+        stage = new Stage(CameraController.getViewport(Constants.UI_CAMERA_ID), game.batch);
 
         // Create the Mode Button
         modeButton = new ModeButton(textureManager);
@@ -124,6 +128,9 @@ public class PlayScreen extends Screen {
 
     }
 
+    /**
+     * Load the scenario data from file paths in the {@link #scenarioFiles} array.
+     */
     private void loadScenarios() {
         JsonObject format = DefaultJson.scenarioFormat();
         // Load all the files in the array
@@ -359,6 +366,11 @@ public class PlayScreen extends Screen {
 
     }
 
+    /**
+     * Set the currently selected difficulty of the game.
+     *
+     * @param difficulty {@code int} : The currently selected difficulty.
+     */
     private void setDifficulty(int difficulty) {
         this.currentDifficulty = difficulty;
         TextureManager textureManager = getTextureManager();
@@ -397,6 +409,12 @@ public class PlayScreen extends Screen {
         }
     }
 
+    /**
+     * Dry the currently displayed index of the scenarios.
+     * @param index {@code int} : The index to set it to show.
+     * @param changeVal {@code int} : The index to change by if on {@link GameType#ENDLESS} and
+     *                                {@link Constants#CUSTOM_SCENARIO_ID}.
+     */
     private void setIndex(int index, int changeVal) {
 
         // If it's not valid, don't do anything
@@ -418,10 +436,18 @@ public class PlayScreen extends Screen {
         showScenarioData(scenarioArray.get(index));
     }
 
+    /**
+     * Dry the currently displayed index of the scenarios.
+     * @param index {@code int} : The index to set it to show.
+     */
     private void setIndex(int index) {
         setIndex(index, 0);
     }
 
+    /**
+     * Change the currently displayed index of the scenarios.
+     * @param change {@code int} : How many indexes to change it by.
+     */
     private void changeIndex(int change) {
         // Update the index number
         int newIndex = currentIndex + change;
@@ -432,6 +458,10 @@ public class PlayScreen extends Screen {
         setIndex(newIndex, change);
     }
 
+    /**
+     * Show the data for a scenario's {@link JsonValue}.
+     * @param scenarioData {@link JsonValue} : The scenario data to show.
+     */
     private void showScenarioData(JsonValue scenarioData) {
         game.font.getData().setScale(titleScale);
         title.setText(game.font, scenarioData.getString("name"), Color.BLACK, plateSize - titlePadding, Align.left,true);
@@ -455,12 +485,18 @@ public class PlayScreen extends Screen {
         rightCustomerBtn.setVisible(showCustomerNumber);
     }
 
+    /**
+     * Updat the {@link #customerNumberText}'s text.
+     */
     private void updateCustomerText() {
         game.font.getData().setScale(customerNumberScale);
         customerNumberText.setText(game.font, Integer.toString(customerNumber));
         game.font.getData().setScale(1f);
     }
 
+    /**
+     * Start the game.
+     */
     private void startGame() {
         // Make sure the currentIndex is valid
         if (currentIndex < 0 || currentIndex >= scenarioArray.size) return;
@@ -505,8 +541,11 @@ public class PlayScreen extends Screen {
         game.screenController.goToScreen(Constants.GAME_SCREEN_ID);
     }
 
+    /**
+     * Go back to the previous {@link Screen} if still on this {@link Screen}.
+     */
     public void backScreen() {
-        if (getScreenController().onScreen(Constants.MAIN_SCREEN_ID)) return;
+        if (!getScreenController().onScreen(Constants.PLAY_SCREEN_ID)) return;
         game.screenController.backScreen();
     }
 
