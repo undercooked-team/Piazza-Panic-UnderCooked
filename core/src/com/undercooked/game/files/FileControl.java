@@ -66,7 +66,7 @@ public class FileControl {
      * @param fileName {@link String} : The name of the file.
      * @return {@link String} : The directory path and file name combined.
      */
-    private static String dirAndName(String dir, String fileName) {
+    public static String dirAndName(String dir, String fileName) {
         return formatDir(dir)
                 + fileName;
     }
