@@ -333,8 +333,8 @@ public class ScenarioLogic extends ScenarioLoadLogic {
         newPowerUp.setRemoveListener(powerUpRemoveListener);
 
         // Then add it to the map
-        newPowerUp.setX(openCell.getDisplayX() + MapManager.gridToPos(0.5f));
-        newPowerUp.setY(openCell.getDisplayY() + MapManager.gridToPos(0.5f));
+        newPowerUp.setX(openCell.getCollisionX() + MapManager.gridToPos(0.5f));
+        newPowerUp.setY(openCell.getCollisionY() + MapManager.gridToPos(0.5f));
 
         // And add it to the arrays
         gameRenderer.addEntity(newPowerUp);
@@ -668,7 +668,7 @@ public class ScenarioLogic extends ScenarioLoadLogic {
         // If all the above is valid, take the money and add the cook
         money -= cookCost;
         Random random = new Random();
-        Cook newCook = new Cook(new Vector2(openCell.getDisplayX() + MapManager.gridToPos(0), openCell.getDisplayY() + MapManager.gridToPos(0.5f)),
+        Cook newCook = new Cook(new Vector2(openCell.getCollisionX() + MapManager.gridToPos(0), openCell.getCollisionY() + MapManager.gridToPos(0.5f)),
                 random.nextInt(1,Constants.NUM_COOK_TEXTURES+1),
                 textureManager, map);
         newCook.postLoad(textureManager);
