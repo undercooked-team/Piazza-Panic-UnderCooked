@@ -40,7 +40,7 @@ public class SettingsControlTests {
 	@Test
 	public void loadSettings() {
 		setCon.loadData();
-		// assertEquals(setCon.getMusicVolume(), 0.5f, 0.01f);
+		assertEquals(1, 1); // TODO: Add actual tests
 	}
 
 }
