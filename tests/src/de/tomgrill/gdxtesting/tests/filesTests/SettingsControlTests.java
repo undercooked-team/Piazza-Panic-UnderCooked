@@ -33,14 +33,14 @@ public class SettingsControlTests {
 
 	@Before
 	public void setup() {
-		SettingsControl setCon = new SettingsControl("settingsTest.json");
+		setCon = new SettingsControl("settingsTest.json");
 	}
 
 	/** Test loadData() loads the data in settings.json. */
 	@Test
 	public void loadSettings() {
 		setCon.loadData();
-		// assertEquals(setCon.getMusicVolume(), 0.5f, 0.01f);
+		assertEquals(1, 1); // TODO: Add actual tests
 	}
 
 }
