@@ -25,6 +25,11 @@ public class TimedInputStep extends WaitStep {
     static final float textPadding = 5;
     static final float textScale = 0.5f;
 
+    /**
+     * Constructor for the {@link TimedInputStep}.
+     * @param font {@link BitmapFont} : The {@link BitmapFont} to use to draw the
+     *                                  input required.
+     */
     public TimedInputStep(BitmapFont font) {
         super();
         this.font = font;
@@ -47,6 +52,7 @@ public class TimedInputStep extends WaitStep {
         instance.elapsedTime += delta / powerUpMultiplier;
     }
 
+    @Override
     public void waitFinished(InteractionInstance instance, Cook cook) {
         // If the wait finishes, then it's a failure
         finished(instance, cook, null, null, false);
@@ -63,10 +69,22 @@ public class TimedInputStep extends WaitStep {
         return InteractResult.NONE;
     }
 
+    /**
+     * Calculate the X drawing position.
+     *
+     * @param instance {@link InteractionInstance} : The interaction instance.
+     * @return {@code float} : The x position to draw at.
+     */
     private float calculateDrawX(InteractionInstance instance) {
         return instance.station.getX() + instance.station.getInteractBox().width/2f - text.width/2f;
     }
 
+    /**
+     * Calculate the Y drawing position.
+     *
+     * @param instance {@link InteractionInstance} : The interaction instance.
+     * @return {@code float} : The y position to draw at.
+     */
     private float calculateDrawY(InteractionInstance instance) {
         return instance.station.getY() + instance.station.getInteractBox().height/2f + padding*2 + offsetY + height;
     }
@@ -102,6 +120,7 @@ public class TimedInputStep extends WaitStep {
         return 1f - (instance.elapsedTime / time);
     }
 
+    @Override
     public void setBarColor(InteractionInstance instance, ShapeRenderer shape) {
         float drawPercent = getDrawPercent(instance);
         shape.setColor(1f-drawPercent, drawPercent, 0, 1);

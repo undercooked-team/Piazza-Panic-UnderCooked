@@ -140,7 +140,7 @@ public class FileControl {
                 if (!file.file().createNewFile()) {
                     throw new RuntimeException("Could not create file: " + file.file().getAbsolutePath());
                 }
-                saveToFile(dir, fileName, "{}");
+                saveToFile(dir, fileName, "");
             } catch (IOException e) {
                 e.printStackTrace();
             }
