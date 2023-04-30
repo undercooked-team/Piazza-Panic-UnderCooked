@@ -1,13 +1,11 @@
 package com.undercooked.game.station;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.undercooked.game.Input.InputType;
-import com.undercooked.game.MainGameClass;
 import com.undercooked.game.assets.AudioManager;
 import com.undercooked.game.entity.cook.Cook;
 import com.undercooked.game.food.Item;
@@ -19,8 +17,6 @@ import com.undercooked.game.interactions.StationInteractControl;
 import com.undercooked.game.map.Map;
 import com.undercooked.game.map.MapEntity;
 import com.undercooked.game.map.MapManager;
-
-import static com.undercooked.game.MainGameClass.shapeRenderer;
 
 /**
  * The class for the Stations that appear on the {@link Map}.
@@ -45,9 +41,9 @@ public class Station extends MapEntity {
 	 * The amount of money needed to unlock the {@link Station}.
 	 * Set with {@link #setPrice(int)}.
 	 * <br><br>
-	 * If the price is <= 0, then the {@link Station} will be
+	 * If the price is &lt;= 0, then the {@link Station} will be
 	 * enabled.
-	 * <br>If the price is > 0, it will be disabled.
+	 * <br>If the price is &gt; 0, it will be disabled.
 	 */
 	private int price;
 
@@ -379,8 +375,8 @@ public class Station extends MapEntity {
 	/**
 	 * Set the price of the {@link Station}.
 	 * <br><br>
-	 * If the price is <= 0, the {@link Station} will be enabled.
-	 * <br>If the price is > 0, then the {@link Station} will be disabled.
+	 * If the price is &lt;= 0, the {@link Station} will be enabled.
+	 * <br>If the price is &gt; 0, then the {@link Station} will be disabled.
 	 * @param price {@code int} : The price of the {@link Station}.
 	 */
 	public void setPrice(int price) {
