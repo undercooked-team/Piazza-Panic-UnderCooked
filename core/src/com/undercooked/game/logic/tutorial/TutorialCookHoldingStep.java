@@ -3,6 +3,10 @@ package com.undercooked.game.logic.tutorial;
 import com.undercooked.game.entity.cook.Cook;
 import com.undercooked.game.entity.cook.CookController;
 
+/**
+ * A {@link TutorialStep} for needing a {@link Cook} to hold
+ * a specific {@link com.undercooked.game.food.Item}.
+ */
 public class TutorialCookHoldingStep extends TutorialFollowCurrentCookStep {
 
     /** The {@link com.undercooked.game.food.Item} id that the {@link Cook} needs to hold. */

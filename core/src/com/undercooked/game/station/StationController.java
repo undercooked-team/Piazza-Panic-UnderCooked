@@ -36,9 +36,6 @@ public class StationController {
 	 */
 	public ObjectMap<String, StationData> stationData;
 
-	SpriteBatch batch;
-	GameScreen game;
-
 	/**
 	 * Constructor for the {@link StationController}.
 	 * This sets up the {@link Array<Station>} for {@link #stations}
@@ -80,59 +77,13 @@ public class StationController {
 	}
 
 	/**
-	 * Loads all of the {@link StationData} for each {@link Station} ID
-	 * into the {@link #stationData} {@link ObjectMap}
-	 * 
-	 * @param path       {@link String} : The asset path to the {@link StationData}
-	 *                   JSON.
-	 * @param internal
-	 * @param pathPrefix
+	 * Loads the {@link StationData} from the asset path provided, adds it
+	 * to the {@link StationController}'s {@link StationData} and then returns
+	 * it.
+	 * @param stationPath {@link String} : The path to the station asset.
+	 * @return {@link StationData} : The {@link StationData} at that location,
+	 * 								 or {@code null} if it wasn't loaded successfully.
 	 */
-	private void loadStationsFromPath(String path, boolean internal, String pathPrefix) {
-		FileHandle stations = FileControl.getFileHandle("game/stations/" + path, internal);
-		for (FileHandle file : stations.list()) {
-			// If it's a directory, then recurse
-			if (file.isDirectory()) {
-				loadStationsFromPath(path + file.name() + "/", internal, pathPrefix);
-			} else {
-				// If it's not, ensure it's a json.
-				if (file.extension().equals("json")) {
-					StationData newData = loadStationPath(pathPrefix + path + file.nameWithoutExtension());
-					if (newData != null) {
-						newData.setPath(pathPrefix + path + file.nameWithoutExtension());
-						stationData.put(pathPrefix + path + file.nameWithoutExtension(), newData);
-					}
-				}
-			}
-		}
-	}
-
-	private void loadStationsFromPath(String path, boolean internal) {
-		if (internal) {
-			loadStationsFromPath(path, true, "<main>:");
-		} else {
-			// Look at the stations folder
-			loadStationsFromPath(path, false, "");
-		}
-	}
-
-	/**
-	 * Loads all the station paths in the game and stores them in an
-	 * {@link ObjectMap}
-	 * pairing of the station's id and its path.
-	 */
-	public void loadStationPaths() {
-		// First clear the object map
-		stationData.clear();
-
-		// Load the internal path.
-		loadStationsFromPath("", true);
-
-		// Load from the external path.
-		loadStationsFromPath(FileControl.getDataPath(), false);
-
-	}
-
 	public StationData loadStation(String stationPath) {
 		StationData loadedData = loadStationPath(stationPath);
 		// Add it to the array, if it's not null.
@@ -142,6 +93,12 @@ public class StationController {
 		return loadedData;
 	}
 
+	/**
+	 * Loads the {@link StationData} from the asset path provided and returns it.
+	 * @param stationPath {@link String} : The path to the station asset.
+	 * @return {@link StationData} : The {@link StationData} at that location,
+	 * 								 or {@code null} if it wasn't loaded successfully.
+	 */
 	public StationData loadStationPath(String stationPath) {
 		if (stationData.containsKey(stationPath)) {
 			return stationData.get(stationPath);
@@ -184,10 +141,20 @@ public class StationController {
 		return null;
 	}
 
+	/**
+	 * Returns the {@link StationData} mapped to the id.
+	 * @param stationID {@link String} : The id of the {@link Station}.
+	 * @return {@link StationData} : The data of the {@link Station}.
+	 */
 	public StationData getStationData(String stationID) {
 		return stationData.get(stationID);
 	}
 
+
+	/**
+	 * Add a {@link Station} to the {@link StationController}.
+	 * @param station {@link Station} : The {@link Station} to add.
+	 */
 	public void addStation(Station station) {
 		// Only add if it's not contained already
 		if (!stations.contains(station, true)) {
@@ -195,10 +162,17 @@ public class StationController {
 		}
 	}
 
+	/**
+	 * Remove a {@link Station} from the {@link StationController}.
+	 * @param station {@link Station} : The {@link Station} to remove.
+	 */
 	public void removeStation (Station station) {
 		stations.removeValue(station, true);
 	}
 
+	/**
+	 * Reset all {@link Station}s.
+	 */
 	public void reset() {
 		// Reset all stations
 		for (Station station : stations) {
@@ -206,6 +180,9 @@ public class StationController {
 		}
 	}
 
+	/**
+	 * Stop all {@link Station}s.
+	 */
 	public void stopAll() {
 		// Stop all stations
 		for (Station station : stations) {
@@ -213,11 +190,17 @@ public class StationController {
 		}
 	}
 
+	/**
+	 * Clear all of the {@link Station}s.
+	 */
 	public void clear() {
 		// Clear the stations
 		stations.clear();
 	}
 
+	/**
+	 * Clear all of the {@link Station}s and {@link StationData}.
+	 */
 	public void dispose() {
 		// Clear
 		clear();
@@ -226,10 +209,21 @@ public class StationController {
 		stationData.clear();
 	}
 
+	/**
+	 * @param stationID
+	 * @return {@code boolean} : {@code true} if the station data loaded has the station id,
+	 * 							 {@code false} if it does not.
+	 */
 	public boolean hasID(String stationID) {
 		return stationData.containsKey(stationID);
 	}
 
+	/**
+	 * Converts all of the {@link Station}s in the game into a {@link JsonValue}
+	 * array, only if they need to be, to be stored externally.
+	 * @param map {@link Map} : The {@link Map} of the game.
+	 * @return {@link JsonValue} : The {@link Station}s in a Json array form.
+	 */
 	public JsonValue serializeStations(Map map) {
 		// JsonValue stationsRoot = new JsonValue(JsonValue.ValueType.object);
 		JsonValue stationsArrayRoot = new JsonValue(JsonValue.ValueType.array);
@@ -246,6 +240,19 @@ public class StationController {
 		return stationsArrayRoot;
 	}
 
+	/**
+	 * Takes a {@link JsonValue} of the {@link Station}s that was serialized,
+	 * and loads all of the {@link Station}s back into the game.
+	 *
+	 * @param logic {@link GameLogic} : The {@link GameLogic} to load to.
+	 * @param jsonValue {@link JsonValue} : The station Json data.
+	 * @param audioManager {@link AudioManager} : The {@link AudioManager} to load to.
+	 * @param interactions {@link Interactions} : The {@link Interactions} for the {@link Station}s
+	 *                                            to use.
+	 * @param items {@link Items} : The {@link Items} to load the {@link Item}s the {@link Station} is
+	 *                              holding to.
+	 * @param map {@link Map} : The {@link Map} to add the {@link Station} to.
+	 */
 	public void deserializeStations(GameLogic logic, JsonValue jsonValue, AudioManager audioManager, Interactions interactions, Items items, Map map) {
 		// For each station
 		for (JsonValue stationRoot : jsonValue) {

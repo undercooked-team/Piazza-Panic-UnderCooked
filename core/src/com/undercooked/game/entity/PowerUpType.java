@@ -1,5 +1,9 @@
 package com.undercooked.game.entity;
 
+/**
+ * The different types of {@link PowerUp}s that can
+ * spawn in the game.
+ */
 public enum PowerUpType {
     /** Movement speed of the {@link com.undercooked.game.entity.cook.Cook} increases. */
     COOK_SPEED_UP("<main>:powerup/speed.png"),
@@ -16,7 +20,13 @@ public enum PowerUpType {
     /** Reputation is just increased. */
     REPUTATION_UP("<main>:powerup/reputation.png");
 
+    /** The asset path to the {@link PowerUp}'s {@link com.badlogic.gdx.graphics.Texture}. */
     public final String texturePath;
+
+    /**
+     * Constructor for the {@link PowerUpType}.
+     * @param texturePath {@link String} : The path to the asset.
+     */
     PowerUpType(String texturePath) {
         this.texturePath = texturePath;
     }
