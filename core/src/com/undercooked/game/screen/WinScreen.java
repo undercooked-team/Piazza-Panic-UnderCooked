@@ -77,7 +77,7 @@ public class WinScreen extends Screen {
             // And try to add the score
             leaderboardScreen.addLeaderBoardData(gameType, leaderboardID, leaderboardName, nameInput, score);
             // And then set the leaderboard screen to view the leaderboard
-            leaderboardScreen.goToLeaderboard(gameType);
+            leaderboardScreen.goToLeaderboardType(gameType);
             leaderboardScreen.showLeaderboard(leaderboardID);
             // And stop here
             return;

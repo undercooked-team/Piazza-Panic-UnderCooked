@@ -70,6 +70,7 @@ public class CustomerController {
 	 * The constructor for the {@link CustomerController}.
 	 * <br>Sets up all the variables of the variables to be used.
 	 * @param textureManager {@link TextureManager} : The {@link TextureManager} to use.
+	 * @param map {@link Map} : The {@link Map} to use.
 	 */
 	public CustomerController(TextureManager textureManager, Map map) {
 		this.textureManager = textureManager;

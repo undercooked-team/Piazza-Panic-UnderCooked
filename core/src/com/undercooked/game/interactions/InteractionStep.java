@@ -103,7 +103,7 @@ public abstract class InteractionStep {
      * @param instance {@link InteractionInstance} : The interaction instance
      * @param success {@code boolean} : {@code true} if the interaction was successful,
      *                                  {@code false} if it was not.
-     * @return
+     * @return {@link InteractResult} : The result of the {@link InteractionStep}.
      */
     public final InteractResult finished(InteractionInstance instance, boolean success) {
         return finished(instance, null, null, null, success);

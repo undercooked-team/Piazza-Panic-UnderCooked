@@ -473,6 +473,7 @@ public class GameRenderer {
 
     /**
      * Load the {@link GameRenderer}'s {@link Texture}s.
+     * @param textureGroup {@link String} : The texture group to use.
      * @param textureManager {@link TextureManager} : The {@link TextureManager} to use.
      */
     public void load(String textureGroup, TextureManager textureManager) {

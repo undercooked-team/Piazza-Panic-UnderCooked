@@ -26,24 +26,22 @@ import com.undercooked.game.util.leaderboard.LeaderboardController;
 import com.undercooked.game.util.leaderboard.LeaderboardEntry;
 import com.undercooked.game.GameType;
 
-//INCORRECT FILE FORMATTING WILL CRASH GAME
-//MAKE SURE ALL LINES IN LEADERBOARD FILE ARE x;y OR JUST s
-//NO NEWLINE AT END OF FILE
+/**
+ * The class for displaying the {@link Leaderboard}s of the game.
+ */
 public class LeaderboardScreen extends Screen {
 
-	Texture background;
-	Texture line;
-	Texture leaderboardTexture;
-	OrthographicCamera camera;
-	FitViewport viewport;
-	Leaderboard leaderboard;
-	Array<LeaderboardEntry> leaderboardData;
+	private Texture backgroundTexture;
+	private Texture lineTexture;
+	private Texture leaderboardTexture;
+	private OrthographicCamera camera;
+	private FitViewport viewport;
+	private Leaderboard leaderboard;
+	private Array<LeaderboardEntry> leaderboardData;
 	private GameType currentLType;
 	private int currentIndex;
 	private Stage stage;
 	private ModeButton modeButton;
-	private TextureRegionDrawable scenarioBtnDrawable;
-	private TextureRegionDrawable endlessBtnDrawable;
 	private Array<String> leaderboardIDs;
 	private GlyphLayout leaderboardNameDisplay;
 	private int firstScore;
@@ -51,57 +49,13 @@ public class LeaderboardScreen extends Screen {
 	private static final int SCORES_AT_ONCE = 5;
 	/**
 	 * Constructor for leaderboard screen
-	 * @param game - Entry point class
+	 * @param game {@link MainGameClass} : The {@link MainGameClass} of the game.
 	 */
 	public LeaderboardScreen(MainGameClass game) {
 		super(game);
 	}
 
-	/**
-	 * Read player data from leaderboard file
-	 * Delete the leaderboard txt file to clear leaderboard
-	 * The file starts with "s" and then adds scores
-	 */
-	public void readPlayerData() {
-		/*playerData = new ArrayList<>();
-		boolean doesPlayerDataExist = Gdx.files.local("leaderboarddata/playerData.txt").exists();
-		if (doesPlayerDataExist) {
-			FileHandle handle = Gdx.files.local("leaderboarddata/playerData.txt");
-			String text = handle.readString();
-			String[] entries = text.split("\\n");
-			for (String s : entries) {
-				if(!s.equals("s")) {
-					String[] parts = s.split(";");
-					if (parts.length < 2) continue;
-					String name = parts[0];
-					String stringScore = parts[1].trim();
-					ArrayList<String> sublist = new ArrayList<>();
-					sublist.add(name);
-					sublist.add(stringScore);
-					playerData.add(sublist);
-				}
-			}
-		} else {
-			FileHandle file = Gdx.files.local("leaderboarddata/playerData.txt");
-			file.writeString("s",true);
-		}*/
-	}
-
-	/**
-	 * Order leaderboard data
-	 */
-	public void sortPlayerData() {
-		/*Collections.sort(playerData, new Comparator<ArrayList<String>>() {
-			@Override
-			public int compare(ArrayList<String> e1, ArrayList<String> e2) {
-				Integer i1 = Integer.valueOf(e1.get(1));
-				Integer i2 = Integer.valueOf(e2.get(1));
-				return (i1.compareTo(i2));
-			}
-		});*/
-	}
-
-	/** What needs to be loaded when this screen is loaded. */
+	@Override
 	public void load() {
 		TextureManager textureManager = game.getTextureManager();
 		textureManager.load(Constants.LEADERBOARD_TEXTURE_ID, "uielements/MainScreenBackground.jpg");
@@ -134,7 +88,7 @@ public class LeaderboardScreen extends Screen {
 
 		// And go to the scenario leaderboard by default
 		currentLType = null;
-		goToLeaderboard(GameType.SCENARIO);
+		goToLeaderboardType(GameType.SCENARIO);
 	}
 
 	@Override
@@ -162,18 +116,16 @@ public class LeaderboardScreen extends Screen {
 		LeaderboardController.unloadLeaderboard();
 	}
 
-	/**
-	 * What should be done when screen is shown
-	 */
+	@Override
 	public void show() {
 		final TextureManager textureManager = game.getTextureManager();
 
 		// Update the main screen music variable
 		game.mainScreenMusic = game.audioManager.getMusic("audio/music/MainScreenMusic.ogg");
 		ScreenUtils.clear(0, 0, 0, 0);
-		background = textureManager.get("uielements/MainScreenBackground.jpg");
+		backgroundTexture = textureManager.get("uielements/MainScreenBackground.jpg");
 		leaderboardTexture = textureManager.get("uielements/LeaderBoard.png");
-		line = textureManager.get("uielements/line.jpg");
+		lineTexture = textureManager.get("uielements/line.jpg");
 		game.font.getData().setScale(2.5F);
 
 		// Create the buttons
@@ -213,7 +165,7 @@ public class LeaderboardScreen extends Screen {
 		modeButton.setListener(new Listener<GameType>() {
 			@Override
 			public void tell(GameType value) {
-				goToLeaderboard(value);
+				goToLeaderboardType(value);
 			}
 		});
 
@@ -250,10 +202,7 @@ public class LeaderboardScreen extends Screen {
 		Gdx.input.setInputProcessor(stage);
 	}
 
-	/**
-	 * Screen render method
-	 * @param delta - some change in time
-	 */
+	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
 		ScreenUtils.clear(0, 0, 0, 0);
@@ -272,14 +221,14 @@ public class LeaderboardScreen extends Screen {
 		game.mainScreenMusic.play();
 
 		game.batch.begin();
-		game.batch.draw(background, 0, 0, gameResolutionX, gameResolutionY);
+		game.batch.draw(backgroundTexture, 0, 0, gameResolutionX, gameResolutionY);
 		game.batch.draw(leaderboardTexture, lbox, dbox, boxwid, boxhi);
-		game.batch.draw(line, lbox, dbox + eachentryhi, boxwid, gameResolutionY / 100.0f);
-		game.batch.draw(line, lbox, dbox + 2 * eachentryhi, boxwid, gameResolutionY / 100.0f);
-		game.batch.draw(line, lbox, dbox + 3 * eachentryhi, boxwid, gameResolutionY / 100.0f);
-		game.batch.draw(line, lbox, dbox + 4 * eachentryhi, boxwid, gameResolutionY / 100.0f);
-		game.batch.draw(line, lbox, dbox + 5 * eachentryhi, boxwid, gameResolutionY / 100.0f);
-		game.batch.draw(line, lbox, dbox + 6 * eachentryhi, boxwid, gameResolutionY / 100.0f);
+		game.batch.draw(lineTexture, lbox, dbox + eachentryhi, boxwid, gameResolutionY / 100.0f);
+		game.batch.draw(lineTexture, lbox, dbox + 2 * eachentryhi, boxwid, gameResolutionY / 100.0f);
+		game.batch.draw(lineTexture, lbox, dbox + 3 * eachentryhi, boxwid, gameResolutionY / 100.0f);
+		game.batch.draw(lineTexture, lbox, dbox + 4 * eachentryhi, boxwid, gameResolutionY / 100.0f);
+		game.batch.draw(lineTexture, lbox, dbox + 5 * eachentryhi, boxwid, gameResolutionY / 100.0f);
+		game.batch.draw(lineTexture, lbox, dbox + 6 * eachentryhi, boxwid, gameResolutionY / 100.0f);
 		game.font.setColor(Color.BLACK);
 
 		game.font.draw(game.batch, leaderboardNameDisplay, Constants.V_WIDTH/2-(leaderboardNameDisplay.width/2), 17 * gameResolutionY / 20.0f);
@@ -312,7 +261,12 @@ public class LeaderboardScreen extends Screen {
 		}
 	}
 
-	public void goToLeaderboard(GameType gameType) {
+	/**
+	 * Go to the {@link Leaderboard}s for a certain {@link GameType}.
+	 * @param gameType {@link GameType} : The {@link GameType} to show the
+	 * 									  {@link Leaderboard}s for.
+	 */
+	public void goToLeaderboardType(GameType gameType) {
 		// If it's already that leaderboard, just return
 		if (gameType == currentLType) return;
 
@@ -341,10 +295,17 @@ public class LeaderboardScreen extends Screen {
 		setIndex(0);
 	}
 
+	/**
+	 * Update the IDs to the currently displayued {@link GameType}.
+	 */
 	private void updateIDs() {
 		leaderboardIDs = LeaderboardController.getIDs(currentLType);
 	}
 
+	/**
+	 * Scroll the leaderboard by an amount of {@link LeaderboardEntry}.
+	 * @param amountY {@link float} : The number of {@link LeaderboardEntry}s to scroll past.
+	 */
 	private void scrollLeaderboard(float amountY) {
 		// Add the scroll
 		firstScore += Math.signum(amountY);
@@ -354,6 +315,11 @@ public class LeaderboardScreen extends Screen {
 		firstScore = Math.max(0, Math.min(firstScore, leaderboardData.size-(SCORES_AT_ONCE-1)));
 	}
 
+	/**
+	 * Set the currently viewed {@link Leaderboard} by the index it is in
+	 * the leaderboard IDs for the current {@link GameType}.
+	 * @param index {@link int} : The index of the {@link Leaderboard}.
+	 */
 	public void setIndex(int index) {
 		// If leaderboardIDs is null, return
 		if (leaderboardIDs == null) return;
@@ -377,10 +343,19 @@ public class LeaderboardScreen extends Screen {
 		showLeaderboard(currentLType, leaderboardIDs.get(index));
 	}
 
+	/**
+	 * Show the {@link Leaderboard} of the id, of the current
+	 * {@link GameType}.
+	 * @param id {@link String} : The id of the {@link Leaderboard} to show.
+	 */
 	public void showLeaderboard(String id) {
 		showLeaderboard(currentLType, id);
 	}
 
+	/**
+	 * Update the displayed {@link Leaderboard} name text at the top of the
+	 * leaderboard display.
+	 */
 	protected void updateNameText() {
 		game.font.setColor(Color.BLACK);
 		if (leaderboard == null) {
@@ -396,6 +371,11 @@ public class LeaderboardScreen extends Screen {
 		game.font.setColor(Color.WHITE);
 	}
 
+	/**
+	 * Show the {@link Leaderboard} of the {@link GameType} by its id.
+	 * @param lType {@link GameType} : The {@link GameType} of the {@link Leaderboard}.
+	 * @param id {@link String} : The id of the {@link Leaderboard}.
+	 */
 	protected void showLeaderboard(GameType lType, String id) {
 		// Get the leaderboard
 		leaderboard = LeaderboardController.getLeaderboard(lType, id);
@@ -416,9 +396,11 @@ public class LeaderboardScreen extends Screen {
 	}
 
 	/**
-	 * Add data to leaderboard
-	 * @param name - name of player
-	 * @param score - score of player
+	 * Add data to leaderboard.
+	 * @param lType {@link GameType} : The leaderboard {@link GameType}.
+	 * @param id {@link String} : The id of the {@link Leaderboard}.
+	 * @param name {@link String} : The name of the {@link LeaderboardEntry}.
+	 * @param score {@code float} : The score of the {@link LeaderboardEntry}.
 	 */
 	public void addLeaderBoardData(GameType lType, String id, String leaderboardName, String name, float score) {
 		// Only continue if it's loaded
@@ -432,7 +414,7 @@ public class LeaderboardScreen extends Screen {
 	}
 
 	/**
-	 * Change screen back to main menu
+	 * Change screen back to main menu screen.
 	 */
 	public void changeScreenToMain() {
 		if (game.gameMusic != null) game.gameMusic.pause();
@@ -440,11 +422,6 @@ public class LeaderboardScreen extends Screen {
 		game.screenController.goToScreen(Constants.MAIN_SCREEN_ID);
 	}
 
-	/**
-	 * Change window size
-	 * @param width - new window size
-	 * @param height - new window height
-	 */
 	@Override
 	public void resize(int width, int height) {
 		viewport.update(width, height);
