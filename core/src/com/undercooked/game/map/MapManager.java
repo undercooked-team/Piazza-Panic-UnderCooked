@@ -17,21 +17,39 @@ import com.undercooked.game.util.Constants;
 import com.undercooked.game.util.DefaultJson;
 import com.undercooked.game.util.json.JsonFormat;
 
+/**
+ * A class for controlling the loading of a map asset, and the creation
+ * of the {@link Map} from the Json data.
+ */
 public class MapManager {
 
-    private TextureManager textureManager;
-    private AudioManager audioManager;
+    /** The {@link TextureManager} to use. */
+    private final TextureManager textureManager;
 
+    /** The {@link AudioManager} to use. */
+    private final AudioManager audioManager;
+
+    /**
+     * Constructor for the {@link MapManager}.
+     *
+     * @param textureManager {@link TextureManager} : The {@link TextureManager} to use.
+     * @param audioManager {@link AudioManager} : The {@link AudioManager} to use.
+     */
     public MapManager(TextureManager textureManager, AudioManager audioManager) {
         this.textureManager = textureManager;
         this.audioManager = audioManager;
-        load();
     }
 
-    private void load() {
-
-    }
-
+    /**
+     * Load the map asset at the asset path provided.
+     * @param path {@link String} : The path to tha map asset.
+     * @param stationController {@link StationController} : The {@link StationController} to load {@link Station}s
+     *                                                      and {@link StationData} to.
+     * @param cookController {@link CookController} : The {@link CookController} to load {@link com.undercooked.game.entity.cook.Cook}s to.
+     * @param interactions {@link Interactions} : The {@link Interactions} for the {@link Station}s to use.
+     * @param gameItems {@link Items} : The {@link Items} of the game.
+     * @return {@link Map} : The loaded {@link Map}.
+     */
     public Map load(String path, StationController stationController, CookController cookController, Interactions interactions, Items gameItems) {
         // Try loading the Json
         JsonValue root = JsonFormat.formatJson(FileControl.loadJsonAsset(path, "maps"), DefaultJson.mapFormat());
@@ -49,7 +67,7 @@ public class MapManager {
         stationController.clear();
 
         // Convert the Map Json into an actual map
-        Map outputMap = mapOfSize(root.getInt("width"), root.getInt("height"), stationController, textureManager,
+        Map outputMap = mapOfSize(root.getInt("width"), root.getInt("height"), stationController,
                 audioManager, interactions, gameItems);
 
         // Loop through the stations
@@ -85,6 +103,21 @@ public class MapManager {
         return outputMap;
     }
 
+    /**
+     * Set up a {@link Station} on the {@link Map} using its {@link JsonValue}.
+     *
+     * @param map {@link Map} : The {@link Map} to add the {@link Station} to.
+     * @param jsonData {@link JsonValue} : The Json of the {@link Station}.
+     * @param stationController {@link StationController} : The {@link StationController} to use for the
+     *                                                      {@link Station} and {@link StationData}.
+     * @param newStation {@link Station} : The new {@link Station}, without loading its Json data onto it.
+     * @param stationData {@link StationData} : The data of the {@link Station}.
+     * @param interactions {@link Interactions} : The {@link Interactions} for the {@link Station} to
+     *                                            get interactions from.
+     * @param audioManager {@link AudioManager} : The {@link AudioManager} to use.
+     * @param gameItems {@link Items} : The {@link Items} of the game.
+     * @return {@link Array<Entity>} : The entities removed from the {@link Map} by adding the {@link Station}.
+     */
     public static Array<Entity> setupStation(Map map, JsonValue jsonData, StationController stationController, Station newStation, StationData stationData, Interactions interactions, AudioManager audioManager, Items gameItems) {
         newStation.makeInteractionController(audioManager, gameItems);
         newStation.setInteractions(interactions);
@@ -145,6 +178,17 @@ public class MapManager {
 
     }
 
+    /**
+     * Creates a new counter {@link Station} and returns it, loading it as needed.
+     *
+     * @param stationController {@link StationController} : The {@link StationController} to use for the
+     *                                                      {@link Station} and {@link StationData}.
+     * @param audioManager {@link AudioManager} : The {@link AudioManager} to use.
+     * @param interactions {@link Interactions} : The {@link Interactions} for the {@link Station} to
+     *                                            get interactions from.
+     * @param gameItems {@link Items} : The {@link Items} of the game.
+     * @return {@link Station} : The newly created counter.
+     */
     public static Station newCounter(StationController stationController, AudioManager audioManager, Interactions interactions, Items gameItems) {
         // If the counter isn't loaded, then try to load it
         if (!stationController.hasID("<main>:counter")) {
@@ -165,8 +209,19 @@ public class MapManager {
         return newCounter;
     }
 
-    // Creates a map of size width and height.
-    public static Map mapOfSize(int width, int height, StationController stationController, TextureManager textureManager, AudioManager audioManager, Interactions interactions, Items gameItems) {
+    /**
+     * Creates a {@link Map} of size width x height.
+     * @param width {@code int} : The width of the {@link Map}.
+     * @param height {@code int} : The height of the {@link Map}.
+     * @param stationController {@link StationController} : The {@link StationController} to use for the
+     *                                                      {@link Station} and {@link StationData}.
+     * @param audioManager {@link AudioManager} : The {@link AudioManager} to use.
+     * @param interactions {@link Interactions} : The {@link Interactions} for the {@link Station} to
+     *                                            get interactions from.
+     * @param gameItems {@link Items} : The {@link Items} of the game.
+     * @return {@link Map} : A {@link Map} of size width x height.
+     */
+    public static Map mapOfSize(int width, int height, StationController stationController, AudioManager audioManager, Interactions interactions, Items gameItems) {
         // The map size is the area that the players can run around in.
         // Therefore, height += 2, for top and bottom counters, and then
         // width has a few more added, primarily on the left.
@@ -215,18 +270,30 @@ public class MapManager {
         return returnMap;
     }
 
-    public static float gridToPos(int gridPos) {
-        return gridPos * 64F;
-    }
-
+    /**
+     * Converts a grid position into a pixel position value.
+     * @param gridPos {@code float} : The position on the {@link Map} grid.
+     * @return {@code float} : The pixel position of the grid position.
+     */
     public static float gridToPos(float gridPos) {
         return gridPos * 64F;
     }
 
+    /**
+     * Converts a pixel position into a grid position value,
+     * and floors it to be an int.
+     * @param pos {@code float} : The pixel position.
+     * @return {@code int} : The grid position of the pixel position, floored.
+     */
     public static int posToGridFloor(float pos) {
         return (int) (pos / 64F);
     }
 
+    /**
+     * Converts a pixel position into a grid position value.
+     * @param pos {@code float} : The pixel position.
+     * @return {@code float} : The grid position of the pixel position.
+     */
     public static float posToGrid(float pos) {
         return (pos / 64F);
     }
