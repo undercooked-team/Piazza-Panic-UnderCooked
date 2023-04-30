@@ -399,6 +399,8 @@ public class LeaderboardScreen extends Screen {
 	 * Add data to leaderboard.
 	 * @param lType {@link GameType} : The leaderboard {@link GameType}.
 	 * @param id {@link String} : The id of the {@link Leaderboard}.
+	 * @param leaderboardName {@link String} : The name of the {@link Leaderboard} to set it to if
+	 *                                         it does not have one already.
 	 * @param name {@link String} : The name of the {@link LeaderboardEntry}.
 	 * @param score {@code float} : The score of the {@link LeaderboardEntry}.
 	 */

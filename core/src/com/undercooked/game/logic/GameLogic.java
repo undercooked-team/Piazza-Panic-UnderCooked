@@ -144,6 +144,8 @@ public abstract class GameLogic {
         this.customerController = new CustomerController(textureManager);
         this.interactions = new Interactions();
 
+        this.stationController = new StationController();
+
         this.textureManager = textureManager;
         this.audioManager = audioManager;
 

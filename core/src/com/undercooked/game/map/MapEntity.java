@@ -152,6 +152,7 @@ public class MapEntity extends Entity {
 
     /**
      * Class to be Override by children
+     * @param cook {@link Cook} : The {@link Cook} interacting with the {@link MapEntity}.
      * @param keyID {@link String} : The key's ID.
      * @param inputType {@link InputType} : The type of input of interaction.
      * @return {@link InteractResult} : The result of the {@link InteractionStep}.

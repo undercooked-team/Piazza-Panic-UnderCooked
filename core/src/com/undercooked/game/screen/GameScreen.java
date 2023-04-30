@@ -16,6 +16,7 @@ import com.undercooked.game.audio.AudioSliders;
 import com.undercooked.game.audio.Slider;
 import com.undercooked.game.logic.GameLogic;
 import com.undercooked.game.render.GameRenderer;
+import com.undercooked.game.station.StationController;
 import com.undercooked.game.util.CameraController;
 import com.undercooked.game.util.Constants;
 
@@ -67,6 +68,7 @@ public class GameScreen extends Screen {
 		super(game);
 		this.buttonWidth = Constants.V_WIDTH / 10.0f;
 		this.buttonHeight = Constants.V_HEIGHT / 20.0f;
+
 	}
 
 	/**
@@ -76,7 +78,6 @@ public class GameScreen extends Screen {
 	public void setGameLogic(GameLogic gameLogic) {
 		this.gameLogic = gameLogic;
 		gameLogic.setGameScreen(this);
-		gameLogic.setStationController(game.stationController);
 		// If it has a GameRenderer, update it there
 		if (this.gameRenderer != null) {
 			this.gameLogic.setGameRenderer(this.gameRenderer);
