@@ -502,7 +502,7 @@ public class PlayScreen extends Screen {
         gameScreen.setGameRenderer(gameRenderer);
 
         // Move to the game screen
-        game.screenController.setScreen(Constants.GAME_SCREEN_ID);
+        game.screenController.goToScreen(Constants.GAME_SCREEN_ID);
     }
 
     public void backScreen() {

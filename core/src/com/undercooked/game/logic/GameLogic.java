@@ -215,7 +215,7 @@ public abstract class GameLogic {
         // Get the WinScreen
         WinScreen winScreen = (WinScreen) gameScreen.getScreenController().getScreen(Constants.WIN_SCREEN_ID);
         // Go to win screen
-        gameScreen.getScreenController().setScreen(Constants.WIN_SCREEN_ID);
+        gameScreen.getScreenController().goToScreen(Constants.WIN_SCREEN_ID);
         // Set the leaderboard type and id
         winScreen.setLeaderboardID(leaderboardId + "-" + Difficulty.toString(difficulty));
         winScreen.setLeaderboardType(gameType);

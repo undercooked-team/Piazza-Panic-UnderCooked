@@ -134,7 +134,7 @@ public class TutorialLogic extends ScenarioLoadLogic {
         if (tutorialSteps.isEmpty()) {
             currentStep = null;
             if (!gameScreen.getScreenController().onScreen(Constants.GAME_SCREEN_ID)) return;
-            gameScreen.getScreenController().setScreen(Constants.MAIN_SCREEN_ID);
+            gameScreen.getScreenController().goToScreen(Constants.MAIN_SCREEN_ID);
             return;
         }
 

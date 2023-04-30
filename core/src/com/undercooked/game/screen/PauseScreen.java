@@ -2,19 +2,16 @@ package com.undercooked.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.undercooked.game.MainGameClass;
 import com.undercooked.game.assets.TextureManager;
-import com.undercooked.game.audio.AudioSettings;
 import com.undercooked.game.audio.AudioSliders;
 import com.undercooked.game.util.CameraController;
 import com.undercooked.game.util.Constants;
@@ -157,7 +154,7 @@ public class PauseScreen extends Screen {
     public void quitToMenu() {
         // Go to the main menu, if still on the pause screen
         if (!getScreenController().onScreen(Constants.PAUSE_SCREEN_ID)) return;
-        game.screenController.setScreen(Constants.MAIN_SCREEN_ID);
+        game.screenController.goToScreen(Constants.MAIN_SCREEN_ID);
     }
 
     @Override
