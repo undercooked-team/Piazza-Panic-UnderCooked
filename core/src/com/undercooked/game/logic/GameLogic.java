@@ -589,7 +589,7 @@ public abstract class GameLogic {
             requestsData.addChild("", request.serial());
         }
 
-        gameRoot.addChild("cooks", cookController.serializeCooks(map));
+        gameRoot.addChild("cooks", cookController.serializeCooks());
         gameRoot.addChild("stations", stationController.serializeStations(map));
         gameRoot.addChild("customers", customerController.serializeCustomers());
 

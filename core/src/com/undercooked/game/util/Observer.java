@@ -9,6 +9,7 @@ package com.undercooked.game.util;
 public abstract class Observer<T> {
     /**
      * Return a {@link T} value to what is observing.
+     * @return T {@link T} : The value to observe.
      */
     public abstract  T observe();
 }

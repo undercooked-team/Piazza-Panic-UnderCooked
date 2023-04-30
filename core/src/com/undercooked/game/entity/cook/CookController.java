@@ -115,7 +115,7 @@ public class CookController {
             // and if it's not null
             if (cCook != null) {
                 // then check inputs for it.
-                cCook.checkInput(delta);
+                cCook.checkInput();
             }
         }
 
@@ -417,15 +417,16 @@ public class CookController {
 
     /**
      * Serializes the {@link Cook}s to a {@link JsonValue}.
-     * @param map {@link Map} : The map of the game.
+     *
+     * @return {@link JsonValue} : The {@link Cook}s in a Json array form.
      */
-    public JsonValue serializeCooks(Map map) {
+    public JsonValue serializeCooks() {
         // Create the cooks JsonValue
         JsonValue cooksArrayRoot = new JsonValue(JsonValue.ValueType.array);
 
         // For each Cook, add it to the cooks JsonValue
         for (Cook cook : cooks) {
-            cooksArrayRoot.addChild(cook.serial(map));
+            cooksArrayRoot.addChild(cook.serial());
         }
 
         // JsonValue cooksRoot = new JsonValue(JsonValue.ValueType.object);

@@ -122,6 +122,7 @@ public class Entity {
 
 	/**
 	 * Function called after the screen has been loaded.
+	 * @param textureManager {@link TextureManager} : The {@link TextureManager} to use.
 	 */
 	public void postLoad(TextureManager textureManager) {
 		// Get texture
