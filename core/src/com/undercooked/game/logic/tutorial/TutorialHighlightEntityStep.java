@@ -7,10 +7,23 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.undercooked.game.assets.TextureManager;
 import com.undercooked.game.entity.Entity;
 
+/**
+ * A {@link TutorialStep} for moving to and highlighting an {@link Entity}.
+ */
 public class TutorialHighlightEntityStep extends TutorialFollowEntityStep {
+
+    /** The {@link Entity} to highlight. */
     protected Entity highlightEntity;
+
+    /** The {@link Texture} to use to highlight the {@link Entity}. */
     protected Texture highlightTexture;
 
+    /**
+     * Constructor for the {@link TutorialHighlightEntityStep}.
+     * @param text {@link String} : The text to display
+     * @param textSpeed {@link float} : The number of characters to add per second.
+     * @param highlightEntity {@link Entity} : The {@link Entity} to highlight.
+     */
     public TutorialHighlightEntityStep(String text, float textSpeed, Entity highlightEntity) {
         super(text, textSpeed, highlightEntity);
         this.highlightEntity = highlightEntity;
