@@ -2,7 +2,17 @@ package com.undercooked.game.util.json;
 
 import com.badlogic.gdx.utils.JsonValue;
 
+/**
+ * A value used in a json format to specify a {@link JsonValue}'s value
+ * to be formatted as an {@link Integer}.
+ */
 public class JsonInt extends JsonVal<Integer> {
+
+    /**
+     * Constructor for the class that defaults {@code allowNull} to true.
+     * @param ID {@link String} : The id.
+     * @param value {@link Integer} : The default value to use.
+     */
     public JsonInt(String ID, Integer value) {
         super(ID, value);
     }

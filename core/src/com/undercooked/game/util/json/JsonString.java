@@ -3,8 +3,8 @@ package com.undercooked.game.util.json;
 import com.badlogic.gdx.utils.JsonValue;
 
 /**
- * A value used in a json format to specify a {@link JsonValue} to
- * be formatted to a {@link String}.
+ * A value used in a json format to specify a {@link JsonValue}'s value
+ * to be formatted as a {@link String}.
  */
 public class JsonString extends JsonVal<String> {
     /** If the default {@link #value} should be allowed to be {@code null} or not.*/
@@ -13,7 +13,7 @@ public class JsonString extends JsonVal<String> {
     /**
      * Constructor for the class that defaults {@code allowNull} to true.
      * @param ID {@link String} : The id.
-     * @param value {@link JsonValue.ValueType} : The default value to use.
+     * @param value {@link String} : The default value to use.
      */
     public JsonString(String ID, String value) {
         this(ID, value, true);

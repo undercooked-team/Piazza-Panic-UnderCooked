@@ -43,7 +43,7 @@ public class JsonFormat {
         Array<JsonVal<?>> values = ideal.getValues();
 
         for (int i = 0 ; i < values.size ; i++) {
-            JsonVal jsonVal = values.get(i);
+            JsonVal<?> jsonVal = values.get(i);
             // Check that it has the ID
             if (!json.has(jsonVal.ID)) {
                 // Add the child

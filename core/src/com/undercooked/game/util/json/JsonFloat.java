@@ -2,7 +2,17 @@ package com.undercooked.game.util.json;
 
 import com.badlogic.gdx.utils.JsonValue;
 
+/**
+ * A value used in a json format to specify a {@link JsonValue}'s value
+ * to be formatted as an {@link Float}.
+ */
 public class JsonFloat extends JsonVal<Float> {
+
+    /**
+     * Constructor for the class that defaults {@code allowNull} to true.
+     * @param ID {@link String} : The id.
+     * @param value {@link Float} : The default value to use.
+     */
     public JsonFloat(String ID, Float value) {
         super(ID, value);
     }
