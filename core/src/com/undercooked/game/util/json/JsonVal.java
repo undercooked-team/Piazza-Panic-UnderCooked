@@ -3,7 +3,7 @@ package com.undercooked.game.util.json;
 import com.badlogic.gdx.utils.JsonValue;
 
 /**
- * A value in json used to define how to format a {@link JsonValue}
+ * A value in a json format to define how to format a {@link JsonValue} when
  * using the {@link JsonFormat#formatJson(JsonValue, JsonObject, boolean)}.
  *
  * @param <T> The type of value that the {@link JsonVal} has.
