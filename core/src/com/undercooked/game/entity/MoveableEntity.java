@@ -3,39 +3,100 @@ package com.undercooked.game.entity;
 import com.undercooked.game.map.Map;
 import com.undercooked.game.map.MapManager;
 
+/**
+ * A class for {@link Entity}s that are able to move.
+ */
 public class MoveableEntity extends Entity {
+
+    /** The movement speed of the {@link MoveableEntity}*/
     public float speed;
 
+    /** The movement of the {@link Entity} on the X. */
     public float dirX = 0;
+
+    /** The movement of the {@link Entity} on the Y. */
     public float dirY = 0;
+
+    /** If the last {@link #moveAndCollide(Map, float, float, float)} collided on the X. */
     protected boolean collidedX = false;
+
+    /** If the last {@link #moveAndCollide(Map, float, float, float)} collided on the Y. */
     protected boolean collidedY = false;
 
-    public float moveCalc(float dir) {
-        return dir * MapManager.gridToPos(speed);
+    /**
+     * Calculates the movement distance of the {@link MoveableEntity} on a {@link Map}.
+     *
+     * @param dirMultiplier {@link float} : The direction multiplier of the movement.
+     * @return {@code float} : The distance to move.
+     */
+    public float moveCalc(float dirMultiplier) {
+        return dirMultiplier * MapManager.gridToPos(speed);
     }
 
-    public float moveCalc(float dir, float delta) {
-        return moveCalc(dir) * delta;
+    /**
+     * Calculates the movement distance of the {@link MoveableEntity}
+     * on a {@link Map} over an amount of time.
+     *
+     * @param dirMultiplier {@link float} : The direction multiplier of the movement.
+     * @param delta {@link float} : The time since the last frame.
+     * @return {@code float} : The distance to move.
+     */
+    public float moveCalc(float dirMultiplier, float delta) {
+        return moveCalc(dirMultiplier) * delta;
     }
 
+    /**
+     * Move the {@link MoveableEntity}.
+     *
+     * @param delta {@code float} : The time since the last frame.
+     */
     public void move(float delta) {
         move(dirX, dirY, delta);
     }
 
+    /**
+     * Move the {@link MoveableEntity} a distance x and y over an amount of time.
+     *
+     * @param x {@code float} : The distance to move x.
+     * @param y {@code float} : the distance to move y.
+     * @param delta {@code float} : The time since the last frame.
+     */
     public void move(float x, float y, float delta) {
         pos.x += moveCalc(x, delta);
         pos.y += moveCalc(y, delta);
     }
 
+    /**
+     * Move the {@link MoveableEntity} a distance x and y.
+     *
+     * @param x {@code float} : The distance to move x.
+     * @param y {@code float} : the distance to move y.
+     */
     public void move(float x, float y) {
         pos.x += moveCalc(x);
         pos.y += moveCalc(y);
     }
 
+    /**
+     * Move and collide until either the {@link MoveableEntity} has finished
+     * moving, or until it can't move.
+     *
+     * @param map {@link Map} : The {@link Map} to use for collisions.
+     * @param delta {@link float} : The time the {@link MoveableEntity} has been moving for.
+     */
     public void moveAndCollide(Map map, float delta) {
         moveAndCollide(map, dirX, dirY, delta);
     }
+
+    /**
+     * Move and collide until either the {@link MoveableEntity} has finished
+     * moving, or until it can't move.
+     *
+     * @param x {@code float} : The distance to move x.
+     * @param y {@code float} : the distance to move y.
+     * @param map {@link Map} : The {@link Map} to use for collisions.
+     * @param delta {@link float} : The time the {@link MoveableEntity} has been moving for.
+     */
     public void moveAndCollide(Map map, float x, float y, float delta) {
 
         collidedX = false;
