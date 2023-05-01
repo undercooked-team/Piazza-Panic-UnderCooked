@@ -93,6 +93,10 @@ public class TextureManager {
      *                           {@code false} if not.
      */
     public boolean load(String textureGroup, String path) {
+        // If it's the default texture, it is already loaded.
+        if (path.equals(Constants.DEFAULT_TEXTURE)) {
+            return true;
+        }
         System.out.println("Loading Texture: " + path);
         try {
             // Try to load the Texture
@@ -210,6 +214,10 @@ public class TextureManager {
      * @param texture {@link String} : The texture path to unload.
      */
     public void unloadTexture(String texture) {
+        // If it's the default texture, don't unload it.
+        if (texture.equals(Constants.DEFAULT_TEXTURE)) {
+            return;
+        }
         for (String key : textures.keys()) {
             Array<String> paths = textures.get(key);
             int pathIndex = paths.indexOf(texture, false);
