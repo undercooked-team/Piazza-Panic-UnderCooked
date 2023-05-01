@@ -39,6 +39,6 @@ jobs:
         path: build/reports/jacoco/test/html/
     - name: Upload library JAR
       uses: actions/upload-artifact@v3.1.1
-        with:
-          name: lib.jar
-          path: build/libs/lib.jar
+      with:
+        name: lib.jar
+        path: build/libs/lib.jar
