@@ -99,9 +99,9 @@ public final class Constants {
     /** The default {@link com.badlogic.gdx.graphics.Texture} to use for a floor tile. */
     public static final String DEFAULT_FLOOR_TILE = "<main>:floor/floor_tile.png";
     /** The default {@link com.badlogic.gdx.audio.Music} to load if one fails to load. */
-    public static final String DEFAULT_MUSIC = "game/sounds/frying.mp3";
+    public static final String DEFAULT_MUSIC = "defaults/1-minute-of-silence.mp3";
     /** The default {@link com.badlogic.gdx.audio.Sound} to load if one fails to load. */
-    public static final String DEFAULT_SOUND = "game/sounds/chopping.mp3";
+    public static final String DEFAULT_SOUND = "defaults/default_sound.wav";
 
     // public static final ... DEFAULT_CONTROLS = ...;
 

@@ -3,6 +3,7 @@ package com.undercooked.game.assets;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -84,7 +85,7 @@ public class AudioManager {
             // Load directly into the assetManager so that they can't be
             // unloaded using this class.
             assetManager.load(Constants.DEFAULT_MUSIC, Music.class);
-            assetManager.load(Constants.DEFAULT_SOUND, Music.class);
+            assetManager.load(Constants.DEFAULT_SOUND, Sound.class);
         } catch (GdxRuntimeException e) {
             // Of course, make sure it actually doesn't crash if they can't load
             System.out.println("Couldn't load default music.");
@@ -158,6 +159,11 @@ public class AudioManager {
      *         {@code false} if it was not.
      */
     public boolean loadMusic(String path, String musicVolumeGroup) {
+        // If it's the default music or sound, just return true as they're
+        // already loaded
+        if (path.equals(Constants.DEFAULT_MUSIC) || path.equals(Constants.DEFAULT_SOUND)) {
+            return true;
+        }
         try {
             assetManager.load(path, Music.class);
         } catch (GdxRuntimeException e) {
@@ -192,7 +198,7 @@ public class AudioManager {
      */
     public boolean loadMusicAsset(String path, String musicVolumeGroup) {
         if (path == null) {
-            return loadMusic(Constants.DEFAULT_SOUND, musicVolumeGroup);
+            return false;
         }
         return loadMusic(FileControl.getAssetPath(path, "sounds"), musicVolumeGroup);
     }
@@ -205,6 +211,10 @@ public class AudioManager {
      * @param path {@link String} : The path to unload.
      */
     public void unloadMusic(String path) {
+        // If it's the default music or sound, don't unload
+        if (path.equals(Constants.DEFAULT_MUSIC) || path.equals(Constants.DEFAULT_SOUND)) {
+            return;
+        }
         // Only go through the unload process if it's actually loaded
         if (assetManager.isLoaded(path)) {
             // Go through all the volumeGroups and remove the path
@@ -272,6 +282,11 @@ public class AudioManager {
      *         {@code false} if it was not.
      */
     public boolean loadSound(String path, String soundVolumeGroup) {
+        // If it's the default music or sound, just return true as they're
+        // already loaded
+        if (path.equals(Constants.DEFAULT_MUSIC) || path.equals(Constants.DEFAULT_SOUND)) {
+            return true;
+        }
         // Try to load the sound
         try {
             assetManager.load(path, Sound.class);
