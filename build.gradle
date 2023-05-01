@@ -25,6 +25,7 @@ allprojects {
         ashleyVersion = '1.7.4'
         aiVersion = '1.8.2'
         gdxControllersVersion = '2.2.1'
+        checkstyleVersion = '10.4'
     }
 
     repositories {
@@ -41,7 +42,6 @@ allprojects {
 project(":desktop") {
     apply plugin: "java-library"
     apply plugin:  "jacoco"
-    apply plugin: "checkstyle"
 
     dependencies {
         implementation project(":core")
