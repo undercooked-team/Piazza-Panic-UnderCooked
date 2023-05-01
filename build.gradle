@@ -55,17 +55,29 @@ project(":core") {
     apply plugin:  "jacoco"
     apply plugin: "checkstyle"
     
+    def checkstyleVersion = 10.4
+    
     dependencies {
+        
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+        checkstyleRules(".compuppycrawl.tools:checkstyle:${checkstyleVersion}")
+        {
+            transitive = false
+        }
+    }
+    
+    checkstyle
+    {
+        toolversion "${checkstyleVersion}"
+    }
+    configurations
+    {
+        checkstyleRules
     }
 }
-def checkstyleVersion = 10.4
-checkstyle
-{
-    toolversion "${checkstyleVersion}"
-}
+
 
 project(":tests") {
     apply plugin: "java"
