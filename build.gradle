@@ -82,7 +82,7 @@ project(":core") {
     checkstyle
     {
         toolVersion "${checkstyleVersion}"
-        config = resource.text.fromArchiveEntry(configurations.checkstyleRules, 'google_checks.xml')
+        config = resources.text.fromArchiveEntry(configurations.checkstyleRules, 'google_checks.xml')
     }
 }
 
