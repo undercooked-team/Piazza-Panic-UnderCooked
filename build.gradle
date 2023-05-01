@@ -25,7 +25,7 @@ allprojects {
         ashleyVersion = '1.7.4'
         aiVersion = '1.8.2'
         gdxControllersVersion = '2.2.1'
-        checkstyleVersion = '10.4'
+        
     }
 
     repositories {
@@ -58,7 +58,7 @@ project(":core") {
     def checkstyleVersion = '10.4'
     checkstyle
     {
-        toolversion "${checkstyleVersion}"
+        toolVersion "${checkstyleVersion}"
     }
     
     configurations
@@ -71,7 +71,7 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-ai:$aiVersion"
-        checkstyleRules(".compuppycrawl.tools:checkstyle:${checkstyleVersion}")
+        checkstyleRules("com.puppycrawl.tools:checkstyle:${checkstyleVersion}")
         {
             transitive = false
         }
@@ -81,7 +81,7 @@ project(":core") {
     
     checkstyle
     {
-        toolversion "${checkstyleVersion}"
+        toolVersion "${checkstyleVersion}"
         config = resource.text.fromArchiveEntry(configurations.checkstyleRules, 'google_checks.xml')
     }
 }
