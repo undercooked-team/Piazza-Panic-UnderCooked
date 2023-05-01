@@ -53,7 +53,7 @@ public class AudioManager {
 
     /**
      * Constructor to set up the Maps for music, sound and volumes.
-     * 
+     *
      * @param assetManager {@link AssetManager} : The {@link AssetManager} to use.
      */
     public AudioManager(AssetManager assetManager) { // , SoundStateChecker soundStateChecker) {
@@ -94,7 +94,7 @@ public class AudioManager {
 
     /**
      * Returns whether the asset path is or is not loaded.
-     * 
+     *
      * @param path {@link String} : The path to the asset.
      * @return {@code boolean} : {@code true} if it is loaded,
      *         {@code false} if it is not.
@@ -106,7 +106,7 @@ public class AudioManager {
     /**
      * Returns the {@link Music} if it has been loaded,
      * or the default music if it has not.
-     * 
+     *
      * @param path {@link String} : The link to the {@link Music} file.
      * @return {@link Music} : The {@link Music} if it has been loaded,
      *         or the {@link Constants#DEFAULT_MUSIC} file
@@ -131,7 +131,7 @@ public class AudioManager {
     /**
      * Returns the {@link Music} asset if it has been loaded,
      * or the default music if it has not.
-     * 
+     *
      * @param path {@link String} : The asset path to the {@link Music} file.
      * @return {@link Music} : The {@link Music} if it has been loaded,
      *         or the {@link Constants#DEFAULT_MUSIC} file
@@ -147,7 +147,7 @@ public class AudioManager {
     /**
      * Adds the {@link Music} file at the {@code path} to be
      * loaded by the {@link AssetManager}.
-     * 
+     *
      * @param path             {@link String} : The path to the music.
      * @param musicVolumeGroup {@link String} : The volume group for the
      *                         {@link Music}
@@ -180,7 +180,7 @@ public class AudioManager {
     /**
      * Adds the {@link Music} file at the {@code path} to be
      * loaded by the {@link AssetManager}.
-     * 
+     *
      * @param path             {@link String} : The asset path to the music.
      * @param musicVolumeGroup {@link String} : The volume group for the
      *                         {@link Music}
@@ -201,7 +201,7 @@ public class AudioManager {
      * Unloads the {@link Music} {@code path} from the {@link AssetManager}, and
      * removes it from
      * the volume groups.
-     * 
+     *
      * @param path {@link String} : The path to unload.
      */
     public void unloadMusic(String path) {
@@ -220,7 +220,7 @@ public class AudioManager {
      * Unloads the {@link Sound} {@code path} from the {@link AssetManager}, and
      * removes it from
      * the volume groups.
-     * 
+     *
      * @param path {@link String} : The path to unload.
      * @return {@link Sound} : The {@link Sound} if it has been loaded,
      *         or the {@link Constants#DEFAULT_MUSIC} file
@@ -245,7 +245,7 @@ public class AudioManager {
     /**
      * Returns the {@link Sound} asset if it has been loaded,
      * or the default music if it has not.
-     * 
+     *
      * @param path {@link String} : The asset path to the {@link Sound} file.
      * @return {@link Sound} : The {@link Sound} if it has been loaded,
      *         or the {@link Constants#DEFAULT_MUSIC} file
@@ -261,7 +261,7 @@ public class AudioManager {
     /**
      * Adds the {@link Sound} file at the {@code path} to be
      * loaded by the {@link AssetManager}.
-     * 
+     *
      * @param path             {@link String} : The path to the music.
      * @param soundVolumeGroup {@link String} : The volume group for the
      *                         {@link Sound}
@@ -296,7 +296,7 @@ public class AudioManager {
     /**
      * Adds the {@link Sound} file at the {@code path} to be
      * loaded by the {@link AssetManager}.
-     * 
+     *
      * @param path             {@link String} : The asset path to the music.
      * @param soundVolumeGroup {@link String} : The volume group for the
      *                         {@link Sound}
@@ -323,7 +323,7 @@ public class AudioManager {
     /**
      * Update all of the {@link Music}s' volumes for the group specified to the
      * value set in {@link #setMusicVolume(float, String)}.
-     * 
+     *
      * @param musicVolumeGroup {@link String} : The group to update the volume of.
      */
     public void updateMusicVolumes(String musicVolumeGroup) {
@@ -346,7 +346,7 @@ public class AudioManager {
 
     /**
      * Set the volume of the {@link Music}s for the specified volume group.
-     * 
+     *
      * @param volume           {@link float} : The volume to set it to (0.0 - 1.0).
      * @param musicVolumeGroup {@link String} : The volume group to set it for.
      */
@@ -365,7 +365,7 @@ public class AudioManager {
 
     /**
      * Set the volume of the {@link Sound}s for the specified volume group.
-     * 
+     *
      * @param volume           {@link float} : The volume to set it to (0.0 - 1.0).
      * @param soundVolumeGroup {@link String} : The volume group to set it for.
      */
@@ -385,7 +385,7 @@ public class AudioManager {
 
     /**
      * Unloads all paths in an audio group from the {@link AssetManager}.
-     * 
+     *
      * @param audioGroup  A {@link String} of the {@code audioGroup}'s name.
      * @param forgetGroup {@code boolean} for if the group should be deleted
      *                    from the map afterwards or not
@@ -421,7 +421,7 @@ public class AudioManager {
 
     /**
      * Unload all of the {@link Music} in the specified music volume group.
-     * 
+     *
      * @param musicVolumeGroup {@link String} : The music volume group to unload.
      */
     public void unload(String musicVolumeGroup) {
