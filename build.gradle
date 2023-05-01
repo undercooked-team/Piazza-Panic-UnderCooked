@@ -56,6 +56,15 @@ project(":core") {
     apply plugin: "checkstyle"
     
     def checkstyleVersion = 10.4
+    checkstyle
+    {
+        toolversion "${checkstyleVersion}"
+    }
+    
+    configurations
+    {
+        checkstyleRules
+    }
     
     dependencies {
         
@@ -68,13 +77,12 @@ project(":core") {
         }
     }
     
+    
+    
     checkstyle
     {
         toolversion "${checkstyleVersion}"
-    }
-    configurations
-    {
-        checkstyleRules
+        config = resource.text.fromArchiveEntry(configurations.checkstyleRules, 'google_checks.xml')
     }
 }
 
