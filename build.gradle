@@ -55,7 +55,7 @@ project(":core") {
     apply plugin:  "jacoco"
     apply plugin: "checkstyle"
     
-    def checkstyleVersion = 10.4
+    def checkstyleVersion = '10.4'
     checkstyle
     {
         toolversion "${checkstyleVersion}"
