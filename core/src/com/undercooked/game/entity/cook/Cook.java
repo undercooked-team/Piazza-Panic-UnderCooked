@@ -50,19 +50,28 @@ public class Cook extends MoveableEntity {
 
 	/** The {@link Item}s that the {@link Cook} is currently holding. */
 	public ItemStack heldItems;
-	
+
 	private final Map map;
 
 	/** Multiplier for the speed of the {@link Cook}. */
 	protected float speedMultiplier;
 
-	/** The {@link Listener} to tell when the {@link Cook} is trying to serve an {@link Item}. */
+	/**
+	 * The {@link Listener} to tell when the {@link Cook} is trying to serve an
+	 * {@link Item}.
+	 */
 	protected Listener<Cook> serveListener;
 
-	/** The {@link Listener} to tell when the {@link Cook} interacts with a register {@link MapCell}. */
+	/**
+	 * The {@link Listener} to tell when the {@link Cook} interacts with a register
+	 * {@link MapCell}.
+	 */
 	protected Listener<MapCell> interactRegisterListener;
 
-	/** The {@link Listener} to tell when the {@link Cook} interacts with a phone {@link MapCell}. */
+	/**
+	 * The {@link Listener} to tell when the {@link Cook} interacts with a phone
+	 * {@link MapCell}.
+	 */
 	protected Listener<MapCell> interactPhoneListener;
 
 	/** The {@link Listener} to tell when the {@link Cook} buys something. */
@@ -73,11 +82,13 @@ public class Cook extends MoveableEntity {
 
 	/**
 	 * Cook entity constructor
-	 * 
-	 * @param pos {@link Vector2} : The position of the {@link Cook}.
-	 * @param cookNum {@link int} : The number of the cook {@link Texture} to use.
-	 * @param textureManager {@link TextureManager} : The {@link TextureManager} to use.
-	 * @param map {@link Map} : The {@link Map} to use for collisions.
+	 *
+	 * @param pos            {@link Vector2} : The position of the {@link Cook}.
+	 * @param cookNum        {@link int} : The number of the cook {@link Texture} to
+	 *                       use.
+	 * @param textureManager {@link TextureManager} : The {@link TextureManager} to
+	 *                       use.
+	 * @param map            {@link Map} : The {@link Map} to use for collisions.
 	 */
 	public Cook(Vector2 pos, int cookNum, TextureManager textureManager, Map map) {
 		super();
@@ -296,7 +307,7 @@ public class Cook extends MoveableEntity {
 
 	/**
 	 * Update the {@link Cook}.
-	 * 
+	 *
 	 * @param delta {@code float} : The time since the last frame.
 	 */
 	public void update(float delta) {
@@ -307,7 +318,7 @@ public class Cook extends MoveableEntity {
 		float finalSpeedMult = speedMultiplier;
 		if (heldItems.size() > holdLimit) {
 			// Decrease speed by the number of items held, up to a max of 4 times
-			finalSpeedMult -= (0.15f * Math.min(4,heldItems.size()-holdLimit));
+			finalSpeedMult -= (0.15f * Math.min(4, heldItems.size() - holdLimit));
 		}
 
 		// Move
@@ -373,7 +384,7 @@ public class Cook extends MoveableEntity {
 
 	/**
 	 * Draw the top half of the {@link Cook} at the location provided.
-	 * 
+	 *
 	 * @param batch {@link SpriteBatch} : The {@link SpriteBatch} to use.
 	 * @param x     {@code float} : The {@code x} position to draw at.
 	 * @param y     {@code float} : The {@code y} position to draw at.
@@ -422,7 +433,7 @@ public class Cook extends MoveableEntity {
 
 	/**
 	 * Set the texture to draw the {@link Cook}.
-	 * 
+	 *
 	 * @param path {@link String} : The path to the {@link Texture}.
 	 */
 	private void setWalkTexture(String path) {
@@ -435,7 +446,7 @@ public class Cook extends MoveableEntity {
 
 	/**
 	 * Set specific walk frames
-	 * 
+	 *
 	 * @param row {@code int} : The row on the {@link #spriteSheet}.
 	 */
 	private void setWalkFrames(int row) {
@@ -485,7 +496,7 @@ public class Cook extends MoveableEntity {
 
 	/**
 	 * @return {@link MapCell} : The current {@link MapCell} interaction target
-	 * 							 of the {@link Cook}.
+	 *         of the {@link Cook}.
 	 */
 	public MapCell getInteractTarget() {
 		return interactTarget;
@@ -493,9 +504,9 @@ public class Cook extends MoveableEntity {
 
 	/**
 	 * @return {@link Station} : The current {@link Station} interaction target
-	 * 							 of the {@link Cook}.
-	 *                           Returns {@code null}, even if {@link #getInteractTarget()}
-	 *                           does not, if the {@link Station} is an invalid target.
+	 *         of the {@link Cook}.
+	 *         Returns {@code null}, even if {@link #getInteractTarget()}
+	 *         does not, if the {@link Station} is an invalid target.
 	 */
 	public Station getStationTarget() {
 		return stationTarget;
@@ -503,9 +514,11 @@ public class Cook extends MoveableEntity {
 
 	/**
 	 * Returns whether the {@link Cook} can hold a number more {@link Item}s.
+	 * 
 	 * @param number {@code int} : The number of check.
-	 * @return {@code boolean} : {@code true} if the {@link Cook} can hold the {@link Item},
-	 * 							 {@code false} if not.
+	 * @return {@code boolean} : {@code true} if the {@link Cook} can hold the
+	 *         {@link Item},
+	 *         {@code false} if not.
 	 */
 	public boolean canAddItems(int number) {
 		if (number <= 0) {
@@ -517,8 +530,10 @@ public class Cook extends MoveableEntity {
 
 	/**
 	 * Returns whether the {@link Cook} can hold at least one more {@link Item}s.
-	 * @return {@code boolean} : {@code true} if the {@link Cook} can hold the {@link Item},
-	 * 							 {@code false} if not.
+	 * 
+	 * @return {@code boolean} : {@code true} if the {@link Cook} can hold the
+	 *         {@link Item},
+	 *         {@code false} if not.
 	 */
 	public boolean canAddItem() {
 		return canAddItems(1);
@@ -530,7 +545,7 @@ public class Cook extends MoveableEntity {
 	 *
 	 * @param item {@link Item} : The {@link Item} to add.
 	 * @return {@code boolean} : {@code true} if it was able to be added,
-	 * 							 {@code false} if it was not.
+	 *         {@code false} if it was not.
 	 */
 	public boolean addItem(Item item) {
 		// Continue only if it can add it
@@ -547,7 +562,7 @@ public class Cook extends MoveableEntity {
 	 * Take an item from the top of the {@link Cook}'s held items.
 	 *
 	 * @return {@link Item} : The {@link Item} at the top of the {@link ItemStack},
-	 * 						  or {@code null} if there is none.
+	 *         or {@code null} if there is none.
 	 */
 	public Item takeItem() {
 		// Continue only if the Cook has an item to remove
@@ -571,7 +586,8 @@ public class Cook extends MoveableEntity {
 	/**
 	 * Locks the {@link Cook} to a {@link Station}.
 	 *
-	 * @param station {@link Station} : The {@link Station} to lock the {@link Cook} to.
+	 * @param station {@link Station} : The {@link Station} to lock the {@link Cook}
+	 *                to.
 	 */
 	public void lockToStation(Station station) {
 		// If not already locked to a Station
