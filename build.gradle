@@ -40,7 +40,7 @@ allprojects {
 
 project(":desktop") {
     apply plugin: "java-library"
-
+    apply plugin:  "jacoco"
 
     dependencies {
         implementation project(":core")
@@ -51,7 +51,7 @@ project(":desktop") {
 
 project(":core") {
     apply plugin: "java-library"
-
+    apply plugin:  "jacoco"
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
