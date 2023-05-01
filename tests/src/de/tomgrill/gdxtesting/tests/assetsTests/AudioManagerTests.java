@@ -128,20 +128,18 @@ public class AudioManagerTests {
 				assetManager.isLoaded(Constants.DEFAULT_SOUND, Music.class));
 
 		// ! FIXME: Below tests are not working
-		// audioManager.unloadMusic(Constants.DEFAULT_SOUND);
-		// assertTrue("Should succeed loading the default sound",
-		// audioManager.loadMusicAsset("", ""));
-		// assetManager.finishLoading();
-		// assertTrue("Default sound should be present as you can't load a blank string
-		// input, which is an invalid input",
-		// assetManager.isLoaded(Constants.DEFAULT_SOUND, Music.class));
+		audioManager.unloadMusic(Constants.DEFAULT_SOUND);
+		assertTrue("Should succeed loading the default sound",
+				audioManager.loadMusicAsset("", ""));
+		assetManager.finishLoading();
+		assertTrue("Default sound should be present as you can't load a blank string input, which is an invalid input",
+				assetManager.isLoaded(Constants.DEFAULT_SOUND, Music.class));
 
-		// audioManager.unloadMusic(Constants.DEFAULT_SOUND);
-		// assertTrue("Should succeed loading the default sound",
-		// audioManager.loadMusicAsset("error-Im not a music :D", ""));
-		// assetManager.finishLoading();
-		// assertTrue("Default sound should be present as the input is not a valid path
-		// to music",
-		// assetManager.isLoaded(Constants.DEFAULT_SOUND, Music.class));
+		audioManager.unloadMusic(Constants.DEFAULT_SOUND);
+		assertTrue("Should succeed loading the default sound",
+				audioManager.loadMusicAsset("error-Im not a music :D", ""));
+		assetManager.finishLoading();
+		assertTrue("Default sound should be present as the input is not a valid path to music",
+				assetManager.isLoaded(Constants.DEFAULT_SOUND, Music.class));
 	}
 }
