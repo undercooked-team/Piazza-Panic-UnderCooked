@@ -2,17 +2,16 @@ package de.tomgrill.gdxtesting.tests.foodTests;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.undercooked.game.assets.TextureManager;
+import com.undercooked.game.food.Item;
 import de.tomgrill.gdxtesting.GdxTestRunner;
-
-import org.junit.*;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.undercooked.game.files.FileControl;
-import com.undercooked.game.food.Item;
-
-import org.junit.runner.RunWith;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(GdxTestRunner.class)
 // ! TESTS ARE RUN IN ALPHABETICAL ORDER !

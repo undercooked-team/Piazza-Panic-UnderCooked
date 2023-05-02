@@ -1,27 +1,23 @@
 package de.tomgrill.gdxtesting.tests.assetsTests;
 
-import static org.junit.Assert.*;
-
-import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.AudioDevice;
-import com.badlogic.gdx.audio.AudioRecorder;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.backends.headless.mock.audio.MockAudio;
-import com.badlogic.gdx.backends.headless.mock.audio.MockAudioDevice;
-import com.badlogic.gdx.backends.headless.mock.audio.MockMusic;
-import com.badlogic.gdx.files.FileHandle;
-import org.junit.*;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
-
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.backends.headless.mock.audio.MockAudio;
+import com.badlogic.gdx.backends.headless.mock.audio.MockMusic;
+import com.badlogic.gdx.files.FileHandle;
 import com.undercooked.game.assets.AudioManager;
 import com.undercooked.game.files.FileControl;
 import com.undercooked.game.util.Constants;
-
 import de.tomgrill.gdxtesting.GdxTestRunner;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
+
+import static org.junit.Assert.*;
 
 @RunWith(GdxTestRunner.class)
 // ! TESTS ARE RUN IN ALPHABETICAL ORDER !
@@ -36,6 +32,8 @@ public class AudioManagerTests {
 
 	@BeforeClass
 	public static void setup() {
+		// Update the mock audio of Gdx to allow modifying the
+		// volumes of the music.
 		Gdx.audio = new MockAudio() {
 			@Override
 			public Music newMusic(FileHandle file) {

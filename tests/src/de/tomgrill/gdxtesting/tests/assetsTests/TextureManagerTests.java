@@ -1,18 +1,17 @@
 package de.tomgrill.gdxtesting.tests.assetsTests;
 
-import static org.junit.Assert.*;
-
-import com.badlogic.gdx.graphics.Texture;
-
-import org.junit.*;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
-
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Texture;
 import com.undercooked.game.assets.TextureManager;
 import com.undercooked.game.util.Constants;
-
 import de.tomgrill.gdxtesting.GdxTestRunner;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
+
+import static org.junit.Assert.assertTrue;
 
 @RunWith(GdxTestRunner.class)
 // ! TESTS ARE RUN IN ALPHABETICAL ORDER !

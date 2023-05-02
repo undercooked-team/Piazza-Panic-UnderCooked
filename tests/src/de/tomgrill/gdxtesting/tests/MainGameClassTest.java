@@ -16,15 +16,10 @@
 
 package de.tomgrill.gdxtesting.tests;
 
-import static org.junit.Assert.*;
-
+import com.undercooked.game.MainGameClass;
+import de.tomgrill.gdxtesting.GdxTestRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import com.badlogic.gdx.Gdx;
-import com.undercooked.game.MainGameClass;
-
-import de.tomgrill.gdxtesting.GdxTestRunner;
 
 @RunWith(GdxTestRunner.class)
 public class MainGameClassTest {

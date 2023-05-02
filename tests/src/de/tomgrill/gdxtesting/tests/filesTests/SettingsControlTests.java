@@ -16,20 +16,20 @@
 
 package de.tomgrill.gdxtesting.tests.filesTests;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-
-import org.junit.*;
-import org.junit.runners.MethodSorters;
-import org.junit.runner.RunWith;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.JsonValue;
 import com.undercooked.game.files.FileControl;
 import com.undercooked.game.files.SettingsControl;
-
 import de.tomgrill.gdxtesting.GdxTestRunner;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
+
+import java.io.File;
+
+import static org.junit.Assert.*;
 
 @RunWith(GdxTestRunner.class)
 // ! TESTS ARE RUN IN ALPHABETICAL ORDER !

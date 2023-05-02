@@ -16,9 +16,9 @@
 
 package de.tomgrill.gdxtesting.tests.logicTests;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class GameLogicTest {
 
