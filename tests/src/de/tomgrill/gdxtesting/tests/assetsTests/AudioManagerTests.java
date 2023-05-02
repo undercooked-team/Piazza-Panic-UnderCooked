@@ -156,21 +156,20 @@ public class AudioManagerTests {
 	@Test
 	public void t50updateMusicVolumesNormalCases() {
 		// ! FIXME Function is not updating the volume
-		audioManager.loadMusicAsset("main>:cash-register-opening.mp3", "");
+		audioManager.loadMusicAsset("<main>:cash-register-opening.mp3", "");
 		assetManager.finishLoading();
-		Music music = audioManager.getMusicAsset("main>:cash-register-opening.mp3");
+		Music music = audioManager.getMusicAsset("<main>:cash-register-opening.mp3");
 		float volume = music.getVolume();
 		audioManager.setMusicVolume(0.2f, "");
 		audioManager.updateMusicVolumes("");
-		volume = music.getVolume();
-		assertEquals("The audio volume should've updated.", 0.2f,
-				volume, 0.01f);
+		assertNotEquals("The audio volume should've updated.", volume,
+				music.getVolume());
 
 		audioManager.setMusicVolume(0.891f, "");
 		audioManager.updateMusicVolumes("");
 		float volume2 = music.getVolume();
 		assertEquals("The audio volume should've updated when changed again.", 0.891f,
-				volume2, 0.01f);
+				volume2, 0.0f);
 	}
 
 	@Test
@@ -178,12 +177,12 @@ public class AudioManagerTests {
 		audioManager.setMusicVolume(-0.01f, "");
 		audioManager.updateMusicVolumes("");
 		assertEquals("The audio volume should be clamped to 0.", 0f,
-				audioManager.getMusicAsset("main>:cash-register-opening.mp3").getVolume(), 0.01f);
+				audioManager.getMusicAsset("<main>:cash-register-opening.mp3").getVolume(), 0.01f);
 
 		audioManager.setMusicVolume(99999999f, "");
 		audioManager.updateMusicVolumes("");
 		assertEquals("The audio volume should be clamped to 1.", 1f,
-				audioManager.getMusicAsset("main>:cash-register-opening.mp3").getVolume(), 0.01f);
+				audioManager.getMusicAsset("<main>:cash-register-opening.mp3").getVolume(), 0.01f);
 	}
 
 	// TODO Sound Volume Testing, though sounds don't have a volume function

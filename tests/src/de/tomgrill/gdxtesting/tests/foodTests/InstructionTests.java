@@ -24,7 +24,7 @@ public class InstructionTests {
 	static Instruction instruction;
 	static AssetManager assetManager;
 	static TextureManager textureManager;
-	static String texturePath = "<main>:lettuce.png";
+	static String texturePath = "<main>:item/lettuce.png";
 	static String text = "This is some lettuce.";
 	static JsonValue instructionRoot;
 
@@ -45,11 +45,10 @@ public class InstructionTests {
 	public void t00_postLoad() {
 		// Load the texture
 		instruction.load(textureManager, "items");
+		// Load the asset manager
+		assetManager.finishLoading();
 		// Post load the texture
 		instruction.postLoad(textureManager);
-		// ! CRASH
-		assetManager.finishLoading();
-		// ! ###
 		// Check if the texture is not null
 		assertNotNull("Instruction texture didn't load", instruction.getTexture());
 	}

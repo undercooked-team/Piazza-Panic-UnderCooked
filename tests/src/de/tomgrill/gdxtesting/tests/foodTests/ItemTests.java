@@ -1,5 +1,7 @@
 package de.tomgrill.gdxtesting.tests.foodTests;
 
+import com.badlogic.gdx.assets.AssetManager;
+import com.undercooked.game.assets.TextureManager;
 import de.tomgrill.gdxtesting.GdxTestRunner;
 
 import org.junit.*;
@@ -19,20 +21,28 @@ import static org.junit.Assert.*;
 public class ItemTests {
 
 	static Item item;
-	static String itemID = "<main>:lettuce.png";
-	static String texturePath = FileControl.getAssetPath(itemID, "items");
+	static AssetManager assetManager;
+	static TextureManager textureManager;
+	static String itemID = "<main>:item/lettuce.png";
+	static String texturePath = itemID;
 	static String name = "Lettuce";
 	static int value = 1;
 
 	@BeforeClass
 	public static void setup() {
+		// Set up variables
 		item = new Item(itemID, name, texturePath, value);
+		assetManager = new AssetManager();
+		textureManager = new TextureManager(assetManager);
+		// Load the item's texture
+		textureManager.loadAsset("items", texturePath);
+		assetManager.finishLoading();
 	}
 
 	@Test
 	public void t00_updateSprite() {
 		// Update the sprite
-		item.updateSprite(new Texture(texturePath));
+		item.updateSprite(textureManager.getAsset(item.getTexturePath()));
 		// Check if the sprite is not null
 		assertNotNull("Item sprite didn't update", item.sprite);
 	}
