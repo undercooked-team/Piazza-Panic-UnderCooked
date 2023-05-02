@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.JsonValue;
 import com.undercooked.game.assets.AudioManager;
 import com.undercooked.game.files.FileControl;
@@ -46,59 +47,13 @@ public class AudioManagerTests {
 	}
 
 	@Test
-	public void t10TestAssetLoaded() {
-		/*
-		 * assertTrue("Should be true as it is a default music",
-		 * audioManager.assetLoaded("<main>:frying.mp3"));
-		 * assertTrue("Should be true as it is a default music",
-		 * audioManager.assetLoaded("<main>:chopping.mp3"));
-		 */
-	}
-
-	@Test
-	public void t20getMusicNormalCase() {
-		Music music = audioManager.getMusic(Constants.DEFAULT_MUSIC);
-		assertEquals("Should be true as it is a default music", defaultMusic, music);
-		Sound sound = audioManager.getSound(Constants.DEFAULT_SOUND);
-		assertEquals("Should be true as it is a default sound", defaultSound, sound);
-	}
-
-	@Test
-	public void t21getMusicErrorCases() {
-		Music music = audioManager.getMusic(null);
-		assertEquals("Should be defaultMusic as this is a null input", defaultMusic, music);
-		Music music2 = audioManager.getMusic("");
-		assertEquals("Should be defaultMusic as this is a blank string input", defaultMusic, music2);
-		Music music3 = audioManager.getMusic("error");
-		assertEquals("Should be defaultMusic as this is an invalid input", defaultMusic, music3);
-	}
-
-	@Test
-	public void t30getMusicAssetNormalCase() {
-		Music music = audioManager.getMusicAsset("<main>:frying.mp3");
-		assertEquals("Should be true as it is a default music", defaultMusic, music);
-		Sound sound = audioManager.getSoundAsset("<main>:chopping.mp3");
-		assertEquals("Should be true as it is a default sound", defaultSound, sound);
-	}
-
-	@Test
-	public void t33getMusicAssetErrorCases() {
-		Music music = audioManager.getMusic(null);
-		assertEquals("Should be defaultMusic as this is a null input", defaultMusic, music);
-		Music music2 = audioManager.getMusic("");
-		assertEquals("Should be defaultMusic as this is a blank string input", defaultMusic, music2);
-		Music music3 = audioManager.getMusic("error");
-		assertEquals("Should be defaultMusic as this is an invalid input", defaultMusic, music3);
-	}
-
-	@Test
-	public void t40loadMusicAsset() {
+	public void t10loadMusicAsset() {
 		assertNotEquals("Did not load music", defaultMusic,
 				audioManager.loadMusicAsset("<main>:cash-register-opening.mp3", ""));
 	}
 
 	@Test
-	public void t41unloadMusicNormalCase() {
+	public void t11unloadMusicNormalCase() {
 		String musicPath = FileControl.toPath("<main>:cash-register-opening.mp3", "sounds");
 		audioManager.unloadMusic(musicPath);
 		assertFalse("Music is still loaded when it should've unloaded",
@@ -106,7 +61,7 @@ public class AudioManagerTests {
 	}
 
 	@Test
-	public void t42unloadMusicErrorCases() {
+	public void t12unloadMusicErrorCases() {
 		// Try to unload a music that is not loaded
 		String musicPath = FileControl.toPath("<main>:cash-register-opening.mp3", "sounds");
 		// Ensure that the functions below don't crash the program
@@ -115,18 +70,14 @@ public class AudioManagerTests {
 	}
 
 	@Test
-	public void t43loadMusicAssetErrorCases() {
+	public void t13loadMusicAssetErrorCases() {
 		// Ensure that the default sound is loaded first, otherwise something has gone
 		// wrong in testing
 		assertTrue(
 				"Something in testing has gone wrong. Default sound is not loaded when nothing should've unloaded it.",
 				assetManager.isLoaded(Constants.DEFAULT_SOUND, Sound.class));
 
-		// Unload the default music asset first, since we're testing that the default
-		// music gets loaded by the erroneous inputs
-		audioManager.unloadMusic(Constants.DEFAULT_SOUND);
-		assertTrue("Should succeed loading the default sound", audioManager.loadMusicAsset(null, ""));
-		assetManager.finishLoading();
+		assertFalse("Should succeed loading the default sound", audioManager.loadMusicAsset(null, ""));
 		assertTrue("Default sound should be present as you can't load a null input",
 				assetManager.isLoaded(Constants.DEFAULT_SOUND, Sound.class));
 
@@ -149,11 +100,74 @@ public class AudioManagerTests {
 	}
 
 	@Test
+	public void t20TestAssetLoaded() {
+		audioManager.loadMusicAsset("<main>:frying.mp3", "");
+		assetManager.finishLoading();
+
+		assertTrue("Should be true as it is a default music",
+				audioManager.assetLoaded("<main>:frying.mp3"));
+	}
+
+	@Test
+	public void t30getMusicNormalCase() {
+		Music music = audioManager.getMusic(Constants.DEFAULT_MUSIC);
+		assertEquals("Should be true as it is a default music", defaultMusic, music);
+		Sound sound = audioManager.getSound(Constants.DEFAULT_SOUND);
+		assertEquals("Should be true as it is a default sound", defaultSound, sound);
+	}
+
+	@Test
+	public void t31getMusicErrorCases() {
+		Music music = audioManager.getMusic(null);
+		assertEquals("Should be defaultMusic as this is a null input", defaultMusic, music);
+		Music music2 = audioManager.getMusic("");
+		assertEquals("Should be defaultMusic as this is a blank string input", defaultMusic, music2);
+		Music music3 = audioManager.getMusic("error");
+		assertEquals("Should be defaultMusic as this is an invalid input", defaultMusic, music3);
+	}
+
+	@Test
+	public void t40getMusicAssetNormalCase() {
+		audioManager.loadMusicAsset("<main>:frying.mp3", "");
+		audioManager.loadSoundAsset("<main>:chopping.mp3", "");
+		assetManager.finishLoading();
+		Music music = audioManager.getMusicAsset("<main>:frying.mp3");
+		assertEquals("Should be true as it is a default music",
+				assetManager.get(FileControl.toPath("<main>:frying.mp3", "sounds"), Music.class), music);
+		Sound sound = audioManager.getSoundAsset("<main>:chopping.mp3");
+		assertEquals("Should be true as it is a default sound", defaultSound, sound);
+	}
+
+	@Test
+	public void t41getMusicAssetErrorCases() {
+		Music music = audioManager.getMusic(null);
+		assertEquals("Should be defaultMusic as this is a null input", defaultMusic, music);
+		Music music2 = audioManager.getMusic("");
+		assertEquals("Should be defaultMusic as this is a blank string input", defaultMusic, music2);
+		Music music3 = audioManager.getMusic("error");
+		assertEquals("Should be defaultMusic as this is an invalid input", defaultMusic, music3);
+	}
+
+	@Test
 	public void t50updateMusicVolumes() {
 		audioManager.loadMusicAsset("main>:cash-register-opening.mp3", "");
+		assetManager.finishLoading();
 		audioManager.setMusicVolume(0.2f, "");
 		audioManager.updateMusicVolumes("");
 		assertEquals("The audio volume should've updated.", 0.2f,
+				audioManager.getMusicAsset("main>:cash-register-opening.mp3").getVolume(), 0.01f);
+	}
+
+	@Test
+	public void t51updateMusicVolumesErrorCases() {
+		audioManager.setMusicVolume(-0.01f, "");
+		audioManager.updateMusicVolumes("");
+		assertEquals("The audio volume should be clamped to 0.", 0f,
+				audioManager.getMusicAsset("main>:cash-register-opening.mp3").getVolume(), 0.01f);
+
+		audioManager.setMusicVolume(99999999f, "");
+		audioManager.updateMusicVolumes("");
+		assertEquals("The audio volume should be clamped to 1.", 1f,
 				audioManager.getMusicAsset("main>:cash-register-opening.mp3").getVolume(), 0.01f);
 	}
 }
