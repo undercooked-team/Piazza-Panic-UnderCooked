@@ -48,13 +48,13 @@ public class SettingsControlTests {
 	}
 
 	@Test
-	public void t11SetMusicVolumeNormalCase() {
+	public void t10SetMusicVolumeNormalCase() {
 		setCon.setMusicVolume(0.3f);
 		assertEquals(0.3f, setCon.getMusicVolume(), 0.01f);
 	}
 
 	@Test
-	public void t12SetMusicVolumeErrCase() {
+	public void t11SetMusicVolumeErrCase() {
 		assertThrows(IllegalArgumentException.class, () -> {
 			setCon.setMusicVolume(-0.01f);
 		});
@@ -64,13 +64,13 @@ public class SettingsControlTests {
 	}
 
 	@Test
-	public void t13SetGameVolumeNormalCase() {
+	public void t12SetGameVolumeNormalCase() {
 		setCon.setGameVolume(0.8f);
 		assertEquals(0.8f, setCon.getGameVolume(), 0.01f);
 	}
 
 	@Test
-	public void t14SetGameVolumeErrCase() {
+	public void t13SetGameVolumeErrCase() {
 		assertThrows(IllegalArgumentException.class, () -> {
 			setCon.setGameVolume(-0.01f);
 		});

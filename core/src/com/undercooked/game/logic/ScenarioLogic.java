@@ -427,8 +427,12 @@ public class ScenarioLogic extends ScenarioLoadLogic {
 				removePowerUp(powerUp, false);
 				return;
 			default:
-				throw new RuntimeException("PowerUpType not accounted for: " + powerUpType.name());
+				// throw new RuntimeException("PowerUpType not accounted for: " +
+				// powerUpType.name());
+				System.err.println("PowerUpType not accounted for: " + powerUpType.name());
+				return;
 		}
+	}
 
 	}
 
@@ -477,7 +481,10 @@ public class ScenarioLogic extends ScenarioLoadLogic {
 				interactSpeedMultiplier = 1f;
 				return;
 			default:
-				throw new RuntimeException("PowerUpType not accounted for: " + powerUpType.name());
+				// throw new RuntimeException("PowerUpType not accounted for: " +
+				// powerUpType.name());
+				System.err.println("PowerUpType not accounted for: " + powerUpType.name());
+				return;
 		}
 	}
 
