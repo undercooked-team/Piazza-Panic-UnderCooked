@@ -127,15 +127,23 @@ public class AudioManagerTests {
 	}
 
 	@Test
-	public void t40getMusicAssetNormalCase() {
+	public void t40getMusicAssetNormalCases() {
 		audioManager.loadMusicAsset("<main>:frying.mp3", "");
 		audioManager.loadSoundAsset("<main>:chopping.mp3", "");
 		assetManager.finishLoading();
 		Music music = audioManager.getMusicAsset("<main>:frying.mp3");
-		assertEquals("Should be true as it is a default music",
-				assetManager.get(FileControl.toPath("<main>:frying.mp3", "sounds"), Music.class), music);
+		Music expectedMusic = assetManager.get(FileControl.getAssetPath("<main>:frying.mp3", "sounds"),
+				Music.class);
+		assertEquals("Frying Music not loaded",
+				expectedMusic,
+				music);
+
 		Sound sound = audioManager.getSoundAsset("<main>:chopping.mp3");
-		assertEquals("Should be true as it is a default sound", defaultSound, sound);
+		Sound expectedSound = assetManager.get(FileControl.getAssetPath("<main>:chopping.mp3", "sounds"),
+				Sound.class);
+		assertEquals("Should be true as it is a default sound",
+				expectedSound,
+				sound);
 	}
 
 	@Test
@@ -149,13 +157,23 @@ public class AudioManagerTests {
 	}
 
 	@Test
-	public void t50updateMusicVolumes() {
+	public void t50updateMusicVolumesNormalCases() {
+		// ! FIXME Function is not updating the volume
 		audioManager.loadMusicAsset("main>:cash-register-opening.mp3", "");
 		assetManager.finishLoading();
+		Music music = audioManager.getMusicAsset("main>:cash-register-opening.mp3");
+		float volume = music.getVolume();
 		audioManager.setMusicVolume(0.2f, "");
 		audioManager.updateMusicVolumes("");
+		volume = music.getVolume();
 		assertEquals("The audio volume should've updated.", 0.2f,
-				audioManager.getMusicAsset("main>:cash-register-opening.mp3").getVolume(), 0.01f);
+				volume, 0.01f);
+
+		audioManager.setMusicVolume(0.891f, "");
+		audioManager.updateMusicVolumes("");
+		float volume2 = music.getVolume();
+		assertEquals("The audio volume should've updated when changed again.", 0.891f,
+				volume2, 0.01f);
 	}
 
 	@Test
