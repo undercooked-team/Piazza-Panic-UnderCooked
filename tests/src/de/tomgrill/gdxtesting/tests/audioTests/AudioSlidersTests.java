@@ -28,7 +28,7 @@ public class AudioSlidersTests {
 
 	@BeforeClass
 	public static void setup() {
-		texture = new Texture(FileControl.getAssetPath("<main>:vControl", "uielements"));
+		texture = new Texture("uielements/vControl.png");
 		audioSliders = new AudioSliders(1, 2, 3, 4, texture);
 		skin = new Skin();
 		slider = new Slider(0, 1, 0.1f, false, skin);
