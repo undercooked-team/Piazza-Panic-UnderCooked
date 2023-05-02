@@ -150,7 +150,7 @@ public class FileControl {
     try {
       fileData = file.readString();
     } catch (GdxRuntimeException e) {
-      e.printStackTrace();
+      // e.printStackTrace();
     }
     return fileData;
   }

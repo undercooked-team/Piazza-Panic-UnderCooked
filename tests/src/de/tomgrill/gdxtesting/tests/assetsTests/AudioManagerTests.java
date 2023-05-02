@@ -2,7 +2,15 @@ package de.tomgrill.gdxtesting.tests.assetsTests;
 
 import static org.junit.Assert.*;
 
+import com.badlogic.gdx.Audio;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.AudioDevice;
+import com.badlogic.gdx.audio.AudioRecorder;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.backends.headless.mock.audio.MockAudio;
+import com.badlogic.gdx.backends.headless.mock.audio.MockAudioDevice;
+import com.badlogic.gdx.backends.headless.mock.audio.MockMusic;
+import com.badlogic.gdx.files.FileHandle;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
 import org.junit.runner.RunWith;
@@ -28,6 +36,24 @@ public class AudioManagerTests {
 
 	@BeforeClass
 	public static void setup() {
+		Gdx.audio = new MockAudio() {
+			@Override
+			public Music newMusic(FileHandle file) {
+				return new MockMusic() {
+					private float volume;
+
+					@Override
+					public void setVolume(float volume) {
+						this.volume = volume;
+					}
+
+					@Override
+					public float getVolume() {
+						return volume;
+					}
+				};
+			}
+		};
 		assetManager = new AssetManager();
 		audioManager = new AudioManager(assetManager);
 		assetManager.finishLoading();
@@ -159,6 +185,7 @@ public class AudioManagerTests {
 		audioManager.loadMusicAsset("<main>:cash-register-opening.mp3", "");
 		assetManager.finishLoading();
 		Music music = audioManager.getMusicAsset("<main>:cash-register-opening.mp3");
+		System.out.println(music.getClass());
 		float volume = music.getVolume();
 		audioManager.setMusicVolume(0.2f, "");
 		audioManager.updateMusicVolumes("");
