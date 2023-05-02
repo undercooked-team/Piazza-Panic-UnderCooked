@@ -116,8 +116,13 @@ Thumbs.db
 ## Additional
 ## VSCode specific development-config files. Not needed for repo.
 *.code-workspace
+
+## Testing. These get overwritten everytime the tests are run
 tests/build/reports/tests/test/*.html
 tests/build/tmp/test/*_tmp
 tests/build/test-results/test/*.xml
 tests/build/test-results/test/binary/results.bin
 tests/build/reports/tests/test/classes/de.tomgrill.gdxtesting.tests.*.html
+tests/build/tmp/compileTestJava/previous-compilation-data.bin
+tests/build/test-results/test/binary/output.bin.idx
+tests/build/test-results/test/binary/output.bin
