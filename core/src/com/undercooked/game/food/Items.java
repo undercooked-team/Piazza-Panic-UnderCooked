@@ -48,7 +48,7 @@ public class Items {
     }
     Item newItem = new Item(itemId, name, texturePath, value);
     System.out.println(String.format("New Item (%s, %s) with texturePath '%s' and value '%d'",
-            name, itemId, texturePath, value));
+        name, itemId, texturePath, value));
     items.put(itemId, newItem);
     return newItem;
   }
@@ -79,9 +79,9 @@ public class Items {
     }
     JsonFormat.formatJson(ingredientRoot, DefaultJson.itemFormat());
     Item newItem = addItem(assetPath,
-            ingredientRoot.getString("name"),
-            ingredientRoot.getString("texture_path"),
-            ingredientRoot.getInt("value"));
+        ingredientRoot.getString("name"),
+        ingredientRoot.getString("texture_path"),
+        ingredientRoot.getInt("value"));
     newItem.setSize(ingredientRoot.getFloat("width"), ingredientRoot.getFloat("height"));
     return newItem;
   }
@@ -110,7 +110,7 @@ public class Items {
     // Loop through all ingredients and load their textures
     for (Item item : items.values()) {
       System.out.println(String.format("Loading texture %s for item %s.",
-              item.getTexturePath(), item.name));
+          item.getTexturePath(), item.name));
       textureManager.loadAsset(textureGroup, item.getTexturePath(), "textures");
     }
   }
@@ -125,7 +125,7 @@ public class Items {
     // Loop through all ingredients and set their textures
     for (Item item : items.values()) {
       System.out.println(String.format("Giving texture %s to item %s",
-              item.getTexturePath(), item.name));
+          item.getTexturePath(), item.name));
       item.updateSprite(textureManager.getAsset(item.getTexturePath()));
       // item.updateSprite(textureManager.getAsset("<main>:station/blank.png"));
     }
@@ -146,4 +146,7 @@ public class Items {
     items.clear();
   }
 
+  public ObjectMap<String, Item> getItems() {
+    return items;
+  }
 }
