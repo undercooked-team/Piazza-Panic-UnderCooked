@@ -8,27 +8,28 @@ import com.badlogic.gdx.utils.JsonValue;
  */
 public class JsonInt extends JsonVal<Integer> {
 
-    /**
-     * Constructor for the class that defaults {@code allowNull} to true.
-     * @param ID {@link String} : The id.
-     * @param value {@link Integer} : The default value to use.
-     */
-    public JsonInt(String ID, Integer value) {
-        super(ID, value);
-    }
+  /**
+   * Constructor for the class that defaults {@code allowNull} to true.
+   *
+   * @param id    {@link String} : The id.
+   * @param value {@link Integer} : The default value to use.
+   */
+  public JsonInt(String id, Integer value) {
+    super(id, value);
+  }
 
-    @Override
-    public boolean isValue(JsonValue jsonData) {
-        return jsonData.isNumber();
-    }
+  @Override
+  public boolean isValue(JsonValue jsonData) {
+    return jsonData.isNumber();
+  }
 
-    @Override
-    public void setValue(JsonValue jsonData, boolean existsBefore) {
-        jsonData.set(this.value, null);
-    }
+  @Override
+  public void setValue(JsonValue jsonData, boolean existsBefore) {
+    jsonData.set(this.value, null);
+  }
 
-    @Override
-    public JsonValue.ValueType getType() {
-        return JsonValue.ValueType.doubleValue;
-    }
+  @Override
+  public JsonValue.ValueType getType() {
+    return JsonValue.ValueType.doubleValue;
+  }
 }

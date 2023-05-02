@@ -9,26 +9,28 @@ import com.badlogic.gdx.utils.JsonValue;
  */
 public class JsonType extends JsonVal<JsonValue.ValueType> {
 
-    /**
-     * @param ID {@link String} : The id.
-     * @param value {@link JsonValue.ValueType} : The default value to use.
-     */
-    public JsonType(String ID, JsonValue.ValueType value) {
-        super(ID, value);
-    }
+  /**
+   * Constructor for the {@link JsonType}.
+   *
+   * @param id    {@link String} : The id.
+   * @param value {@link JsonValue.ValueType} : The default value to use.
+   */
+  public JsonType(String id, JsonValue.ValueType value) {
+    super(id, value);
+  }
 
-    @Override
-    public boolean isValue(JsonValue jsonData) {
-        return jsonData.type().equals(this.value);
-    }
+  @Override
+  public boolean isValue(JsonValue jsonData) {
+    return jsonData.type().equals(this.value);
+  }
 
-    @Override
-    public void setValue(JsonValue jsonData, boolean existsBefore) {
-        setType(jsonData);
-    }
+  @Override
+  public void setValue(JsonValue jsonData, boolean existsBefore) {
+    setType(jsonData);
+  }
 
-    @Override
-    public JsonValue.ValueType getType() {
-        return this.value;
-    }
+  @Override
+  public JsonValue.ValueType getType() {
+    return this.value;
+  }
 }

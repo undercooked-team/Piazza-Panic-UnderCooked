@@ -1,9 +1,9 @@
 package com.undercooked.game.interactions.steps;
 
-import com.undercooked.game.Input.InputType;
 import com.undercooked.game.entity.cook.Cook;
-import com.undercooked.game.interactions.InteractionInstance;
+import com.undercooked.game.input.InputType;
 import com.undercooked.game.interactions.InteractResult;
+import com.undercooked.game.interactions.InteractionInstance;
 import com.undercooked.game.interactions.InteractionStep;
 
 /**
@@ -14,18 +14,21 @@ import com.undercooked.game.interactions.InteractionStep;
  * <br>Fails if it does not continue from an interact.
  */
 public class StopInputStep extends InteractionStep {
-    @Override
-    public InteractResult finishedLast(InteractionInstance instance, Cook cook, String keyID, InputType inputType) {
-        return interact(instance, cook, keyID, inputType);
-    }
+  @Override
+  public InteractResult finishedLast(InteractionInstance instance, Cook cook,
+                                     String inputId, InputType inputType) {
+    return interact(instance, cook, inputId, inputType);
+  }
 
-    @Override
-    public void update(InteractionInstance instance, Cook cook, float delta, float powerUpMultiplier) {
-        finished(instance, cook, false);
-    }
+  @Override
+  public void update(InteractionInstance instance, Cook cook,
+                     float delta, float powerUpMultiplier) {
+    finished(instance, cook, false);
+  }
 
-    @Override
-    public InteractResult interact(InteractionInstance instance, Cook cook, String keyID, InputType inputType) {
-        return InteractResult.STOP;
-    }
+  @Override
+  public InteractResult interact(InteractionInstance instance, Cook cook,
+                                 String inputId, InputType inputType) {
+    return InteractResult.STOP;
+  }
 }

@@ -76,9 +76,7 @@ project(":core") {
             transitive = false
         }
     }
-    
-    
-    
+
     checkstyle
     {
         toolVersion "${checkstyleVersion}"

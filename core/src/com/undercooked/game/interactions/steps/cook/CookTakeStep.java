@@ -1,9 +1,9 @@
 package com.undercooked.game.interactions.steps.cook;
 
-import com.undercooked.game.Input.InputType;
 import com.undercooked.game.entity.cook.Cook;
-import com.undercooked.game.interactions.InteractionInstance;
+import com.undercooked.game.input.InputType;
 import com.undercooked.game.interactions.InteractResult;
+import com.undercooked.game.interactions.InteractionInstance;
 import com.undercooked.game.interactions.InteractionStep;
 
 /**
@@ -15,19 +15,20 @@ import com.undercooked.game.interactions.InteractionStep;
  */
 public class CookTakeStep extends InteractionStep {
 
-    @Override
-    public InteractResult finishedLast(InteractionInstance instance, Cook cook, String keyID, InputType inputType) {
-        // Try to take the Cook's item
-        if (cook.heldItems.size() > 0) {
-            if (!instance.station.canHoldItem()) {
-                return finished(instance, cook, keyID, inputType, false);
-            }
-            // Take the top item and add it to the Station
-            instance.station.addItem(cook.takeItem());
-            // Return a success
-            return finished(instance, cook, keyID, inputType, true);
-        }
-        // Otherwise it failed
-        return finished(instance, cook, keyID, inputType, false);
+  @Override
+  public InteractResult finishedLast(InteractionInstance instance, Cook cook,
+                                     String inputId, InputType inputType) {
+    // Try to take the Cook's item
+    if (cook.heldItems.size() > 0) {
+      if (!instance.station.canHoldItem()) {
+        return finished(instance, cook, inputId, inputType, false);
+      }
+      // Take the top item and add it to the Station
+      instance.station.addItem(cook.takeItem());
+      // Return a success
+      return finished(instance, cook, inputId, inputType, true);
     }
+    // Otherwise it failed
+    return finished(instance, cook, inputId, inputType, false);
+  }
 }
