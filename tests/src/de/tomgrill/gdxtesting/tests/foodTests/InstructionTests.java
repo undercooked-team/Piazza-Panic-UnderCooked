@@ -44,8 +44,8 @@ public class InstructionTests {
 	@Test
 	public void t00_postLoad() {
 		instruction.load(textureManager, "items");
-		instruction.postLoad(textureManager);
 		assetManager.finishLoading();
+		instruction.postLoad(textureManager);
 		assertNotNull("Instruction texture didn't load.", instruction.getTexture());
 	}
 
