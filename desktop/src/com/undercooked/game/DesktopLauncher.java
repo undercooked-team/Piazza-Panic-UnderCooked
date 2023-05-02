@@ -17,7 +17,7 @@ public class DesktopLauncher {
 	public static void main(String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
-		config.setTitle("eng1team3game");
+		config.setTitle("Piazza Panic: Undercooked");
 		// config.setWindowedMode(1920,1080);
 		// config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 		new Lwjgl3Application(new MainGameClass(), config);
