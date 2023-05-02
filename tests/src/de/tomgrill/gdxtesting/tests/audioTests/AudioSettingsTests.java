@@ -61,9 +61,12 @@ public class AudioSettingsTests {
 
 	@Test
 	public void t11LoadSettings() {
+		audioSettings.gameVolListener.tell(0.35f);
+		audioSettings.musicVolListener.tell(0.65f);
+		audioSettings.saveListener.tell(0.4f);
 		audioSettings.loadVolumes();
-		assertEquals("Music volume not loaded correctly.", 0.15f, audioSettings.getMusicVolume(), 0.01f);
-		assertEquals("Game volume not loaded correctly.", 0.95f, audioSettings.getGameVolume(), 0.01f);
+		assertEquals("Game volume not loaded correctly.", 0.35f, audioSettings.getGameVolume(), 0.01f);
+		assertEquals("Music volume not loaded correctly.", 0.65f, audioSettings.getMusicVolume(), 0.01f);
 	}
 
 	@AfterClass
