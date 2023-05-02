@@ -33,7 +33,7 @@ public class InstructionTests {
 	}
 
 	@Test
-	public void t01_postLoad() {
+	public void t00_postLoad() {
 		// Create a new TextureManager
 		TextureManager textureManager = new TextureManager(new AssetManager());
 		// Load the texture

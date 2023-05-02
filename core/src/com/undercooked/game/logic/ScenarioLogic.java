@@ -434,8 +434,6 @@ public class ScenarioLogic extends ScenarioLoadLogic {
 		}
 	}
 
-	}
-
 	/**
 	 * Removes a {@link PowerUp}'s effect.
 	 *
