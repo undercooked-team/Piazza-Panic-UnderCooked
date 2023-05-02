@@ -41,7 +41,7 @@ jobs:
       uses: actions/upload-artifact@v3.1.1
       with:
         name: lib.jar
-        path: desktop/src/com/undercooked/game/lib.jar
+        path: docs/piazzapanic-undercooked.jar
     - name: Upload CheckStyle report
       uses: actions/upload-artifact@v3.1.1
       with:
