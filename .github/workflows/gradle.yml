@@ -36,12 +36,12 @@ jobs:
       uses: actions/upload-artifact@v3.1.1
       with:
         name: jacoco-report
-        path: docs/
+        path: tests/
     - name: Upload library JAR
       uses: actions/upload-artifact@v3.1.1
       with:
         name: lib.jar
-        path: docs/lib.jar
+        path: desktop/src/com/undercooked/game/lib.jar
     - name: Upload CheckStyle report
       uses: actions/upload-artifact@v3.1.1
       with:
