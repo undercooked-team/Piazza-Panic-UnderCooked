@@ -41,7 +41,7 @@ jobs:
       uses: actions/upload-artifact@v3.1.1
       with:
         name: lib.jar
-        path: build/libs/lib.jar
+        path: docs/lib.jar
     - name: Upload CheckStyle report
       uses: actions/upload-artifact@v3.1.1
       with:
