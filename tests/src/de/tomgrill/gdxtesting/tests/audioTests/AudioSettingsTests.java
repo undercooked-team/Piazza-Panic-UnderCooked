@@ -33,7 +33,7 @@ public class AudioSettingsTests {
 	@BeforeClass
 	public static void setup() {
 		game = new MainGameClass();
-		settingsControl = new SettingsControl(fileLoc);
+		settingsControl = new SettingsControl(fileName);
 		settingsControl.loadIfNotLoaded();
 		audioSettings = new AudioSettings(game, settingsControl);
 	}
@@ -52,16 +52,16 @@ public class AudioSettingsTests {
 
 	@Test
 	public void t10SaveSettings() {
-		audioSettings.saveListener.tell(null);
+		audioSettings.saveListener.tell(0.1f);
 		assertTrue("Settings file not created.", settingsFile.exists());
-		JsonValue settings = FileControl.loadJsonFile(fileDir, fileName, false);
-		assertEquals("Music volume not saved correctly.", 0.15f, settings.getFloat("musicVolume"), 0.01f);
-		assertEquals("Game volume not saved correctly.", 0.95f, settings.getFloat("gameVolume"), 0.01f);
+		JsonValue settings = FileControl.loadJsonData(fileName);
+		assertEquals("Music volume not saved correctly.", 0.15f, settings.getFloat("music_volume"), 0.01f);
+		assertEquals("Game volume not saved correctly.", 0.95f, settings.getFloat("game_volume"), 0.01f);
 	}
 
 	@Test
 	public void t11LoadSettings() {
-		audioSettings.loadListener.tell(null);
+		audioSettings.loadVolumes();
 		assertEquals("Music volume not loaded correctly.", 0.15f, audioSettings.getMusicVolume(), 0.01f);
 		assertEquals("Game volume not loaded correctly.", 0.95f, audioSettings.getGameVolume(), 0.01f);
 	}
