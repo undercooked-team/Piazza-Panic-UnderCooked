@@ -34,65 +34,55 @@ public class ItemsTests {
 
 	@Test
 	public void t00_addItemNormalCases() {
-		String itemID = "<main>:lettuce.png";
-		String texturePath = FileControl.getAssetPath(itemID, "items");
+		String itemID = "<main>:lettuce";
 		String name = "Lettuce";
 		int value = 1;
-		items.addItem(itemID, name, texturePath, value);
+		items.addItem(itemID, name, "<main>:item/lettuce.png", value);
 		// Check if the item was added
 		assertNotNull("Item was not added.", items.getItem(itemID));
 
-		String itemID2 = "<main>:patty_cooked.png";
-		String texturePath2 = FileControl.getAssetPath(itemID, "items");
+		String itemID2 = "<main>:patty_cooked";
 		String name2 = "Cooked Patty";
 		int value2 = 2;
-		items.addItem(itemID2, name2, texturePath2, value2);
+		items.addItem(itemID2, name2, "<main>:item/patty_cooked.png", value2);
 		// Check if the item was added
 		assertNotNull("Item was not added.", items.getItem(itemID));
 	}
 
 	@Test
 	public void t01_addItemDuplicateCases() {
-		String itemID = "<main>:lettuce.png";
-		String texturePath = FileControl.getAssetPath(itemID, "items");
+		String itemID = "<main>:lettuce";
 		String name = "Lettuce";
 		int value = 1;
-		items.addItem(itemID, name, texturePath, value);
+		items.addItem(itemID, name, "<main>:item/lettuce.png", value);
 		// Check if the item was added
 		assertNotNull("Item was not added.", items.getItem(itemID));
 
-		String itemID2 = "<main>:patty_cooked.png";
-		String texturePath2 = FileControl.getAssetPath(itemID, "items");
+		String itemID2 = "<main>:patty_cooked";
 		String name2 = "Cooked Patty";
 		int value2 = 2;
-		items.addItem(itemID2, name2, texturePath2, value2);
+		items.addItem(itemID2, name2, "<main>:item/patty_cooked.png", value2);
 		// Check if the item was added
 		assertNotNull("Item was not added.", items.getItem(itemID));
 	}
 
 	@Test
 	public void t02_getItemErrorCases() {
-		String itemID = "I'm not an itemID :D";
-		String texturePath = FileControl.getAssetPath(itemID, "items");
-		String name = "Something";
-		int value = -1;
-		items.addItem(itemID, name, texturePath, value);
+		String itemID = "<main>:I'm not an itemID :D";
+		items.addItemAsset(itemID);
 		// Check if the item was added
 		assertNull("Invalid item was added.", items.getItem(itemID));
 
-		String itemID2 = "neither am I";
-		String texturePath2 = FileControl.getAssetPath(itemID, "items");
-		String name2 = "Else";
-		int value2 = -2;
-		items.addItem(itemID2, name2, texturePath2, value2);
+		String itemID2 = "<main>:neither am I";
+		items.addItemAsset(itemID2);
 		// Check if the item was added
-		assertNull("Invalid item was added.", items.getItem(itemID));
+		assertNull("Invalid item was added.", items.getItem(itemID2));
 	}
 
 	@Test
 	public void t10_load() {
 		items.load(textureManager, "");
-		assetManager.isFinished();
+		assetManager.finishLoading();
 
 		for (ObjectMap.Entry<String, Item> item : items.getItems()) {
 			assertNotNull(String.format("Item %s had a null texture when it shouldn't.", item.key),
@@ -106,17 +96,16 @@ public class ItemsTests {
 		assetManager.isFinished();
 
 		assertFalse("Lettuce texture was still loaded when it should've unloaded.",
-				assetManager.isLoaded(FileControl.getAssetPath("<main>:lettuce.png", "items"), Texture.class));
+				assetManager.isLoaded(FileControl.getAssetPath("<main>:lettuce", "items"), Texture.class));
 
 		assertEquals("Items was not cleared.", items.getItems(), new ObjectMap<String, Item>());
 	}
 
 	@Test
 	public void t30_addItemAsset() {
-		String itemID = "<main>:lettuce.png";
-		String texturePath = FileControl.getAssetPath(itemID, "items");
+		String itemID = "<main>:lettuce";
 
-		items.addItemAsset(texturePath);
+		items.addItemAsset(itemID);
 		// Check if the item was added
 		assertNotNull("Item was not added.", items.getItem(itemID));
 	}
