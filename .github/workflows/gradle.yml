@@ -32,11 +32,11 @@ jobs:
       uses: gradle/gradle-build-action@v2.3.3
       with:
         arguments: build jacocoTestReport
-    - name: Upload JaCoCo overage report as a workflow artifact
+    - name: Upload JaCoCo coverage report as a workflow artifact
       uses: actions/upload-artifact@v3.1.1
       with:
         name: jacoco-report
-        path: tests/build/reports/jacoco/test/html/
+        path: docs/
     - name: Upload library JAR
       uses: actions/upload-artifact@v3.1.1
       with:
