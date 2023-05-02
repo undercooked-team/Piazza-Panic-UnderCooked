@@ -7,11 +7,8 @@ import org.junit.*;
 import org.junit.runners.MethodSorters;
 import org.junit.runner.RunWith;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.utils.JsonValue;
 import com.undercooked.game.assets.AudioManager;
 import com.undercooked.game.files.FileControl;
 import com.undercooked.game.util.Constants;
@@ -188,4 +185,6 @@ public class AudioManagerTests {
 		assertEquals("The audio volume should be clamped to 1.", 1f,
 				audioManager.getMusicAsset("main>:cash-register-opening.mp3").getVolume(), 0.01f);
 	}
+
+	// TODO Sound Volume Testing, though sounds don't have a volume function
 }
