@@ -7,8 +7,6 @@ import de.tomgrill.gdxtesting.GdxTestRunner;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.undercooked.game.files.FileControl;
 import com.undercooked.game.food.Item;
 
 import org.junit.runner.RunWith;
