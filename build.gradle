@@ -113,7 +113,8 @@ project(":tests") {
     // testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"
     // testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 
-    implementation project(":core")
+        implementation files("../assets")
+        implementation project(":core")
 
         implementation "junit:junit:4.13.1"
         implementation "org.mockito:mockito-core:3.5.13"

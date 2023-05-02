@@ -163,7 +163,7 @@ public final class Constants {
   /**
    * The default {@link com.badlogic.gdx.graphics.Texture} to load if one fails to load.
    */
-  public static final String DEFAULT_TEXTURE = "items/missing.png";
+  public static final String DEFAULT_TEXTURE = "game/textures/missing.png";
   /**
    * The default {@link com.badlogic.gdx.graphics.Texture} to use for a floor tile.
    */

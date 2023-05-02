@@ -347,7 +347,7 @@ public class AudioManager {
   /**
    * Set the volume of the {@link Music}s for the specified volume group.
    *
-   * @param volume           {@link float} : The volume to set it to (0.0 - 1.0).
+   * @param volume           {@code float} : The volume to set it to (0.0 - 1.0).
    * @param musicVolumeGroup {@link String} : The volume group to set it for.
    */
   public void setMusicVolume(float volume, String musicVolumeGroup) {
