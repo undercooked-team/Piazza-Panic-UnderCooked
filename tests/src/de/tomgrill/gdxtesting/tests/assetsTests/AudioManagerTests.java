@@ -185,18 +185,21 @@ public class AudioManagerTests {
 		audioManager.loadMusicAsset("<main>:cash-register-opening.mp3", "");
 		assetManager.finishLoading();
 		Music music = audioManager.getMusicAsset("<main>:cash-register-opening.mp3");
-		System.out.println(music.getClass());
 		float volume = music.getVolume();
 		audioManager.setMusicVolume(0.2f, "");
 		audioManager.updateMusicVolumes("");
 		assertNotEquals("The audio volume should've updated.", volume,
 				music.getVolume());
+		assertEquals("The audio volume should match what we set it to.", 0.2f,
+				music.getVolume(), 0.0f);
 
+		float volume2 = music.getVolume();
 		audioManager.setMusicVolume(0.891f, "");
 		audioManager.updateMusicVolumes("");
-		float volume2 = music.getVolume();
-		assertEquals("The audio volume should've updated when changed again.", 0.891f,
-				volume2, 0.0f);
+		assertNotEquals("The audio volume should've updated when changed again.", volume2,
+				music.getVolume());
+		assertEquals("The audio volume should match what we set it to.", 0.891f,
+				music.getVolume(), 0.0f);
 	}
 
 	@Test
