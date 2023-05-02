@@ -33,3 +33,13 @@ button:hover{
     text-align: center;
     margin_top: 0 auto;
 }
+
+.doc-link {
+    font-size: 14px;
+    margin-left: 2px;
+}
+
+img.game-img {
+    width: 640px;
+    height: 360px;
+}
