@@ -2,12 +2,13 @@ package de.tomgrill.gdxtesting.tests.audioTests;
 
 import static org.junit.Assert.*;
 
+import com.undercooked.game.audio.Slider;
+import com.undercooked.game.util.Listener;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.undercooked.game.audio.AudioSliders;
 import com.undercooked.game.files.FileControl;
 
@@ -23,15 +24,13 @@ public class AudioSlidersTests {
 
 	static AudioSliders audioSliders;
 	static Texture texture;
+
 	static Slider slider;
-	static Skin skin;
 
 	@BeforeClass
 	public static void setup() {
 		texture = new Texture("uielements/vControl.png");
 		audioSliders = new AudioSliders(1, 2, 3, 4, texture);
-		skin = new Skin();
-		slider = new Slider(0, 1, 0.1f, false, skin);
 	}
 
 	@Test
@@ -78,7 +77,92 @@ public class AudioSlidersTests {
 		assertEquals(8, audioSliders.getHeight(), 0.01);
 	}
 
-	// TODO: Test addSlider
+	@Test
+	public void t20_addSlider() {
+		int slidersBefore = audioSliders.size();
+		slider = audioSliders.addSlider(null, texture);
+		assertEquals("AudioSliders does not have new slider.", slidersBefore+1, audioSliders.size());
+		assertTrue("Slider not added.", audioSliders.hasSlider(slider));
+		assertNotNull("Slider not returned.", slider);
+	}
+
+	@Test public void t21_removeSlider() {
+		int slidersBefore = audioSliders.size();
+		audioSliders.removeSlider(slider);
+		assertEquals("AudioSliders did not lose a slider.", slidersBefore-1, audioSliders.size());
+		assertFalse("Slider not removed", audioSliders.hasSlider(slider));
+	}
+
+	@Test
+	public void t30_changeSlider() {
+
+		slider = audioSliders.addSlider(null, texture);
+
+		// Test set to 0.
+		Listener<Float> testListener = new Listener<Float>() {
+			@Override
+			public void tell(Float value) {
+				assertEquals("Listeners told wrong value.", 0f, value, 0f);
+			}
+		};
+
+		slider.addChangeListener(testListener);
+		slider.updatePercent(0);
+		slider.removeChangeListener(testListener);
+
+		// Test set to 1.
+		testListener = new Listener<Float>() {
+			@Override
+			public void tell(Float value) {
+				assertEquals("Listeners told wrong value.", 1f, value, 0f);
+			}
+		};
+
+		slider.addChangeListener(testListener);
+		slider.updatePercent(1);
+		slider.removeChangeListener(testListener);
+
+		// Test set to more specific value.
+		testListener = new Listener<Float>() {
+			@Override
+			public void tell(Float value) {
+				assertEquals("Listeners told wrong value.", 0.32f, value, 0f);
+			}
+		};
+
+		slider.addChangeListener(testListener);
+		slider.updatePercent(0.32f);
+		slider.removeChangeListener(testListener);
+
+	}
+
+	@Test
+	public void t31_changeSliderBounds() {
+
+		// Test set to -1, should output 0.
+		Listener<Float> testListener = new Listener<Float>() {
+			@Override
+			public void tell(Float value) {
+				assertEquals("Percent didn't go to minimum of 0.", 0f, value, 0f);
+			}
+		};
+
+		slider.addChangeListener(testListener);
+		slider.updatePercent(-1);
+		slider.removeChangeListener(testListener);
+
+		// Test set to 100, should output 1.
+		testListener = new Listener<Float>() {
+			@Override
+			public void tell(Float value) {
+				assertEquals("Percent didn't go to maximum of 1.", 1f, value, 0f);
+			}
+		};
+
+		slider.addChangeListener(testListener);
+		slider.updatePercent(100);
+		slider.removeChangeListener(testListener);
+	}
 
 	@Test
 	public void t99_update() {

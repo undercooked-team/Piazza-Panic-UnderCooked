@@ -238,6 +238,28 @@ public class AudioSliders {
     return sliders.get(index);
   }
 
+  /**
+   * Returns whether the {@link Slider} is linked to this
+   * {@link AudioSliders}.
+   *
+   * @param slider {@link Slider} : The {@link Slider} to check for.
+   * @return {@code boolean} : {@code true} if the {@link Slider} is present,
+   *                           {@code false} if it is not.
+   */
+  public boolean hasSlider(Slider slider) {
+    return sliders.contains(slider, true);
+  }
+
+  /**
+   * Returns the number of {@link Slider}s linked to this
+   * {@link AudioSliders}.
+   *
+   * @return {@code int} : The number of {@link Slider}s.
+   */
+  public int size() {
+    return sliders.size;
+  }
+
   // endregion
 
   //region Setters
