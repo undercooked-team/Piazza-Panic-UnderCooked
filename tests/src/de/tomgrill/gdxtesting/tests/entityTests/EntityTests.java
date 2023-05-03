@@ -21,6 +21,7 @@ import de.tomgrill.gdxtesting.GdxTestRunner;
 public class EntityTests {
 
 	static Entity entity;
+	static Entity entity2;
 	static AssetManager assetManager;
 	static TextureManager textureManager;
 	static String texturePath = "<main>:item/lettuce.png";
@@ -33,6 +34,9 @@ public class EntityTests {
 		entity.setTexture(texturePath);
 		entity.setHeight(10);
 		entity.setWidth(15);
+
+		entity2 = new Entity();
+		entity2.setTexture(texturePath);
 	}
 
 	@Test
@@ -56,8 +60,6 @@ public class EntityTests {
 
 	@Test
 	public void t20_isColliding() {
-		Entity entity2 = new Entity();
-		entity2.setTexture(texturePath);
 		entity2.load(textureManager);
 		assetManager.finishLoading();
 		entity2.postLoad(textureManager);
@@ -79,8 +81,10 @@ public class EntityTests {
 	@Test
 	public void t40_unload() {
 		entity.unload(textureManager);
+		entity2.unload(textureManager);
 		assetManager.finishLoading();
-		assertFalse(assetManager.isLoaded(FileControl.getAssetPath(texturePath, "textures")));
+		assertFalse("Texture should've unloaded.",
+				assetManager.isLoaded(FileControl.getAssetPath(texturePath, "textures")));
 	}
 
 }
