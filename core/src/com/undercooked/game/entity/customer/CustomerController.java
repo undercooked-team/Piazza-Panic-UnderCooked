@@ -14,6 +14,8 @@ import com.undercooked.game.map.MapManager;
 import com.undercooked.game.map.Register;
 import com.undercooked.game.util.Constants;
 import com.undercooked.game.util.Listener;
+import com.undercooked.game.util.MathUtil;
+
 import java.util.Comparator;
 import java.util.Random;
 
@@ -295,8 +297,7 @@ public class CustomerController {
    */
   public Customer spawnCustomer(Request request) {
     // Randomly choose a customer number
-    Random random = new Random();
-    int custNo = random.nextInt(1, Constants.NUM_CUSTOMER_TEXTURES + 1);
+    int custNo = MathUtil.nextInt(1, Constants.NUM_CUSTOMER_TEXTURES + 1);
 
     // Create the new customer
     Customer newCustomer = new Customer(custNo, this, textureManager);

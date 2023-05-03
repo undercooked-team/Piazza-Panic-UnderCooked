@@ -22,6 +22,8 @@ import com.undercooked.game.map.MapManager;
 import com.undercooked.game.screen.GameScreen;
 import com.undercooked.game.util.Constants;
 import com.undercooked.game.util.Listener;
+import com.undercooked.game.util.MathUtil;
+
 import java.util.Random;
 
 /**
@@ -367,8 +369,7 @@ public class ScenarioLogic extends ScenarioLoadLogic {
     // If it's <= 0, then spawn the PowerUp.
     PowerUp newPowerUp = new PowerUp();
     // Randomly pick a power up from the pool
-    Random random = new Random();
-    PowerUpType newType = powerUpPool[random.nextInt(0, powerUpPool.length)];
+    PowerUpType newType = powerUpPool[MathUtil.nextInt(0, powerUpPool.length)];
     newPowerUp.setType(newType);
     newPowerUp.setTexture(newType.texturePath);
     newPowerUp.postLoad(textureManager);
@@ -599,7 +600,7 @@ public class ScenarioLogic extends ScenarioLoadLogic {
         requestTarget = i;
       }
       // Randomly select a request from the duplicate requests
-      int newIndex = random.nextInt(0, duplicateRequests.size);
+      int newIndex = MathUtil.nextInt(random, 0, duplicateRequests.size);
       // Get the new request and add it
       requests.add(duplicateRequests.get(newIndex));
       // However, if allowDuplicateRequests is false, then remove the index
@@ -745,11 +746,10 @@ public class ScenarioLogic extends ScenarioLoadLogic {
 
     // If all the above is valid, take the money and add the cook
     money -= cookCost;
-    Random random = new Random();
     Cook newCook = new Cook(new Vector2(
             openCell.getCollisionX() + MapManager.gridToPos(0),
             openCell.getCollisionY() + MapManager.gridToPos(0.5f)),
-            random.nextInt(1, Constants.NUM_COOK_TEXTURES + 1),
+            MathUtil.nextInt(1, Constants.NUM_COOK_TEXTURES + 1),
             textureManager, map);
     newCook.postLoad(textureManager);
     cookController.addCook(newCook);
