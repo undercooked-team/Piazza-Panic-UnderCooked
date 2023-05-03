@@ -26,9 +26,7 @@ public class TextureManagerTests {
 		assetManager = new AssetManager();
 		textureManager = new TextureManager(assetManager);
 
-		// ! FIXME: Crashes here as it doesn't manage to load default texture
 		assetManager.finishLoading();
-		// ! ###
 	}
 
 	@Test
