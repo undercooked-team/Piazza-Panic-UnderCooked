@@ -131,7 +131,7 @@ public class Entity {
    */
   public void unload(TextureManager textureManager) {
     // Unload Texture
-    textureManager.unload(texturePath);
+    textureManager.unloadTextureAsset(texturePath);
   }
 
   /**

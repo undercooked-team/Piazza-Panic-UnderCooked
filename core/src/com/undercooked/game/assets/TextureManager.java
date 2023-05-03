@@ -223,17 +223,19 @@ public class TextureManager {
   /**
    * Unload a single texture from all groups, completely.
    *
-   * @param texture {@link String} : The texture path to unload.
+   * @param texturePath {@link String} : The texture path to unload.
    */
-  public void unloadTexture(String texture) {
+  public void unloadTexture(String texturePath) {
     // If it's the default texture, don't unload it.
-    if (texture.equals(Constants.DEFAULT_TEXTURE)) {
+    if (texturePath.equals(Constants.DEFAULT_TEXTURE)) {
       return;
     }
+
     for (String key : textures.keys()) {
       Array<String> paths = textures.get(key);
-      int pathIndex = paths.indexOf(texture, false);
+      int pathIndex = paths.indexOf(texturePath, false);
       if (pathIndex != -1) {
+        assetManager.unload(paths.get(pathIndex));
         paths.removeIndex(pathIndex);
       }
     }
