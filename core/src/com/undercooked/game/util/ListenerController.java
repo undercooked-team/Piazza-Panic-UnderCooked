@@ -26,6 +26,10 @@ public class ListenerController<T> {
    * @param listener {@link Listener}&lt;{@link T}&gt; : The {@link Listener} to add.
    */
   public void addListener(Listener<T> listener) {
+    // Don't add it if it's null
+    if (listener == null) {
+      return;
+    }
     listeners.add(listener);
   }
 

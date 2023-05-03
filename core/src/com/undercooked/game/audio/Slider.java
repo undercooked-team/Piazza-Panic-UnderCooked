@@ -151,13 +151,58 @@ public class Slider {
   }
 
   /**
+   * Render the {@link Sprite}.
+   *
+   * @param batch {@link SpriteBatch} : The {@link SpriteBatch} to use.
+   */
+  public void render(SpriteBatch batch) {
+    // sliderButton.draw(batch, 1F);
+    // Position of sliderSprite on the Slider so that it visually touches the border of
+    // the Slider (so that anywhere that the sliderSprite is pressed will count as pressing it.
+    sliderSprite.setPosition(sliderButton.getX()
+                    + (sliderButton.getWidth() - sliderSprite.getWidth()) * percent,
+            sliderButton.getY() + sliderButton.getHeight() / 2 - sliderSprite.getHeight() / 2);
+    sliderSprite.draw(batch);
+  }
+
+  /**
+   * Add the {@link Slider} to a {@link Stage} so it can be used
+   * with the {@link com.badlogic.gdx.InputProcessor}.
+   *
+   * @param stage {@link Stage} : The {@link Stage} to add the {@link Slider} to.
+   */
+  public void addToStage(Stage stage) {
+    stage.addActor(this.sliderButton);
+  }
+
+  /**
    * Get the numeric value of the slider's current selected percentage.
    *
-   * @return {@link float} : The value of the slider between the minimum and maximum.
+   * @return {@code float} : The value of the slider between the minimum and maximum.
    */
   public float getValue() {
     return Math.max(Math.min(minValue + percent * (maxValue - minValue), maxValue), minValue);
   }
+
+  /**
+   * Get the width of the slider area.
+   *
+   * @return {@code float} : The width of the full slider.
+   */
+  public float getWidth() {
+    return sliderButton.getWidth();
+  }
+
+  /**
+   * Get the height of the slider area.
+   *
+   * @return {@code float} : The height of the full slider.
+   */
+  public float getHeight() {
+    return sliderButton.getHeight();
+  }
+
+  // region Setters
 
   /**
    * Set the size of the {@link Button}.
@@ -193,33 +238,6 @@ public class Slider {
   public void setSliderSprite(Sprite sprite) {
     sliderSprite = sprite;
   }
-
-  /**
-   * Render the {@link Sprite}.
-   *
-   * @param batch {@link SpriteBatch} : The {@link SpriteBatch} to use.
-   */
-  public void render(SpriteBatch batch) {
-    // sliderButton.draw(batch, 1F);
-    // Position of sliderSprite on the Slider so that it visually touches the border of
-    // the Slider (so that anywhere that the sliderSprite is pressed will count as pressing it.
-    sliderSprite.setPosition(sliderButton.getX()
-                    + (sliderButton.getWidth() - sliderSprite.getWidth()) * percent,
-            sliderButton.getY() + sliderButton.getHeight() / 2 - sliderSprite.getHeight() / 2);
-    sliderSprite.draw(batch);
-  }
-
-  /**
-   * Add the {@link Slider} to a {@link Stage} so it can be used
-   * with the {@link com.badlogic.gdx.InputProcessor}.
-   *
-   * @param stage {@link Stage} : The {@link Stage} to add the {@link Slider} to.
-   */
-  public void addToStage(Stage stage) {
-    stage.addActor(this.sliderButton);
-  }
-
-  // region Setters
 
   /**
    * Set the {@code x} position of the {@link Slider}.
@@ -278,6 +296,19 @@ public class Slider {
   public float setPercent(float percent) {
     this.percent = Math.max(Math.min(percent, 1F), 0F);
     return this.percent;
+  }
+
+  /**
+   * Set the percentage value of the {@link Slider}, 0 - 1,
+   * but follow up by telling all the listeners.
+   *
+   * @param percent {@code float} : The percentage to set to.
+   * @return {@code float} : The percentage it was set to.
+   */
+  public float updatePercent(float percent) {
+    percent = setPercent(percent);
+    changeListeners.tellListeners(percent);
+    return percent;
   }
 
   /**
