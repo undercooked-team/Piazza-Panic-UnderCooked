@@ -315,9 +315,7 @@ public class AudioManager {
    */
   public void postLoad() {
     // Update the music volumes for all the audio groups
-    for (String audioGroup : musicVolumes.keys()) {
-      updateMusicVolumes(audioGroup);
-    }
+    updateMusicVolumes();
   }
 
   /**
@@ -341,6 +339,16 @@ public class AudioManager {
       } catch (GdxRuntimeException e) {
         e.printStackTrace();
       }
+    }
+  }
+
+  /**
+   * Update all of the {@link Music}s' volumes for every music group.
+   */
+  public void updateMusicVolumes() {
+    // Update for all music groups
+    for (String group : musicVolumes.keys()) {
+      updateMusicVolumes(group);
     }
   }
 
