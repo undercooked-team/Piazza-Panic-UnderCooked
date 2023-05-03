@@ -51,7 +51,8 @@ public class Entity {
 
   /**
    * The constructor for the {@link Entity}.
-   * <br>Sets up {@link #pos} and {@link #collision}.
+   * <br>
+   * Sets up {@link #pos} and {@link #collision}.
    */
   public Entity() {
     this.pos = new Vector2();
@@ -136,7 +137,8 @@ public class Entity {
   /**
    * Function called after the screen has been loaded.
    *
-   * @param textureManager {@link TextureManager} : The {@link TextureManager} to use.
+   * @param textureManager {@link TextureManager} : The {@link TextureManager} to
+   *                       use.
    */
   public void postLoad(TextureManager textureManager) {
     // Get texture
@@ -146,9 +148,11 @@ public class Entity {
   /**
    * Sets the texture path of the {@link Entity}, used when
    * {@link #postLoad(TextureManager)} is called.
-   * <br>The format is that of an asset path.
+   * <br>
+   * The format is that of an asset path.
    *
-   * @param texturePath {@link String} : The path to the {@link com.badlogic.gdx.graphics.Texture}.
+   * @param texturePath {@link String} : The path to the
+   *                    {@link com.badlogic.gdx.graphics.Texture}.
    */
   public void setTexture(String texturePath) {
     this.texturePath = texturePath;
@@ -175,7 +179,6 @@ public class Entity {
   public boolean isColliding(Rectangle rect) {
     return collision.overlaps(rect);
   }
-
 
   /**
    * Get the X position.
@@ -230,7 +233,7 @@ public class Entity {
    * @param height {@code float} : The new height of the {@link Entity}.
    */
   public void setHeight(float height) {
-    this.collision.setWidth(height);
+    this.collision.setHeight(height);
   }
 
   /**
