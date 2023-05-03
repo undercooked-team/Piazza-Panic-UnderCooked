@@ -15,9 +15,7 @@ import com.undercooked.game.map.Register;
 import com.undercooked.game.util.Constants;
 import com.undercooked.game.util.Listener;
 import com.undercooked.game.util.MathUtil;
-
 import java.util.Comparator;
-import java.util.Random;
 
 /**
  * The class used to control the {@link Customer}s, their spawning, which

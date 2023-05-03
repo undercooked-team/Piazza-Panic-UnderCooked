@@ -23,7 +23,6 @@ import com.undercooked.game.screen.GameScreen;
 import com.undercooked.game.util.Constants;
 import com.undercooked.game.util.Listener;
 import com.undercooked.game.util.MathUtil;
-
 import java.util.Random;
 
 /**

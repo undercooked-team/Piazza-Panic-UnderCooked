@@ -1,7 +1,6 @@
 package com.undercooked.game.util;
 
 import com.badlogic.gdx.math.Rectangle;
-
 import java.util.Random;
 
 /**
