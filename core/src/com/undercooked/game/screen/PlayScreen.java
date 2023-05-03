@@ -217,7 +217,7 @@ public class PlayScreen extends Screen {
     menuBtn.setPosition(16, Constants.V_HEIGHT - menuBtn.getHeight() - 16);
 
     leftBtn.setSize(128, 128);
-    leftBtn.setPosition(32, Constants.V_HEIGHT / 2f - leftBtn.getHeight());
+    leftBtn.setPosition(32, Constants.V_HEIGHT / 2f - leftBtn.getHeight()/2f);
 
     rightBtn.setSize(128, 128);
     rightBtn.setPosition(

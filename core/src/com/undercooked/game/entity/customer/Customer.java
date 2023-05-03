@@ -114,22 +114,22 @@ public class Customer {
   /**
    * Constructor for {@link Customer}.
    *
-   * @param custno             {@code int} : The {@link Customer}'s {@link Texture} id.
+   * @param custNo             {@code int} : The {@link Customer}'s {@link Texture} id.
    * @param customerController {@link CustomerController} : The controller for the
    *                           {@link Customer}s, so it can be told
    *                           when this {@link Customer} has left.
    * @param textureManager     {@link TextureManager} : The {@link TextureManager} to use
    *                           to load and get {@link Texture}s from.
    */
-  public Customer(int custno, CustomerController customerController,
+  public Customer(int custNo, CustomerController customerController,
                   TextureManager textureManager) {
     TextureManager assetManager = textureManager;
-    custNo = custno;
-    textf = assetManager.get("entities/cust" + custno + "f.png");
-    textb = assetManager.get("entities/cust" + custno + "b.png");
-    textr = assetManager.get("entities/cust" + custno + "r.png");
-
+    this.custNo = custNo;
+    textf = textureManager.get("entities/cust" + custNo + "f.png");
+    textb = textureManager.get("entities/cust" + custNo + "b.png");
+    textr = textureManager.get("entities/cust" + custNo + "r.png");
     curTexture = textb;
+
     // textb = assetManager.get("entities/cust" + custno + "b.png");
     // textr = assetManager.get("entities/cust" + custno + "r.png");
     // textl = assetManager.get("entities/cust" + custno + "l.png");
@@ -237,6 +237,10 @@ public class Customer {
    *                       use
    */
   public void postLoad(TextureManager textureManager) {
+    textf = textureManager.get("entities/cust" + custNo + "f.png");
+    textb = textureManager.get("entities/cust" + custNo + "b.png");
+    textr = textureManager.get("entities/cust" + custNo + "r.png");
+    curTexture = textb;
     if (getRequest() != null) {
       getRequest().postLoad(textureManager);
     }
