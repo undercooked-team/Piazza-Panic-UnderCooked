@@ -1,7 +1,6 @@
 package com.undercooked.game.util.leaderboard;
 
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.undercooked.game.GameType;
@@ -9,411 +8,510 @@ import com.undercooked.game.files.FileControl;
 import com.undercooked.game.util.DefaultJson;
 import com.undercooked.game.util.StringUtil;
 import com.undercooked.game.util.json.JsonFormat;
-
 import java.util.Comparator;
 
 /**
  * Use this static class to manipulate the leaderboards using the enum
  * LeaderboardNames.
- * <p>
+ * <br><br>
  * {@link #loadLeaderboard()} must be called before any of the functions
  * for interacting with the leaderboards in this class can be used.
  * Otherwise, they will all fail.
- * </p>
  */
 public final class LeaderboardController {
 
-	/**
-	 * Converts one of the {@link GameType} to a {@link String}
-	 * value. This is the id of them inside the json file.
-	 * @param gameType {@link GameType} : The name to get.
-	 * @return {@link String} : The name of the leaderboard.
-	 */
-	public static String getLeaderboardID(GameType gameType) {
-		// If it's null, return null
-		if (gameType == null) return "null";
-		// Otherwise, return the name
-		switch (gameType) {
-			case ENDLESS:
-				return "endless";
-			case SCENARIO:
-				return "scenarios";
-		}
-		// Shouldn't reach here
-		return "error";
-	}
+  /**
+   * Converts one of the {@link GameType} to a {@link String}
+   * value. This is the id of them inside the json file.
+   *
+   * @param gameType {@link GameType} : The name to get.
+   * @return {@link String} : The name of the leaderboard.
+   */
+  public static String getLeaderboardId(GameType gameType) {
+    // If it's null, return null
+    if (gameType == null) {
+      return "null";
+    }
 
-	/**
-	 * Converts one of the {@link GameType} to a {@link String}
-	 * value. This is the name to display them as.
-	 * @param gameType {@link GameType} : The name to get.
-	 * @return {@link String} : The name of the leaderboard.
-	 */
-	public static String getLeaderboardName(GameType gameType) {
-		// If it's null, return null
-		if (gameType == null) return "null";
-		// Otherwise, return the name
-		switch (gameType) {
-			case ENDLESS:
-				return "Endless";
-			case SCENARIO:
-				return "Scenario";
-		}
-		// Shouldn't reach here
-		return "error";
-	}
+    // Otherwise, return the name
+    switch (gameType) {
+      case ENDLESS:
+        return "endless";
+      case SCENARIO:
+        return "scenarios";
+      default:
+        // Shouldn't reach here
+        return "error";
+    }
+  }
 
-	/**
-	 * Converts a score value to a {@link String} formatted based
-	 * on what {@link GameType} it should use.
-	 *
-	 * @param currentLType {@link GameType} : The leaderboard to use.
-	 * @param score {@code float} : The score to get a {@link String} of.
-	 * @return
-	 */
-	public static String scoreToString(GameType currentLType, float score) {
-		if (currentLType == null) return Float.toString(score);
-		switch (currentLType) {
-			case SCENARIO:
-				return StringUtil.formatSeconds(score, 2);
-			case ENDLESS:
-				return Integer.toString((int) score);
-		}
-		// Shouldn't reach here
-		return "error";
-	}
+  /**
+   * Converts one of the {@link GameType} to a {@link String}
+   * value. This is the name to display them as.
+   *
+   * @param gameType {@link GameType} : The name to get.
+   * @return {@link String} : The name of the leaderboard.
+   */
+  public static String getLeaderboardName(GameType gameType) {
+    // If it's null, return null
+    if (gameType == null) {
+      return "null";
+    }
 
-	private static Comparator<LeaderboardEntry> scenarioComparator = new Comparator<LeaderboardEntry>() {
-		@Override
-		public int compare(LeaderboardEntry o1, LeaderboardEntry o2) {
-			// score being lower is better
-			if (o1.score < o2.score) {
-				return 1;
-			} else if (o2.score < o1.score) {
-				return -1;
-			}
-			return 0;
-		}
-	};
+    // Otherwise, return the name
+    switch (gameType) {
+      case ENDLESS:
+        return "Endless";
+      case SCENARIO:
+        return "Scenario";
+      default:
+        // Shouldn't reach here
+        return "error";
+    }
+  }
 
-	private static Comparator<LeaderboardEntry> endlessComparator = new Comparator<LeaderboardEntry>() {
-		@Override
-		public int compare(LeaderboardEntry o1, LeaderboardEntry o2) {
-			// score being lower is better
-			if (o1.score > o2.score) {
-				return 1;
-			} else if (o2.score > o1.score) {
-				return -1;
-			}
-			return 0;
-		}
-	};
+  /**
+   * Converts a score value to a {@link String} formatted based
+   * on what {@link GameType} it should use.
+   *
+   * @param leaderboardType {@link GameType} : The leaderboard to use.
+   * @param score        {@code float} : The score to get a {@link String} of.
+   * @return {@link String} : The score as a {@link String}.
+   */
+  public static String scoreToString(GameType leaderboardType, float score) {
+    if (leaderboardType == null) {
+      return Float.toString(score);
+    }
 
-	/**
-	 * Returns a comparator of the scores based on {@link GameType}.
-	 * This is because Scenarios favours lower time taken, while Endless mode
-	 * favours higher customers served.
-	 * <br>0 means they are equal.
-	 * <br>1 means the left side is better.
-	 * <br>-1 means the right side is better.
-	 *
-	 * @param gameType {@link GameType} : The leaderboard to use.
-	 * @return
-	 */
-	public static Comparator<LeaderboardEntry> getScoreComparator(GameType gameType) {
-		if (gameType == null) return new Comparator<LeaderboardEntry>() {
-			@Override
-			public int compare(LeaderboardEntry o1, LeaderboardEntry o2) {
-				return 0;
-			}
-		};
+    switch (leaderboardType) {
+      case SCENARIO:
+        return StringUtil.formatSeconds(score, 2);
+      case ENDLESS:
+        return Integer.toString((int) score);
+      default:
+        // Shouldn't reach here
+        return "error";
+    }
+  }
 
-		switch (gameType) {
-			case SCENARIO:
-				return scenarioComparator;
+  /**
+   * Comparator for the Scenario mode scores.
+   */
+  private static final Comparator<LeaderboardEntry> scenarioComparator =
+      new Comparator<LeaderboardEntry>() {
+          @Override
+          public int compare(LeaderboardEntry o1, LeaderboardEntry o2) {
+            // score being lower is better
+            if (o1.score < o2.score) {
+              return 1;
+            } else if (o2.score < o1.score) {
+              return -1;
+            }
+            return 0;
+          }
+      };
 
-			case ENDLESS:
-				return endlessComparator;
-		}
-		// Shouldn't reach here
-		return null;
-	}
+  /**
+   * Comparator for the Endless mode scores.
+   */
+  private static final Comparator<LeaderboardEntry> endlessComparator =
+      new Comparator<LeaderboardEntry>() {
+          @Override
+          public int compare(LeaderboardEntry o1, LeaderboardEntry o2) {
+              // score being lower is better
+              if (o1.score > o2.score) {
+                return 1;
+              } else if (o2.score > o1.score) {
+                return -1;
+              }
+              return 0;
+          }
+      };
 
-	/**
-	 * Returns a comparison of the scores based on {@link GameType}.
-	 * This is because Scenarios favours lower time taken, while Endless mode
-	 * favours higher customers served.
-	 * <br>0 means they are equal.
-	 * <br>1 means score1 is better.
-	 * <br>-1 means score2 is better.
-	 *
-	 * @param gameType {@link GameType} : The leaderboard to check.
-	 * @param score1 {@link float} : The score of the first entry.
-	 * @param score2 {@link float} : The score of the second entry.
-	 * @return
-	 */
-	public static int compareScore(GameType gameType, float score1, float score2) {
-		if (gameType == null) return 0;
-		switch (gameType) {
-			case SCENARIO:
-				// score being lower is better
-				if (score1 < score2) {
-					return 1;
-				} else if (score2 < score1) {
-					return -1;
-				}
-				return 0;
+  /**
+   * Returns a comparator of the scores based on {@link GameType}.
+   * This is because Scenarios favours lower time taken, while Endless mode
+   * favours higher customers served.
+   * <br>0 means they are equal.
+   * <br>1 means the left side is better.
+   * <br>-1 means the right side is better.
+   *
+   * @param gameType {@link GameType} : The leaderboard to use.
+   * @return {@link Comparator}&lt;{@link LeaderboardEntry}&gt;
+   *                    : The {@link Comparator} for the scores of the {@link GameType}.
+   */
+  public static Comparator<LeaderboardEntry> getScoreComparator(GameType gameType) {
+    if (gameType == null) {
+      return new Comparator<LeaderboardEntry>() {
+        @Override
+        public int compare(LeaderboardEntry o1, LeaderboardEntry o2) {
+          return 0;
+        }
+      };
+    }
 
-			case ENDLESS:
-				// score being higher is better
-				if (score1 > score2) {
-					return 1;
-				} else if (score2 > score1) {
-					return -1;
-				}
-				return 0;
-		}
-		// Shouldn't reach here
-		return 0;
-	}
+    switch (gameType) {
+      case SCENARIO:
+        return scenarioComparator;
 
-	static Json json;
-	/** Root JsonValue of Leaderboard. Contains:
-	 * <ul>
-		* <li>"Example": "leaderboard",
-		* <li>"SCENARIO": [...],<br>
-		* <li>"ENDLESS": [...]
-	 * </ul>
-	 */
-	private static ObjectMap<GameType, ObjectMap<String, Leaderboard>> leaderboardData = new ObjectMap<>();
-	private static String leaderboardFile = "leaderboard.json";
-	private static boolean loaded = false;
+      case ENDLESS:
+        return endlessComparator;
 
-	/**
-	 * Loads the leaderboard.
-	 * <p>
-	 * This method MUST be called before any other method in this class.
-	 * </p>
-	 */
-	public static void loadLeaderboard() {
-		// If leaderboardData is not null, then unload it first
-		if (leaderboardData != null) unloadLeaderboard();
+      default:
+        // Shouldn't reach here
+        return null;
+    }
+  }
 
-		JsonValue root = FileControl.loadJsonData(leaderboardFile);
-		// Create leaderboard.json if it doesn't exist
-		if (root == null) {
-			// Create a new JsonValue, and then format it using the leaderboard format
-			root = new JsonValue(JsonValue.ValueType.object);
-		}
-		// Format the Json
-		JsonFormat.formatJson(root, DefaultJson.leaderboardFormat());
+  /**
+   * Returns a comparison of the scores based on {@link GameType}.
+   * This is because Scenarios favours lower time taken, while Endless mode
+   * favours higher customers served.
+   *
+   * @param gameType {@link GameType} : The leaderboard to check.
+   * @param score1   {@link float} : The score of the first entry.
+   * @param score2   {@link float} : The score of the second entry.
+   * @return {@link int} : 1 if {@code score1} is better,
+   *                       0 if they are the same,
+   *                       -1 if {@code score2} is better.
+   */
+  public static int compareScore(GameType gameType, float score1, float score2) {
+    if (gameType == null) {
+      return 0;
+    }
 
-		// Load it into the ObjectMap.
-		for (GameType lType : GameType.values()) {
-			// Add the ObjectMap for the type
-			ObjectMap<String, Leaderboard> newObjectMap = new ObjectMap<>();
-			leaderboardData.put(lType, newObjectMap);
-			// Then, copy all the leaderboard values over
-			for (JsonValue leaderboard : root.get(getLeaderboardID(lType))) {
-				// If the leaderboard id is already in the ObjectMap, then skip
-				if (newObjectMap.containsKey(leaderboard.getString("id"))) {
-					continue;
-				}
-				// Otherwise, make the leaderboard
-				Leaderboard newLeaderboard = new Leaderboard();
-				newLeaderboard.name = leaderboard.getString("name");
-				// Set the comparator
-				newLeaderboard.setComparator(getScoreComparator(lType));
-				// And add it to the leaderboard to the leaderboard type
-				newObjectMap.put(leaderboard.getString("id"), newLeaderboard);
+    switch (gameType) {
+      case SCENARIO:
+        // score being lower is better
+        if (score1 < score2) {
+          return 1;
+        } else if (score2 < score1) {
+          return -1;
+        }
+        return 0;
 
-				// Now loop through the entries and add them
-				for (JsonValue entry : leaderboard.get("scores")) {
-					LeaderboardEntry newEntry = newLeaderboard.addLeaderboardEntry(
-							entry.getString("name"),
-							entry.getFloat("score")
-					);
+      case ENDLESS:
+        // score being higher is better
+        if (score1 > score2) {
+          return 1;
+        } else if (score2 > score1) {
+          return -1;
+        }
+        return 0;
+      default:
+        // Shouldn't reach here
+        return 0;
+    }
+  }
 
-					// Make sure to set the date of the entry
-					newEntry.setDate(entry.getString("date"));
-				}
-			}
-		}
-		loaded = true;
-	}
+  /**
+   * Root JsonValue of Leaderboard. Contains:
+   * <ul>
+   * <li>"Example": "leaderboard",
+   * <li>"SCENARIO": [...],<br>
+   * <li>"ENDLESS": [...]
+   * </ul>
+   */
+  private static final ObjectMap<GameType, ObjectMap<String, Leaderboard>> leaderboardData =
+          new ObjectMap<>();
 
-	/**
-	 * Unloads the leaderboard, if it is no longer needed.
-	 * <br>
-	 * If the leaderboard is not needed, such as when the game
-	 * is running, then this function can be run and the leaderboard
-	 * entries will be deleted by the garbage collector.
-	 */
-	public static void unloadLeaderboard() {
-		leaderboardData.clear();
-		loaded = false;
-	}
+  /**
+   * The file location of the leaderboard file in the data folder.
+   */
+  private static final String leaderboardFile = "leaderboard.json";
 
-	public static void addEntry(GameType lType, String id, String leaderboardName, String name, float score) {
-		// Only continue if leaderboardData is not null
-		if (leaderboardData == null) return;
+  /**
+   * Whether the leaderboards are loaded or not.
+   */
+  private static boolean loaded = false;
 
-		// Get the leaderboard by id
-		Leaderboard leaderboard = getLeaderboard(lType, id);
-		// If it's null, then add the id
-		if (leaderboard == null) {
-			leaderboard = addLeaderboard(lType, leaderboardName, id);
-		}
+  /**
+   * Loads the leaderboard.
+   * <p>
+   * This method MUST be called before any other method in this class.
+   * </p>
+   */
+  public static void loadLeaderboard() {
+    // If leaderboardData is not null, then unload it first
+    unloadLeaderboard();
 
-		// Add it to the leaderboard
-		leaderboard.addLeaderboardEntry(name, score);
-	}
+    JsonValue root = FileControl.loadJsonData(leaderboardFile);
+    // Create leaderboard.json if it doesn't exist
+    if (root == null) {
+      // Create a new JsonValue, and then format it using the leaderboard format
+      root = new JsonValue(JsonValue.ValueType.object);
+    }
+    // Format the Json
+    JsonFormat.formatJson(root, DefaultJson.leaderboardFormat());
 
-	private static Leaderboard addLeaderboard(GameType lType, String name, String id) {
-		// First, get the leaderboards
-		ObjectMap<String, Leaderboard> leaderboards = getLeaderboards(lType);
-		// If it exists, just ignore
-		if (leaderboards.containsKey(id)) return leaderboards.get(id);
+    // Load it into the ObjectMap.
+    for (GameType leaderboardType : GameType.values()) {
+      // Add the ObjectMap for the type
+      ObjectMap<String, Leaderboard> newObjectMap = new ObjectMap<>();
+      leaderboardData.put(leaderboardType, newObjectMap);
+      // Then, copy all the leaderboard values over
+      for (JsonValue leaderboard : root.get(getLeaderboardId(leaderboardType))) {
+        // If the leaderboard id is already in the ObjectMap, then skip
+        if (newObjectMap.containsKey(leaderboard.getString("id"))) {
+          continue;
+        }
+        // Otherwise, make the leaderboard
+        Leaderboard newLeaderboard = new Leaderboard();
+        newLeaderboard.name = leaderboard.getString("name");
+        // Set the comparator
+        newLeaderboard.setComparator(getScoreComparator(leaderboardType));
+        // And add it to the leaderboard to the leaderboard type
+        newObjectMap.put(leaderboard.getString("id"), newLeaderboard);
 
-		// If it doesn't exist, create it
-		Leaderboard newLeaderboard = new Leaderboard();
-		newLeaderboard.name = name;
-		newLeaderboard.setComparator(getScoreComparator(lType));
-		// Add it to the ObjectMap
-		leaderboards.put(id, newLeaderboard);
-		// And return the new leaderboard that was created
-		return newLeaderboard;
-	}
+        // Now loop through the entries and add them
+        for (JsonValue entry : leaderboard.get("scores")) {
+          LeaderboardEntry newEntry = newLeaderboard.addLeaderboardEntry(
+                  entry.getString("name"),
+                  entry.getFloat("score")
+          );
 
-	/**
-	 * Returns the sorted scores of a leaderboard using the id provided.
-	 * @param lType {@link GameType} : The leaderboard to use.
-	 * @param id {@link String} : The id of the leaderboard.
-	 * @return
-	 */
-	public static Array<LeaderboardEntry> getEntries(GameType lType, String id) {
-		// Get the leaderboard by id
-		Leaderboard leaderboard = getLeaderboard(lType, id);
-		// Only continue if it's not null
-		if (leaderboard == null) return null;
+          // Make sure to set the date of the entry
+          newEntry.setDate(entry.getString("date"));
+        }
+      }
+    }
+    loaded = true;
+  }
 
-		// Now return a copy of the array
-		return leaderboard.copyLeaderboard();
-	}
+  /**
+   * Unloads the leaderboard, if it is no longer needed.
+   * <br>
+   * If the leaderboard is not needed, such as when the game
+   * is running, then this function can be run and the leaderboard
+   * entries will be deleted by the garbage collector.
+   */
+  public static void unloadLeaderboard() {
+    leaderboardData.clear();
+    loaded = false;
+  }
 
-	public static boolean removeEntry(GameType lType, String id, int index) {
-		// Get the leaderboard by id
-		Leaderboard leaderboard = getLeaderboard(lType, id);
-		// Only continue if it's not null
-		if (leaderboard == null) return false;
+  /**
+   * Adds a {@link LeaderboardEntry} to the {@link Leaderboard} specified.
+   *
+   * @param leaderboardType {@link GameType} : The type of {@link Leaderboard} to save the score to.
+   * @param id              {@link String} : The id of the {@link Leaderboard}.
+   * @param leaderboardName {@link String} : The name to use for the {@link Leaderboard} if
+   *                        it doesn't have one already.
+   * @param name            {@link String} : The name of the {@link LeaderboardEntry}.
+   * @param score           {@code float} : The score of the {@link LeaderboardEntry}.
+   */
+  public static void addEntry(GameType leaderboardType, String id,
+                              String leaderboardName, String name,
+                              float score) {
+    // Get the leaderboard by id
+    Leaderboard leaderboard = getLeaderboard(leaderboardType, id);
+    // If it's null, then add the id
+    if (leaderboard == null) {
+      leaderboard = addLeaderboard(leaderboardType, leaderboardName, id);
+    }
 
-		// Check that the index is a valid number
-		if (index < 0 || index >= leaderboard.size()) return false;
+    // Add it to the leaderboard
+    leaderboard.addLeaderboardEntry(name, score);
+  }
 
-		// Then, remove it
-		leaderboard.remove(id, index);
+  private static Leaderboard addLeaderboard(GameType leaderboardType, String name, String id) {
+    // First, get the leaderboards
+    ObjectMap<String, Leaderboard> leaderboards = getLeaderboards(leaderboardType);
+    // If it exists, just ignore
+    if (leaderboards.containsKey(id)) {
+      return leaderboards.get(id);
+    }
 
-		// Return true, as it was successfully removed
-		return true;
-	}
+    // If it doesn't exist, create it
+    Leaderboard newLeaderboard = new Leaderboard();
+    newLeaderboard.name = name;
+    newLeaderboard.setComparator(getScoreComparator(leaderboardType));
+    // Add it to the ObjectMap
+    leaderboards.put(id, newLeaderboard);
+    // And return the new leaderboard that was created
+    return newLeaderboard;
+  }
 
-	public static boolean removeEntry(GameType lType, String id, String name) {
-		// Get the leaderboard by id
-		Leaderboard leaderboard = getLeaderboard(lType, id);
-		// Only continue if it's not null
-		if (leaderboard == null) return false;
+  /**
+   * Returns the sorted scores of a leaderboard using the id provided.
+   *
+   * @param leaderboardType {@link GameType} : The leaderboard to use.
+   * @param id    {@link String} : The id of the leaderboard.
+   * @return {@link Array}&lt;{@link LeaderboardEntry}&gt;
+   *                                : An {@link Array} of the {@link LeaderboardEntry}s for
+   *                                  the requested {@link Leaderboard}.
+   */
+  public static Array<LeaderboardEntry> getEntries(GameType leaderboardType, String id) {
+    // Get the leaderboard by id
+    Leaderboard leaderboard = getLeaderboard(leaderboardType, id);
+    // Only continue if it's not null
+    if (leaderboard == null) {
+      return null;
+    }
 
-		// Tell the leaderboard to remove the entry
-		return leaderboard.removeEntry(id, name);
-	}
+    // Now return a copy of the array
+    return leaderboard.copyLeaderboard();
+  }
 
-	public static Leaderboard getLeaderboard(GameType lType, String id) {
-		return getLeaderboard(lType, id, false);
-	}
+  /**
+   * Remove a {@link LeaderboardEntry} from a {@link Leaderboard}.
+   *
+   * @param leaderboardType {@link GameType} : The type of the {@link Leaderboard}.
+   * @param id    {@link String} : The id of the {@link Leaderboard}.
+   * @param index {@code int} : The index of the {@link LeaderboardEntry}.
+   * @return {@code boolean} : {@code true} if it was deleted successfully,
+   *                           {@code false} if not.
+   */
+  public static boolean removeEntry(GameType leaderboardType, String id, int index) {
+    // Get the leaderboard by id
+    Leaderboard leaderboard = getLeaderboard(leaderboardType, id);
+    // Only continue if it's not null
+    if (leaderboard == null) {
+      return false;
+    }
 
-	private static Leaderboard getLeaderboard(GameType lType, String id, boolean addIfNull) {
-		// Get the array of entries
-		ObjectMap<String, Leaderboard> leaderboards = getLeaderboards(lType);
-		// If the id doesn't exist, add it if addIfNull is true
-		if (!leaderboards.containsKey(id)) {
-			if (!addIfNull) return null;
-			return addLeaderboard(lType, "missing name", id);
-		}
-		// Then return the leaderboard
-		return leaderboards.get(id);
-	}
+    // Check that the index is a valid number
+    if (index < 0 || index >= leaderboard.size()) {
+      return false;
+    }
 
-	private static ObjectMap<String, Leaderboard> getLeaderboards(GameType lType) {
-		return getLeaderboards(lType, false);
-	}
+    // Then, remove it
+    leaderboard.remove(index);
 
-	private static ObjectMap<String, Leaderboard> getLeaderboards(GameType lType, boolean addIfNull) {
-		// If leaderboard data is null, return null
-		if (leaderboardData == null) return null;
+    // Return true, as it was successfully removed
+    return true;
+  }
 
-		// If the leaderboard type doesn't exist, return null
-		if (!leaderboardData.containsKey(lType)) {
-			if (!addIfNull) return null;
-			ObjectMap<String, Leaderboard> newLeaderboards = new ObjectMap<>();
-			leaderboardData.put(lType, newLeaderboards);
-			return newLeaderboards;
-		}
-		// Return the leaderboards
-		return leaderboardData.get(lType);
-	}
+  /**
+   * Remove all {@link LeaderboardEntry} from a {@link Leaderboard}
+   * that have a matching name.
+   *
+   * @param leaderboardType {@link GameType} : The type of the {@link Leaderboard}.
+   * @param id    {@link String} : The id of the {@link Leaderboard}.
+   * @param name  {@link String} : The name in the {@link LeaderboardEntry}.
+   * @return {@code int} : The number of {@link LeaderboardEntry}s that were removed.
+   */
+  public static int removeEntry(GameType leaderboardType, String id, String name) {
+    // Get the leaderboard by id
+    Leaderboard leaderboard = getLeaderboard(leaderboardType, id);
+    // Only continue if it's not null
+    if (leaderboard == null) {
+      return -1;
+    }
 
-	public static Array<String> getIDs(GameType gameType) {
-		// If the leaderboard type doesn't exist, return null
-		ObjectMap<String, Leaderboard> leaderboards = getLeaderboards(gameType);
-		if (leaderboards == null) return null;
+    // Tell the leaderboard to remove the entry
+    return leaderboard.removeEntry(name);
+  }
 
-		// Return an array of the keys
-		return leaderboards.keys().toArray();
-	}
+  /**
+   * Get a {@link Leaderboard} by its {@link GameType} and id.
+   *
+   * @param leaderboardType {@link GameType} : The type of the {@link Leaderboard}.
+   * @param id    {@link String} : The id of the {@link Leaderboard}.
+   * @return {@link Leaderboard} : The {@link Leaderboard} matching the type and id.
+   */
+  public static Leaderboard getLeaderboard(GameType leaderboardType, String id) {
+    // Get the array of entries
+    ObjectMap<String, Leaderboard> leaderboards = getLeaderboards(leaderboardType);
+    // If the id doesn't exist, add it if addIfNull is true
+    if (!leaderboards.containsKey(id)) {
+      return addLeaderboard(leaderboardType, "missing name", id);
+    }
+    // Then return the leaderboard
+    return leaderboards.get(id);
+  }
 
-	public static void saveLeaderboard() {
-		// If leaderboard data is null, stop
-		if (leaderboardData == null) return;
-		// Convert all the data into a JsonValue
-		FileControl.saveJsonData(leaderboardFile, asJsonValue());
-	}
+  /**
+   * Returns all of the {@link Leaderboard}s of the {@link GameType}.
+   *
+   * @param leaderboardType {@link GameType} : The {@link Leaderboard}s' type.
+   * @return {@link ObjectMap}&lt;{@link String}, {@link Leaderboard}&gt;
+   *                    : The mapping of {@link Leaderboard}s and their ids.
+   */
+  private static ObjectMap<String, Leaderboard> getLeaderboards(GameType leaderboardType) {
+    // If the leaderboard type doesn't exist, return null
+    if (!leaderboardData.containsKey(leaderboardType)) {
+      ObjectMap<String, Leaderboard> newLeaderboards = new ObjectMap<>();
+      leaderboardData.put(leaderboardType, newLeaderboards);
+      return newLeaderboards;
+    }
+    // Return the leaderboards
+    return leaderboardData.get(leaderboardType);
+  }
 
-	public static JsonValue asJsonValue() {
-		JsonValue root = new JsonValue(JsonValue.ValueType.object);
-		// Loop through each of the keys in the object map
-		for (GameType lType : leaderboardData.keys()) {
-			// Add the type
-			JsonValue leaderboards = new JsonValue(JsonValue.ValueType.array);
-			root.addChild(getLeaderboardID(lType), leaderboards);
-			// Then loop through the children
-			for (String leaderboardID : leaderboardData.get(lType).keys()) {
-				// Make the JsonValue for it
-				Leaderboard leaderboard = leaderboardData.get(lType).get(leaderboardID);
-				JsonValue leaderboardJson = new JsonValue(JsonValue.ValueType.object);
-				leaderboardJson.addChild("id", new JsonValue(leaderboardID));
-				leaderboardJson.addChild("name", new JsonValue(leaderboard.name));
+  /**
+   * Returns all of the {@link Leaderboard} ids of the {@link GameType}.
+   *
+   * @param gameType {@link GameType} : The {@link Leaderboard}s' type.
+   * @return {@link Array}&lt;{@link String}&gt;
+   *                    : An {@link Array} of the {@link Leaderboard}s' ids.
+   */
+  public static Array<String> getIds(GameType gameType) {
+    // If the leaderboard type doesn't exist, return null
+    ObjectMap<String, Leaderboard> leaderboards = getLeaderboards(gameType);
+    if (leaderboards == null) {
+      return null;
+    }
 
-				JsonValue scores = new JsonValue(JsonValue.ValueType.array);
-				leaderboardJson.addChild("scores", scores);
+    // Return an array of the keys
+    return leaderboards.keys().toArray();
+  }
 
-				leaderboards.addChild(leaderboardJson);
-				int index = 0;
-				// Then get the scores and loop through them
-				for (LeaderboardEntry entry : leaderboard.getLeaderboard()) {
-					JsonValue entryJson = new JsonValue(JsonValue.ValueType.object);
-					entryJson.addChild("name", new JsonValue(entry.name));
-					entryJson.addChild("score", new JsonValue(entry.score));
-					entryJson.addChild("date", new JsonValue(entry.dateAsString()));
-					// And add it to the leaderboard
-					scores.addChild(Integer.toString(index), entryJson);
-					index++;
-				}
-			}
-		}
-		return root;
-	}
+  /**
+   * Saves the leaderboard data to the leaderboard file in the data folder.
+   */
+  public static void saveLeaderboard() {
+    // Convert all the data into a JsonValue
+    FileControl.saveJsonData(leaderboardFile, asJsonValue());
+  }
 
-	public static boolean isLoaded() {
-		return loaded;
-	}
+  /**
+   * Converts the leaderboard data into a {@link JsonValue}.
+   *
+   * @return {@link JsonValue} : The leaderboard data in Json form.
+   */
+  public static JsonValue asJsonValue() {
+    JsonValue root = new JsonValue(JsonValue.ValueType.object);
+    // Loop through each of the keys in the object map
+    for (GameType leaderboardType : leaderboardData.keys()) {
+      // Add the type
+      JsonValue leaderboards = new JsonValue(JsonValue.ValueType.array);
+      root.addChild(getLeaderboardId(leaderboardType), leaderboards);
+      // Then loop through the children
+      for (String leaderboardId : leaderboardData.get(leaderboardType).keys()) {
+        // Make the JsonValue for it
+        Leaderboard leaderboard = leaderboardData.get(leaderboardType).get(leaderboardId);
+        JsonValue leaderboardJson = new JsonValue(JsonValue.ValueType.object);
+        leaderboardJson.addChild("id", new JsonValue(leaderboardId));
+        leaderboardJson.addChild("name", new JsonValue(leaderboard.name));
+
+        JsonValue scores = new JsonValue(JsonValue.ValueType.array);
+        leaderboardJson.addChild("scores", scores);
+
+        leaderboards.addChild(leaderboardJson);
+        int index = 0;
+        // Then get the scores and loop through them
+        for (LeaderboardEntry entry : leaderboard.getLeaderboard()) {
+          JsonValue entryJson = new JsonValue(JsonValue.ValueType.object);
+          entryJson.addChild("name", new JsonValue(entry.name));
+          entryJson.addChild("score", new JsonValue(entry.score));
+          entryJson.addChild("date", new JsonValue(entry.dateAsString()));
+          // And add it to the leaderboard
+          scores.addChild(Integer.toString(index), entryJson);
+          index++;
+        }
+      }
+    }
+    return root;
+  }
+
+  /**
+   * Returns whether the leaderboard data is loaded or not.
+   *
+   * @return {@code boolean} : {@code true} if the leaderboard data is loaded,
+   *                           {@code false} if not.
+   */
+  public static boolean isLoaded() {
+    return loaded;
+  }
 }

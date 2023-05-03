@@ -3,10 +3,8 @@
 apply plugin: "java"
 
 // sourceCompatibility = 1.6
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
-
 
 sourceSets {
 	test {
@@ -14,8 +12,10 @@ sourceSets {
             srcDir 'src'
         }
     }
+}
 
-
+test {
+    exclude "**/examples/**"
 }
 
 eclipse.project {

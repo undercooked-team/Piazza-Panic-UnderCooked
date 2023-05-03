@@ -5,15 +5,22 @@ body {
     background-color:  #e2e0df;
 }
 h1 {
-    font-family: Arial;
+    font-family: Arial, serif;
     font-size: 45px;
     color: rgb(0, 0, 0);
     font-weight: bold;
+    margin-bottom: 0;
 }
 h2 {
-    font-family: Arial;
+    font-family: Arial, serif;
     font-size: 20px;
 }
+h3 {
+    font-family: Arial, serif;
+    margin-top: 0;
+    font-size: 30px;
+}
+
 button{
     background-color: rgb(231, 10, 10);
     border: 5px black;
@@ -32,4 +39,14 @@ button:hover{
 #main {
     text-align: center;
     margin_top: 0 auto;
+}
+
+.doc-link {
+    font-size: 14px;
+    margin-left: 2px;
+}
+
+img.game-img {
+    width: 640px;
+    height: 360px;
 }

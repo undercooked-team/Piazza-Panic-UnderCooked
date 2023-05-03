@@ -25,6 +25,7 @@ allprojects {
         ashleyVersion = '1.7.4'
         aiVersion = '1.8.2'
         gdxControllersVersion = '2.2.1'
+        
     }
 
     repositories {
@@ -40,7 +41,7 @@ allprojects {
 
 project(":desktop") {
     apply plugin: "java-library"
-
+    apply plugin:  "jacoco"
 
     dependencies {
         implementation project(":core")
@@ -51,14 +52,38 @@ project(":desktop") {
 
 project(":core") {
     apply plugin: "java-library"
-
-
+    apply plugin:  "jacoco"
+    apply plugin: "checkstyle"
+    
+    def checkstyleVersion = '10.4'
+    checkstyle
+    {
+        toolVersion "${checkstyleVersion}"
+    }
+    
+    configurations
+    {
+        checkstyleRules
+    }
+    
     dependencies {
+        
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+        checkstyleRules("com.puppycrawl.tools:checkstyle:${checkstyleVersion}")
+        {
+            transitive = false
+        }
+    }
+
+    checkstyle
+    {
+        toolVersion "${checkstyleVersion}"
+        config = resources.text.fromArchiveEntry(configurations.checkstyleRules, 'google_checks.xml')
     }
 }
+
 
 project(":tests") {
     apply plugin: "java"
@@ -88,13 +113,16 @@ project(":tests") {
     // testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"
     // testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 
-    implementation project(":core")
+        implementation files("../assets")
+        implementation project(":core")
 
         implementation "junit:junit:4.13.1"
         implementation "org.mockito:mockito-core:3.5.13"
 
         implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+
+        implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
 
         testImplementation 'junit:junit:4.13.1'
         testImplementation 'org.mockito:mockito-core:3.5.13'

@@ -1,9 +1,9 @@
 package com.undercooked.game.interactions.steps;
 
-import com.undercooked.game.Input.InputType;
 import com.undercooked.game.entity.cook.Cook;
-import com.undercooked.game.interactions.InteractionInstance;
+import com.undercooked.game.input.InputType;
 import com.undercooked.game.interactions.InteractResult;
+import com.undercooked.game.interactions.InteractionInstance;
 import com.undercooked.game.interactions.InteractionStep;
 
 /**
@@ -14,19 +14,21 @@ import com.undercooked.game.interactions.InteractionStep;
  * {@link com.undercooked.game.station.Station}.
  */
 public class RemoveStep extends InteractionStep {
-    @Override
-    public InteractResult finishedLast(InteractionInstance instance, Cook cook, String keyID, InputType inputType) {
-        if (!instance.station.hasItem()) {
-            return finished(instance, cook, keyID, inputType, false);
-        }
-        // Remove the item from the station
-        instance.station.takeItem();
-        // Finish step
-        return finished(instance, cook, keyID, inputType, true);
+  @Override
+  public InteractResult finishedLast(InteractionInstance instance, Cook cook,
+                                     String inputId, InputType inputType) {
+    if (!instance.station.hasItem()) {
+      return finished(instance, cook, inputId, inputType, false);
     }
+    // Remove the item from the station
+    instance.station.takeItem();
+    // Finish step
+    return finished(instance, cook, inputId, inputType, true);
+  }
 
-    @Override
-    public void update(InteractionInstance instance, Cook cook, float delta, float powerUpMultiplier) {
-        finishedLast(instance,cook,null,null);
-    }
+  @Override
+  public void update(InteractionInstance instance, Cook cook,
+                     float delta, float powerUpMultiplier) {
+    finishedLast(instance, cook, null, null);
+  }
 }

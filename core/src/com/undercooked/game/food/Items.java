@@ -4,7 +4,6 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.undercooked.game.assets.TextureManager;
 import com.undercooked.game.files.FileControl;
-import com.undercooked.game.util.Constants;
 import com.undercooked.game.util.DefaultJson;
 import com.undercooked.game.util.json.JsonFormat;
 
@@ -13,127 +12,141 @@ import com.undercooked.game.util.json.JsonFormat;
  */
 public class Items {
 
-	// An ObjectMap of ingredient ids to their textures.
-	ObjectMap<String, Item> items;
+  /**
+   * An {@link ObjectMap} of the {@link Item}s.
+   */
+  private final ObjectMap<String, Item> items;
 
-	public Items() {
-		this.items = new ObjectMap<>();
-	}
+  /**
+   * Constructor for the class, which sets up the {@link #items}
+   * {@link ObjectMap}.
+   */
+  public Items() {
+    this.items = new ObjectMap<>();
+  }
 
-	public Item addItem(String ID, String name, String texturePath, int value) {
-		// If the item already exists, return that
-		if (items.containsKey(ID)) {
-			return items.get(ID);
-		}
-		Item newItem = new Item(ID, name, texturePath, value);
-		System.out.println(String.format("New Item (%s, %s) with texturePath '%s' and value '%d'",
-				name, ID, texturePath, value));
-		items.put(ID, newItem);
-		return newItem;
-	}
+  /**
+   * If the item id doesn't exist yet, it creates a new {@link Item}
+   * and adds it to the {@link #items}, returning the newly created {@link Item}.
+   * <br>
+   * If the item id already exists, it instead returns the already created
+   * {@link Item}.
+   *
+   * @param itemId      {@link String} : The item's id.
+   * @param name        {@link String} : The display name of the item.
+   * @param texturePath {@link String} : The path to the
+   *                    {@link com.badlogic.gdx.graphics.Texture}.
+   * @param value       {@code int} : The value of the {@link Item}.
+   * @return {@link Item} : The newly created {@link Item} if the id didn't yet
+   *         exist,
+   *         or the {@link Item} that was created for the id already.
+   */
+  public Item addItem(String itemId, String name, String texturePath, int value) {
+    // If the item already exists, return that
+    if (items.containsKey(itemId)) {
+      return items.get(itemId);
+    }
+    Item newItem = new Item(itemId, name, texturePath, value);
+    System.out.println(String.format("New Item (%s, %s) with texturePath '%s' and value '%d'",
+        name, itemId, texturePath, value));
+    items.put(itemId, newItem);
+    return newItem;
+  }
 
-	public Item addItem(String ID) {
-		return addItem(ID, ID, ID + ".png", 0);
-	}
+  /**
+   * Adds an {@link Item} using the {@link #addItem(String, String, String, int)}
+   * by loading it from a {@link JsonValue} at an asset path, if the id isn't
+   * created
+   * already.
+   * <br>
+   * If the item id already exists, it instead returns the already created
+   * {@link Item}.
+   * <br>
+   * The id for the {@link Item} is the asset path.
+   *
+   * @param assetPath {@link String} : The path to the asset.
+   * @return {@link Item} : The newly created {@link Item} if the id didn't yet
+   *         exist,
+   *         or the {@link Item} that was created for the id already.
+   */
+  public Item addItemAsset(String assetPath) {
+    if (items.containsKey(assetPath)) {
+      return items.get(assetPath);
+    }
+    JsonValue ingredientRoot = FileControl.loadJsonAsset(assetPath, "items");
+    if (ingredientRoot == null) {
+      return null;
+    }
+    JsonFormat.formatJson(ingredientRoot, DefaultJson.itemFormat());
+    Item newItem = addItem(assetPath,
+        ingredientRoot.getString("name"),
+        ingredientRoot.getString("texture_path"),
+        ingredientRoot.getInt("value"));
+    newItem.setSize(ingredientRoot.getFloat("width"), ingredientRoot.getFloat("height"));
+    return newItem;
+  }
 
-	public Item addItemAsset(String assetPath) {
-		if (items.containsKey(assetPath)) {
-			return items.get(assetPath);
-		}
-		JsonValue ingredientRoot = FileControl.loadJsonAsset(assetPath, "items");
-		if (ingredientRoot == null) {
-			return null;
-		}
-		JsonFormat.formatJson(ingredientRoot, DefaultJson.itemFormat());
-		Item newItem = addItem(assetPath,
-				ingredientRoot.getString("name"),
-				ingredientRoot.getString("texture_path"),
-				ingredientRoot.getInt("value"));
-		newItem.setSize(ingredientRoot.getFloat("width"), ingredientRoot.getFloat("height"));
-		return newItem;
-	}
+  /**
+   * Returns the {@link Item} mapped to the id provided.
+   *
+   * @param itemId {@link String} : The id of the {@link Item}.
+   * @return {@link Item} : The {@link Item} mapped to the id, or
+   *         {@code null} if it doesn't exist.
+   */
+  public Item getItem(String itemId) {
+    return items.get(itemId);
+  }
 
-	public Item getItem(String itemID) {
-		return items.get(itemID);
-	}
+  /**
+   * Set to load all of the {@link Item}s'
+   * {@link com.badlogic.gdx.graphics.Texture}s
+   * through the {@link TextureManager}.
+   *
+   * @param textureManager {@link TextureManager} : The {@link TextureManager} to
+   *                       use.
+   * @param textureGroup   {@link String} : The texture group to load to.
+   */
+  public void load(TextureManager textureManager, String textureGroup) {
+    // Loop through all ingredients and load their textures
+    for (Item item : items.values()) {
+      System.out.println(String.format("Loading texture %s for item %s.",
+          item.getTexturePath(), item.name));
+      textureManager.loadAsset(textureGroup, item.getTexturePath(), "textures");
+    }
+  }
 
-	public void load(TextureManager textureManager, String textureID) {
-		// Loop through all ingredients and load their textures
-		for (Item item : items.values()) {
-			System.out.println(String.format("Loading texture %s for item %s.", item.getTexturePath(), item.name));
-			textureManager.loadAsset(textureID, item.getTexturePath(), "textures");
-		}
-	}
+  /**
+   * Post load all of the {@link Item}s using the {@link TextureManager}.
+   *
+   * @param textureManager {@link TextureManager} : The {@link TextureManager} to
+   *                       use.
+   */
+  public void postLoad(TextureManager textureManager) {
+    // Loop through all ingredients and set their textures
+    for (Item item : items.values()) {
+      System.out.println(String.format("Giving texture %s to item %s",
+          item.getTexturePath(), item.name));
+      item.updateSprite(textureManager.getAsset(item.getTexturePath()));
+      // item.updateSprite(textureManager.getAsset("<main>:station/blank.png"));
+    }
+  }
 
-	public void postLoad(TextureManager textureManager) {
-		// Loop through all ingredients and set their textures
-		for (Item item : items.values()) {
-			System.out.println(String.format("Giving texture %s to item %s", item.getTexturePath(), item.name));
-			item.updateSprite(textureManager.getAsset(item.getTexturePath()));
-			// item.updateSprite(textureManager.getAsset("<main>:station/blank.png"));
-		}
-	}
+  /**
+   * Unload all of the {@link Item}s using the {@link TextureManager}.
+   *
+   * @param textureManager {@link TextureManager} : The {@link TextureManager} to
+   *                       use.
+   */
+  public void unload(TextureManager textureManager) {
+    // Loop through all the ingredients and unload their textures
+    for (Item item : items.values()) {
+      textureManager.unloadTexture(item.getTexturePath());
+    }
+    // Clear the ingredients map, as none of them are loaded now
+    items.clear();
+  }
 
-	public void unload(TextureManager textureManager) {
-		// Loop through all the ingredients and unload their textures
-		for (Item item : items.values()) {
-			textureManager.unloadTexture(item.getTexturePath());
-		}
-		// Clear the ingredients map, as none of them are loaded now
-		items.clear();
-	}
-
-	/** TEMP. Final will use the functions above. */
-	/*public static void setupIngredients(GameScreen game) {
-		// Meats
-		unformedPatty = new Ingredient(null, 32, 32, "unformed_patty", 0, .5f, game);
-		formedPatty = new Ingredient(null, 32, 32, "patty", 0, .5f, game);
-
-		// Cooked Meats
-		cookedPatty = new Ingredient(null, 32, 32, "patty", 0, .5f, game);
-		cookedPatty.status = Status.COOKED;
-		cookedPatty.flipped = true;
-		burnedPatty = new Ingredient(null, 32, 32, "patty", 0, .5f, game);
-		burnedPatty.status = Status.BURNED;
-		burnedPatty.flipped = true;
-
-		// Vegetables
-		lettuce = new Ingredient(null, 32, 32, "lettuce", 1, 0, game);
-		tomato = new Ingredient(null, 32, 32, "tomato", 1, 0, game);
-		onion = new Ingredient(null, 32, 32, "onion", 1, 0, game);
-		lettuceChopped = new Ingredient(null, 32, 32, "lettuce", 1, 0, game);
-		lettuceChopped.slices = 1;
-		tomatoChopped = new Ingredient(null, 32, 32, "tomato", 1, 0, game);
-		tomatoChopped.slices = 1;
-		onionChopped = new Ingredient(null, 32, 32, "onion", 1, 0, game);
-		onionChopped.slices = 1;
-
-		// Breads
-		bun = new Ingredient(new Vector2(0, 0), 32, 32, "burger_bun", 0, .5f, game);
-		cooked_bun = new Ingredient(new Vector2(0, 0), 32, 32, "burger_bun", 0, .5f, game);
-		cooked_bun.status = Status.COOKED;
-		cooked_bun.flipped = true;
-	}
-
-	// Meats.
-	public static Ingredient unformedPatty;
-	public static Ingredient formedPatty;
-	public static Ingredient cookedPatty;
-	// Cooked Meats.
-	public static Ingredient burnedPatty;
-
-	// Vegetables.
-	public static Ingredient lettuce;
-	public static Ingredient tomato;
-	public static Ingredient onion;
-	// Chopped vegetables.
-	public static Ingredient lettuceChopped;
-	public static Ingredient tomatoChopped;
-	public static Ingredient onionChopped;
-
-	// Breads.
-	public static Ingredient bun;
-	// Toasted breads.
-	public static Ingredient cooked_bun;*/
-
+  public ObjectMap<String, Item> getItems() {
+    return items;
+  }
 }

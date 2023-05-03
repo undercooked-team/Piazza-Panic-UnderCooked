@@ -14,9 +14,10 @@ import com.undercooked.game.interactions.InteractionStep;
  * the number of times specified, and fails if it does not.
  */
 public class StationHasItemStep extends InteractionStep {
-    @Override
-    public void update(InteractionInstance instance, Cook cook, float delta, float powerUpMultiplier) {
-        // Continue if the station has an item.
-        finished(instance, cook, instance.station.hasItem(value, (int) time));
-    }
+  @Override
+  public void update(InteractionInstance instance, Cook cook,
+                     float delta, float powerUpMultiplier) {
+    // Continue if the station has an item.
+    finished(instance, cook, instance.station.hasItem(value, (int) time));
+  }
 }
