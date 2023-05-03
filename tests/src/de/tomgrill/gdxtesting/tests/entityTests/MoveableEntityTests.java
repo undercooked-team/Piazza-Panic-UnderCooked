@@ -6,6 +6,7 @@ import org.junit.*;
 import org.junit.runners.MethodSorters;
 
 import com.undercooked.game.entity.MoveableEntity;
+import com.undercooked.game.map.Map;
 import com.undercooked.game.map.MapManager;
 
 import org.junit.runner.RunWith;
@@ -19,6 +20,7 @@ import de.tomgrill.gdxtesting.GdxTestRunner;
 public class MoveableEntityTests {
 
   static MoveableEntity moveableEntity;
+  static Map map;
 
   @BeforeClass
   public static void setup() {
@@ -26,6 +28,8 @@ public class MoveableEntityTests {
     moveableEntity.speed = 11;
     moveableEntity.dirX = 1;
     moveableEntity.dirY = -1;
+
+    map = new Map(1000, 1000);
   }
 
   @Test
@@ -43,4 +47,10 @@ public class MoveableEntityTests {
     assertEquals(moveableEntity.moveCalc(10, 1f), moveableEntity.pos.x, 0.01);
     assertEquals(moveableEntity.moveCalc(10, 1f), moveableEntity.pos.y, 0.01);
   }
+
+  // TODO: Complete this test
+  // @Test
+  // public void t20_moveAndCollide() {
+  // moveableEntity.moveAndCollide(map, 10, 10, 1f);
+  // }
 }
