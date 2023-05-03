@@ -179,7 +179,6 @@ public class AudioManagerTests {
 
 	@Test
 	public void t50updateMusicVolumesNormalCases() {
-		// ! FIXME Function is not updating the volume
 		audioManager.loadMusicAsset("<main>:cash-register-opening.mp3", "");
 		assetManager.finishLoading();
 		Music music = audioManager.getMusicAsset("<main>:cash-register-opening.mp3");
