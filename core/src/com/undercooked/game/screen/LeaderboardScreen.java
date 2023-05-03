@@ -334,6 +334,7 @@ public class LeaderboardScreen extends Screen {
    * @param amountY {@link float} : The number of {@link LeaderboardEntry}s to scroll past.
    */
   private void scrollLeaderboard(float amountY) {
+    if (leaderboardData == null) return;
     // Add the scroll
     firstScore += Math.signum(amountY);
     // Clamp it between 0 and the number of possible
