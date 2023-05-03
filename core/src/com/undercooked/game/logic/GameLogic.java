@@ -615,9 +615,9 @@ public abstract class GameLogic {
   public float getDifficultyMultiplier() {
     switch (difficulty) {
       case Difficulty.EASY:
-        return 2f;
+        return 4f;
       case Difficulty.MEDIUM:
-        return 1.5f;
+        return 2f;
       default:
         return 1f;
     }
