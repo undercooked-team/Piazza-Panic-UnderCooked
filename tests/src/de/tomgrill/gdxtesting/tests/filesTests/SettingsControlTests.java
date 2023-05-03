@@ -37,65 +37,65 @@ import static org.junit.Assert.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SettingsControlTests {
 
-	static SettingsControl setCon;
-	static String settingsFilename = "settingsTest.json";
-	static String fullSettingsPath = FileControl.dirAndName(FileControl.getDataPath(), settingsFilename);
+  static SettingsControl setCon;
+  static String settingsFilename = "settingsTest.json";
+  static String fullSettingsPath = FileControl.dirAndName(FileControl.getDataPath(), settingsFilename);
 
-	@BeforeClass
-	public static void setup() {
-		setCon = new SettingsControl(settingsFilename);
-		setCon.loadData();
-	}
+  @BeforeClass
+  public static void setup() {
+    setCon = new SettingsControl(settingsFilename);
+    setCon.loadData();
+  }
 
-	@Test
-	public void t10SetMusicVolumeNormalCase() {
-		setCon.setMusicVolume(0.3f);
-		assertEquals(0.3f, setCon.getMusicVolume(), 0.01f);
-	}
+  @Test
+  public void t10SetMusicVolumeNormalCase() {
+    setCon.setMusicVolume(0.3f);
+    assertEquals(0.3f, setCon.getMusicVolume(), 0.01f);
+  }
 
-	@Test
-	public void t11SetMusicVolumeErrCase() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			setCon.setMusicVolume(-0.01f);
-		});
-		assertThrows(IllegalArgumentException.class, () -> {
-			setCon.setMusicVolume(1.01f);
-		});
-	}
+  @Test
+  public void t11SetMusicVolumeErrCase() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      setCon.setMusicVolume(-0.01f);
+    });
+    assertThrows(IllegalArgumentException.class, () -> {
+      setCon.setMusicVolume(1.01f);
+    });
+  }
 
-	@Test
-	public void t12SetGameVolumeNormalCase() {
-		setCon.setGameVolume(0.8f);
-		assertEquals(0.8f, setCon.getGameVolume(), 0.01f);
-	}
+  @Test
+  public void t12SetGameVolumeNormalCase() {
+    setCon.setGameVolume(0.8f);
+    assertEquals(0.8f, setCon.getGameVolume(), 0.01f);
+  }
 
-	@Test
-	public void t13SetGameVolumeErrCase() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			setCon.setGameVolume(-0.01f);
-		});
-		assertThrows(IllegalArgumentException.class, () -> {
-			setCon.setGameVolume(1.01f);
-		});
-	}
+  @Test
+  public void t13SetGameVolumeErrCase() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      setCon.setGameVolume(-0.01f);
+    });
+    assertThrows(IllegalArgumentException.class, () -> {
+      setCon.setGameVolume(1.01f);
+    });
+  }
 
-	@Test
-	public void t21SaveData() {
-		setCon.saveData();
-		assertTrue(new File(fullSettingsPath).exists());
-		JsonValue expected = new JsonValue(JsonValue.ValueType.object);
-		expected.addChild("music_volume", new JsonValue(0.3f));
-		expected.addChild("game_volume", new JsonValue(0.8f));
-		JsonValue actual = FileControl.loadJsonData(settingsFilename);
-		do {
-			assertEquals(expected.child.asFloat(), actual.child.asFloat(), 0.01f);
-		} while (expected.next != null && actual.next != null);
-	}
+  @Test
+  public void t21SaveData() {
+    setCon.saveData();
+    assertTrue(new File(fullSettingsPath).exists());
+    JsonValue expected = new JsonValue(JsonValue.ValueType.object);
+    expected.addChild("music_volume", new JsonValue(0.3f));
+    expected.addChild("game_volume", new JsonValue(0.8f));
+    JsonValue actual = FileControl.loadJsonData(settingsFilename);
+    do {
+      assertEquals(expected.child.asFloat(), actual.child.asFloat(), 0.01f);
+    } while (expected.next != null && actual.next != null);
+  }
 
-	@AfterClass
-	public static void deleteTestSettingsFileAndDir() {
-		new File(fullSettingsPath).delete();
-		new File(FileControl.getDataPath()).delete();
-	}
+  @AfterClass
+  public static void deleteTestSettingsFileAndDir() {
+    new File(fullSettingsPath).delete();
+    new File(FileControl.getDataPath()).delete();
+  }
 
 }

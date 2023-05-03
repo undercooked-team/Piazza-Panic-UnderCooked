@@ -20,71 +20,71 @@ import de.tomgrill.gdxtesting.GdxTestRunner;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EntityTests {
 
-	static Entity entity;
-	static Entity entity2;
-	static AssetManager assetManager;
-	static TextureManager textureManager;
-	static String texturePath = "<main>:item/lettuce.png";
+  static Entity entity;
+  static Entity entity2;
+  static AssetManager assetManager;
+  static TextureManager textureManager;
+  static String texturePath = "<main>:item/lettuce.png";
 
-	@BeforeClass
-	public static void setup() {
-		assetManager = new AssetManager();
-		textureManager = new TextureManager(assetManager);
-		entity = new Entity();
-		entity.setTexture(texturePath);
-		entity.setHeight(10);
-		entity.setWidth(15);
+  @BeforeClass
+  public static void setup() {
+    assetManager = new AssetManager();
+    textureManager = new TextureManager(assetManager);
+    entity = new Entity();
+    entity.setTexture(texturePath);
+    entity.setHeight(10);
+    entity.setWidth(15);
 
-		entity2 = new Entity();
-		entity2.setTexture(texturePath);
-	}
+    entity2 = new Entity();
+    entity2.setTexture(texturePath);
+  }
 
-	@Test
-	public void t01_load() {
-		entity.load(textureManager);
-		assetManager.finishLoading();
-		assertTrue(assetManager.isLoaded(FileControl.getAssetPath(texturePath, "textures")));
-	}
+  @Test
+  public void t01_load() {
+    entity.load(textureManager);
+    assetManager.finishLoading();
+    assertTrue(assetManager.isLoaded(FileControl.getAssetPath(texturePath, "textures")));
+  }
 
-	@Test
-	public void t02_postLoad() {
-		entity.postLoad(textureManager);
-		assetManager.finishLoading();
-		assertNotNull(entity.getSprite());
-	}
+  @Test
+  public void t02_postLoad() {
+    entity.postLoad(textureManager);
+    assetManager.finishLoading();
+    assertNotNull(entity.getSprite());
+  }
 
-	@Test
-	public void t10_update() {
-		entity.update(0.01f);
-	}
+  @Test
+  public void t10_update() {
+    entity.update(0.01f);
+  }
 
-	@Test
-	public void t20_isColliding() {
-		entity2.load(textureManager);
-		assetManager.finishLoading();
-		entity2.postLoad(textureManager);
-		assetManager.finishLoading();
-		entity2.update(0.01f);
-		assertFalse("Cannot collide with an entity with no width or height", entity.isColliding(entity2));
+  @Test
+  public void t20_isColliding() {
+    entity2.load(textureManager);
+    assetManager.finishLoading();
+    entity2.postLoad(textureManager);
+    assetManager.finishLoading();
+    entity2.update(0.01f);
+    assertFalse("Cannot collide with an entity with no width or height", entity.isColliding(entity2));
 
-		entity2.setWidth(20);
-		entity2.setHeight(35);
-		entity2.update(0.01f);
-		assertTrue("Entities should be colliding", entity.isColliding(entity2));
-	}
+    entity2.setWidth(20);
+    entity2.setHeight(35);
+    entity2.update(0.01f);
+    assertTrue("Entities should be colliding", entity.isColliding(entity2));
+  }
 
-	@Test
-	public void t30_getSprite() {
-		assertNotNull("Sprite should be present.", entity.getSprite());
-	}
+  @Test
+  public void t30_getSprite() {
+    assertNotNull("Sprite should be present.", entity.getSprite());
+  }
 
-	@Test
-	public void t40_unload() {
-		entity.unload(textureManager);
-		entity2.unload(textureManager);
-		assetManager.finishLoading();
-		assertFalse("Texture should've unloaded.",
-				assetManager.isLoaded(FileControl.getAssetPath(texturePath, "textures")));
-	}
+  @Test
+  public void t40_unload() {
+    entity.unload(textureManager);
+    entity2.unload(textureManager);
+    assetManager.finishLoading();
+    assertFalse("Texture should've unloaded.",
+        assetManager.isLoaded(FileControl.getAssetPath(texturePath, "textures")));
+  }
 
 }
