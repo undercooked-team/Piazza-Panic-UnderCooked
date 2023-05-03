@@ -11,14 +11,29 @@ public class Difficulty {
   public static final int EASY = 0;
 
   /**
+   * The text form of the Easy value.
+   */
+  public static final String EASY_TEXT = "easy";
+
+  /**
    * The value for Medium difficulty.
    */
   public static final int MEDIUM = 1;
 
   /**
+   * The text form of the Medium value.
+   */
+  public static final String MEDIUM_TEXT = "medium";
+
+  /**
    * The value for Hard difficulty.
    */
   public static final int HARD = 2;
+
+  /**
+   * The text form of the Hard value.
+   */
+  public static final String HARD_TEXT = "hard";
 
   /**
    * Converts a difficulty value into a string.
@@ -29,13 +44,13 @@ public class Difficulty {
   public static String toString(int difficulty) {
     switch (difficulty) {
       case EASY:
-        return "easy";
+        return EASY_TEXT;
       case MEDIUM:
-        return "medium";
+        return MEDIUM_TEXT;
       case HARD:
-        return "hard";
+        return HARD_TEXT;
       default:
-        return "default";
+        return "invalid";
     }
   }
 
@@ -46,12 +61,15 @@ public class Difficulty {
    * @return {@link int} : The difficulty value.
    */
   public static int asInt(String difficulty) {
-    switch (difficulty) {
-      case "easy":
+    if (difficulty == null) {
+      return -1;
+    }
+    switch (difficulty.toLowerCase()) {
+      case EASY_TEXT:
         return EASY;
-      case "medium":
+      case MEDIUM_TEXT:
         return MEDIUM;
-      case "hard":
+      case HARD_TEXT:
         return HARD;
       default:
         return -1;
